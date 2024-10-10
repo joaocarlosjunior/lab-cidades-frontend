@@ -1,0 +1,27 @@
+<header>
+    <app-navbar></app-navbar>
+</header>
+<main>
+    <section class="contentBuscador">
+        <div class="maxWidthWrapper " >
+            <div class="contentMain" >
+                <app-search-bar></app-search-bar>
+                <div class="cardArquivoList">
+                    
+                    <app-card-arquivo 
+                    *ngFor="let i of numbers"
+                    [index]="i"
+                    [title]="'Planejamento urbano em algomerações transfroeiriças: analise dos sistemas de planejamento de algomração de Foz do Iguaçi (BR), ciudade del Este (PY) e Puerto Iguazú(AR)'"
+                    [autor]= "'Zé Maria'"
+                    [description]="'Este artigo reflete sobre os desafios do planejamento urbano nestes novos arranjos, focando-se em uma tipologia específica: as aglomerações transfronteiriças. O recorte espacial definido foi a aglomeração de Foz do Iguaçu (BR), Ciudad del Este (PY) e Puerto Iguazú (AR), conhecida como Tríplice Fronteira. O trabalho objetiva analisar a configuração do planejamento em cada uma das cidades dessa aglomeração, '"
+                    [yearPublication]="'2021'"
+                    [urlArchive]="'https://doi.org/10.11606/issn.1676-6288.prolam.2021.174105'"
+                    ></app-card-arquivo>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer>
+    <app-footer></app-footer>
+</footer>

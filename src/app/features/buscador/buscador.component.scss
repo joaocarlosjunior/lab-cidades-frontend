@@ -1,0 +1,15 @@
+.contentMain{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    //height: 500px;
+}
+
+.cardArquivoList{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    gap: 25px;
+}
