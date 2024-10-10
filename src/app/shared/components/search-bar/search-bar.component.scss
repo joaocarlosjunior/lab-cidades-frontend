@@ -1,0 +1,38 @@
+.search-bar-container{
+    //padding: 0px 56px 0px 8px;
+    background: #eaf1fb;
+    border-radius: 32px;
+    display: flex;
+    align-items: center;
+    width: 345px;
+    min-width: 345px;
+    max-width: 345px;
+
+    input{
+        font-size: 1.1rem;
+        outline: none;
+        border: none;
+        background: inherit;
+        width: 84%;
+    }
+
+    &.opened{
+        background: var(--white-color);
+        border-radius: 32px 32px 0px 0px;
+    }
+}
+
+@media (min-width: 860px){
+    .search-bar-container{
+        width: 664px;
+        min-width: 664px;
+        max-width: 664px;
+
+        input{
+            width: 80%;
+        }
+    }
+
+}
+
+
