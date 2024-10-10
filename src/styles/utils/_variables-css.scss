@@ -1,0 +1,44 @@
+/*=============== VARIABLES CSS ===============*/
+:root {
+    --header-height: 5.1rem;
+  
+    /*========== Colors ==========*/
+    /*Color mode HSL(hue, saturation, lightness)*/
+    --black-color: #171c26;
+    --black-color-light: #e8f1ff;
+    --black-color-lighten: #252b37;
+    --white-color: #fff;
+  
+    --text-color: #232323;
+    --primary-color: #006244 ;
+    --primary-color-hover: #31a986 ;
+    --secondary-color: #f0e63a;
+    --secondary-color-hover: #f0d400;
+    --header-footer-color: #fff;
+    --text-header-footer-color: #000;
+    --text-header-footer-color-hover: #cacaca;
+    --background-color: #e8f1ff;
+    --background-color-2: #d4e1f4;
+    --variant-background-color: #314ca5;
+    --variant-background-color-2: #283a73;
+    --cancel-color: #f73e3e;
+    --max-width: 1100px;
+  
+    /*========== Font and typography ==========*/
+    /*.5rem = 8px | 1rem = 16px ...*/
+    --body-font: "Montserrat", sans-serif;
+    --normal-font-size: 0.938rem;
+  
+    /*========== Font weight ==========*/
+    --font-light: 300;
+    --font-regular: 400;
+    --font-semi-bold: 600;
+    --font-bold: 700;
+    --font-extra-bold: 800;
+  
+    --text-color: #232323;
+  
+    /*========== z index ==========*/
+    --z-tooltip: 10;
+    --z-fixed: 100;
+  }
