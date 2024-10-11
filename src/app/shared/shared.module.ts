@@ -5,6 +5,10 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { AppMaterialModule } from './app-material/app-material.module';
 import { SearchOverlayComponent } from './components/search-overlay/search-overlay.component';
 import { CardArquivoComponent } from './components/card-arquivo/card-arquivo.component';
+import { CoreModule } from '../core/core.module';
+import { HttpClientModule } from '@angular/common/http';
+import { ArquivoService } from './services/arquivo.service';
+import { NomeAutorPipe } from './components/card-arquivo/pipes/nome-autor.pipe';
 
 
 
@@ -13,17 +17,23 @@ import { CardArquivoComponent } from './components/card-arquivo/card-arquivo.com
     CardComponent,
     SearchBarComponent,
     SearchOverlayComponent,
-    CardArquivoComponent
+    CardArquivoComponent,
+    NomeAutorPipe
   ],
   imports: [
     CommonModule,
-    AppMaterialModule
+    AppMaterialModule,
+    CoreModule,
+    HttpClientModule
   ],
   exports:[
     CommonModule,
+    AppMaterialModule,
+    CoreModule,
     CardComponent,
     SearchBarComponent,
     CardArquivoComponent
-  ]
+  ],
+  providers: [ArquivoService]
 })
 export class SharedModule { }
