@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Autor } from '../../model/Autor';
 
 @Component({
   selector: 'app-card-arquivo',
@@ -7,9 +8,9 @@ import { Component, Input } from '@angular/core';
 })
 export class CardArquivoComponent {
   @Input({required: true}) title!: string;
-  @Input({required: true}) autor!: string;
+  @Input({required: true}) autores!: Autor[];
   @Input({required: true}) description!: string;
-  @Input({required: true}) yearPublication!: string;
+  @Input({required: true}) yearPublication!: number;
   @Input({required: true}) urlArchive!: string;
   @Input({required: true}) index!: number;
 
