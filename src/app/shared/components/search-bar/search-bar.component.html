@@ -11,7 +11,9 @@
   <input 
   #inputElement
   placeholder="O que você está procurando?" 
-  (click)="overlayOpen.set(true)"/>
+  (click)="overlayOpen.set(true)"
+  (keyup.enter)="setAssunto($event)"
+  />
 </div>
 
 <ng-template
