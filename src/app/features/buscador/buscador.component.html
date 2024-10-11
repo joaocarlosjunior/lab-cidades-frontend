@@ -1,27 +1,47 @@
 <header>
-    <app-navbar></app-navbar>
+  <app-navbar></app-navbar>
 </header>
+
 <main>
-    <section class="contentBuscador">
-        <div class="maxWidthWrapper " >
-            <div class="contentMain" >
-                <app-search-bar></app-search-bar>
-                <div class="cardArquivoList">
-                    
+  <section class="contentBuscador">
+      <div class="maxWidthWrapper">
+          <div  class="contentMain"
+          [ngStyle]="{ height: contentHeight }"
+          >
+              <app-search-bar (assunto)="setAssunto($event)"></app-search-bar>
+              
+              <!-- Verifica se a pesquisa foi feita e se há arquivos -->
+              <div class="cardArquivoList" *ngIf="searchTriggered && arquivosEncontrados; else naoEncontrado">
+                  <div *ngFor="let arquivo of arquivos | async; let i = index">
                     <app-card-arquivo 
-                    *ngFor="let i of numbers"
-                    [index]="i"
-                    [title]="'Planejamento urbano em algomerações transfroeiriças: analise dos sistemas de planejamento de algomração de Foz do Iguaçi (BR), ciudade del Este (PY) e Puerto Iguazú(AR)'"
-                    [autor]= "'Zé Maria'"
-                    [description]="'Este artigo reflete sobre os desafios do planejamento urbano nestes novos arranjos, focando-se em uma tipologia específica: as aglomerações transfronteiriças. O recorte espacial definido foi a aglomeração de Foz do Iguaçu (BR), Ciudad del Este (PY) e Puerto Iguazú (AR), conhecida como Tríplice Fronteira. O trabalho objetiva analisar a configuração do planejamento em cada uma das cidades dessa aglomeração, '"
-                    [yearPublication]="'2021'"
-                    [urlArchive]="'https://doi.org/10.11606/issn.1676-6288.prolam.2021.174105'"
+                      [index]="i + 1"
+                      [title]="arquivo.titulo"
+                      [autores]="arquivo.autores"
+                      [description]="arquivo.descricao"
+                      [yearPublication]="arquivo.anoPublicacao"
+                      [urlArchive]="arquivo.arquivoUrl"
                     ></app-card-arquivo>
-                </div>
-            </div>
-        </div>
-    </section>
+                  </div>
+              </div>
+              
+              <ng-template #naoEncontrado>
+                  <div *ngIf="searchTriggered" class="arquivoNaoEncontrado" >
+                    <div class="header">
+                      <h3>Nenhum registro encontrado</h3>
+                      <p>Não há resultados que correspondam à sua pesquisa "{{ textoDigitado }}"</p>
+                    </div>
+                    <ul class="list">
+                      <li>Certifique-se de que todas as palavras estão digitadas corretamente.</li>
+                      <li>Tente usar um escopo de pesquisa diferente. Tente usar palavras-chave diferentes.</li>
+                      <li>Tente usar palavras-chave mais genéricas. Tente usar menos palavras-chave.</li>
+                    </ul>
+                  </div>
+              </ng-template>
+          </div>
+      </div>
+  </section>
 </main>
+
 <footer>
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 </footer>
