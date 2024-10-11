@@ -7,7 +7,10 @@ import { CoreModule } from './core/core.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SobreComponent } from './features/sobre/sobre.component';
 import { BuscadorComponent } from './features/buscador/buscador.component';
-import { FeatureModule } from './features/feature.module';
+import { HomeModule } from './features/home/home.module';
+import { BuscadorModule } from './features/buscador/buscador.module';
+import { ContatoModule } from './features/contato/contato.module';
+import { SobreModule } from './features/sobre/sobre.module';
 
 @NgModule({
   declarations: [
@@ -15,9 +18,7 @@ import { FeatureModule } from './features/feature.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    CoreModule,
-    FeatureModule
+    AppRoutingModule
   ],
   providers: [
     provideClientHydration(),
