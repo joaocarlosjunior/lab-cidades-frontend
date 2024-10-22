@@ -19,3 +19,25 @@
     width: 100%;
     max-width: 150px;
 }
+
+.btnCard{
+    background-image: linear-gradient(
+        transparent 0%,
+        transparent 90%,
+        blue 90%,
+        blue 100%
+    );
+
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position-x: right;
+
+    text-decoration: none;
+    display: inline-flex;
+    transition: background-size 300ms;
+}
+
+.btnCard:hover{
+    background-size: 100% 100%;
+    background-position-x: left;
+}
