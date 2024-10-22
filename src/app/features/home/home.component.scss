@@ -1,22 +1,41 @@
 .mainWrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  position: relative;
+}
+
+.b-img{
+  display: flex;
+  background: linear-gradient(rgba(31, 91, 255, 0.1), rgba(20, 118, 247, 0.3)), url("../../../assets/images/img-cidade.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  height: 600px;
+  width: auto;
+  align-items: center;
 }
 
 .mainContent {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-items: center;
+  text-align: center;
 }
 
-.mainContent h2 {
-  font-size: 1em;
-  font-weight: 300;
+.mainContent h1,p{
+  color: var(--white-color);
+  font-weight: var(--font-semi-bold);
+}
+
+.mainContent h2{
+  color: var(--white-color);
+  font-weight: var(--font-light);
 }
 
 .mainContent h1 {
-  font-size: 2em;
+  font-size: 4em;
   font-weight: var(--font-extra-bold);
 }
 
@@ -44,13 +63,6 @@
   height: 400px;
 }
 
-.mainWrapper .mainContentPhoto img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50% 0;
-}
-
 .section-2 {
 
   background: var(--primary-color);
@@ -62,10 +74,15 @@
     flex-direction: column;
     padding: 50px;
     gap: 20px;
+    text-align: center;
 
     h2, p{
       color:var(--white-color);
       text-align: center;
+    }
+
+    p{
+      font-weight: var(--font-light);
     }
   }
 }
@@ -96,6 +113,52 @@
   }
 }
 
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+.scrollAnimation{
+  animation: appear 5s linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.appearAnimation{
+  animation: slide-in 0.8s linear;
+}
+
+@keyframes slide {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+.appearAnimation-2{
+  animation: slide 0.8s linear;
+}
 
 @media (min-width: 860px) {
   .mainContent p {

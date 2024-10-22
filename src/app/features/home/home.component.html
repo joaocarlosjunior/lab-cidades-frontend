@@ -1,60 +1,73 @@
 <header>
-    <app-navbar></app-navbar>
+  <app-navbar></app-navbar>
 </header>
 <main>
-    <section>
-        <div class="maxWidthWrapper">
-                <div class="mainWrapper">
-                    <div class="mainContent" >
-                        <h2>Bem vindo à página do </h2>
-                        <h1>Lab Cidades Uesc</h1>
-                        <p>Lab Cidades é um <b>projeto de extensão</b> da Universidade Estadual de Santa Cruz (UESC),
-                            localizado na região cacaueira do sul da Bahia, que tem como principal objetivo <b>mapear e analisar</b> os 
-                            problemas urbanos enfrentados por essa região.
-                        </p>
-                        <a class="btnPrimary" href="#">Saiba Mais</a>
-                    </div>
-                    <div class="mainContentPhoto">
-                        <img src="../../../assets/images/img-cidade.jpg" alt="">
-                    </div>
-                </div>
+  <link
+    rel="preload"
+    as="image"
+    href="../../../assets/images/img-cidade-opacity.jpg"
+  />
+  <section class="b-img">
+    <div class="maxWidthWrapper">
+      <div class="mainWrapper">
+        <div class="mainContent appearAnimation-2">
+          <h2>Bem vindo à página do</h2>
+          <h1>Lab Cidades Uesc</h1>
+          <p>
+            Lab Cidades é um projeto de extensão da Universidade Estadual de
+            Santa Cruz (UESC), localizado na região cacaueira do sul da Bahia,
+            que tem como principal objetivo mapear e analisar os problemas
+            urbanos enfrentados por essa região.
+          </p>
+          <a class="btnPrimary" routerLink="/sobre">Saiba Mais</a>
         </div>
-    </section>
-    <section class="section-2">
-        <div class="maxWidthWrapper">
-            <div class="searchEngine">
-                <h2>Buscar no Acervo</h2>
-                <p>Busque arquivos no acervo do lab cidades</p>
-                <app-search-bar></app-search-bar>
-            </div>
-        </div>
-    </section>
-    <section class="section-3">
-        <div class="maxWidthWrapper">
-            <div class="content">
-                <h2>Análise e Planejamento Urbano</h2>
+      </div>
+    </div>
+  </section>
+  <section class="section-2">
+    <div class="maxWidthWrapper">
+      <div class="searchEngine appearAnimation scrollAnimation">
+        <h2>
+          Aqui você encontra conteúdo sobre politicas urbanas e planejamento
+          público municipais.
+        </h2>
+        <p>
+          Busque por artigos, pesquisas, trabalhos técnicos e mapas reunidos em um só
+          lugar.
+        </p>
+        <app-search-bar></app-search-bar>
+      </div>
+    </div>
+  </section>
+  <section class="section-3">
+    <div class="maxWidthWrapper">
+      <div class="content">
+        <h2>Análise e Planejamento Urbano</h2>
 
-                <div class="cards" >
-                    <app-card
-                    [title]="'Artigos'"
-                    [description]="'Confira os artigos publicados'"
-                    [cardIcon]="'assets/icons/article-icon.svg'"
-                    ></app-card>
-                    <app-card
-                    [title]="'Mini Cursos'"
-                    [description]="'Confira os mini cursos disponiveis'"
-                    [cardIcon]="'assets/icons/classroom.svg'"
-                    ></app-card>
-                    <app-card
-                    [title]="'Analises'"
-                    [description]="'Confira as analises publicadas'"
-                    [cardIcon]="'assets/icons/analytics.svg'"
-                    ></app-card>
-                </div>
-            </div>
+        <div class="cards">
+          <app-card
+            class="scrollAnimation"
+            [title]="'Artigos'"
+            [description]="'Confira os artigos publicados'"
+            [cardIcon]="'assets/icons/article-icon.svg'"
+          ></app-card>
+          <app-card
+            class="scrollAnimation"
+            [title]="'Mini Cursos'"
+            [description]="'Confira os mini cursos disponiveis'"
+            [cardIcon]="'assets/icons/classroom.svg'"
+          ></app-card>
+          <app-card
+            class="scrollAnimation"
+            [title]="'Analises'"
+            [description]="'Confira as analises publicadas'"
+            [cardIcon]="'assets/icons/analytics.svg'"
+          ></app-card>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 </main>
 <footer>
-    <app-footer></app-footer>
+  <app-footer></app-footer>
 </footer>
