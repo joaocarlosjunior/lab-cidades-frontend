@@ -3,45 +3,70 @@
 </header>
 
 <main>
-  <section class="contentBuscador">
-      <div class="maxWidthWrapper">
-          <div  class="contentMain"
-          [ngStyle]="{ height: contentHeight }"
-          >
-              <app-search-bar (assunto)="setAssunto($event)"></app-search-bar>
-              
-              <!-- Verifica se a pesquisa foi feita e se há arquivos -->
-              <div class="cardArquivoList" *ngIf="searchTriggered && arquivosEncontrados; else naoEncontrado">
-                  <div *ngFor="let arquivo of arquivos | async; let i = index">
-                    <app-card-arquivo 
-                      [index]="i + 1"
-                      [title]="arquivo.titulo"
-                      [autores]="arquivo.autores"
-                      [description]="arquivo.descricao"
-                      [yearPublication]="arquivo.anoPublicacao"
-                      [urlArchive]="arquivo.arquivoUrl"
-                    ></app-card-arquivo>
-                  </div>
-              </div>
-              
-              <ng-template #naoEncontrado>
-                  <div *ngIf="searchTriggered" class="arquivoNaoEncontrado" >
-                    <div class="header">
-                      <h3>Nenhum registro encontrado</h3>
-                      <p>Não há resultados que correspondam à sua pesquisa "{{ textoDigitado }}"</p>
-                    </div>
-                    <ul class="list">
-                      <li>Certifique-se de que todas as palavras estão digitadas corretamente.</li>
-                      <li>Tente usar um escopo de pesquisa diferente. Tente usar palavras-chave diferentes.</li>
-                      <li>Tente usar palavras-chave mais genéricas. Tente usar menos palavras-chave.</li>
-                    </ul>
-                  </div>
-              </ng-template>
+  <section class="sectionbBuscador">
+    <div class="maxWidthWrapper">
+      <div class="contentMain">
+        <div class="contentTop">
+          <h1>
+            Aqui você encontra conteúdo sobre politicas urbanas e planejamento
+            público municipais.
+          </h1>
+          <p>
+            Desde artigos, pesquisas, trabalhos técnicos e mapas reunidos em um
+            só lugar.
+          </p>
+        </div>
+
+        <app-search-bar></app-search-bar>
+
+        <!-- Verifica se a pesquisa foi feita e se há arquivos -->
+        <div
+          class="cardArquivoList"
+          *ngIf="searchTriggered && arquivosEncontrados; else naoEncontrado"
+        >
+          <div *ngFor="let arquivo of arquivos | async; let i = index">
+            <app-card-arquivo
+              [index]="i + 1"
+              [title]="arquivo.titulo"
+              [autores]="arquivo.autores"
+              [description]="arquivo.descricao"
+              [yearPublication]="arquivo.anoPublicacao"
+              [urlArchive]="arquivo.arquivoUrl"
+            ></app-card-arquivo>
           </div>
+        </div>
+
+        <ng-template #naoEncontrado>
+          <div *ngIf="searchTriggered" class="arquivoNaoEncontrado">
+            <div class="header">
+              <h3>Nenhum registro encontrado</h3>
+              <p>
+                Não há resultados que correspondam à sua pesquisa "{{
+                  textoDigitado
+                }}"
+              </p>
+            </div>
+            <ul class="list">
+              <li>
+                Certifique-se de que todas as palavras estão digitadas
+                corretamente.
+              </li>
+              <li>
+                Tente usar um escopo de pesquisa diferente. Tente usar
+                palavras-chave diferentes.
+              </li>
+              <li>
+                Tente usar palavras-chave mais genéricas. Tente usar menos
+                palavras-chave.
+              </li>
+            </ul>
+          </div>
+        </ng-template>
       </div>
+    </div>
   </section>
 </main>
 
-<footer>
+<footer style="bottom: 0;">
   <app-footer></app-footer>
 </footer>

@@ -1,23 +1,43 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ArquivoService } from '../../shared/services/arquivo.service';
 import { Arquivo } from '../../shared/model/Arquivo';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-buscador',
   templateUrl: './buscador.component.html',
-  styleUrl: './buscador.component.scss'
+  styleUrls: ['./buscador.component.scss'],
 })
-export class BuscadorComponent implements OnInit{
+export class BuscadorComponent implements OnInit {
   arquivos!: Observable<Arquivo[]>;
   searchTriggered = false;
   arquivosEncontrados = false;
   contentHeight = '400px';
   textoDigitado!: string;
 
-  constructor(private arquivoService: ArquivoService){ }
+  constructor(
+    private arquivoService: ArquivoService,
+    private route: ActivatedRoute, // ActivatedRoute para capturar query params
+    private router: Router
+  ) {
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        window.scroll(0, 0);
+      }
+    });
+  }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // Captura o parâmetro 'q' da URL e realiza a pesquisa
+    this.route.queryParams.subscribe((params) => {
+      const query = params['q'];
+      if (query) {
+        this.textoDigitado = query;
+        this.setAssunto(query); // Realiza a pesquisa automaticamente ao capturar o parâmetro
+      }
+    });
+  }
 
   setAssunto(assunto: string) {
     this.searchTriggered = true; // A pesquisa foi disparada

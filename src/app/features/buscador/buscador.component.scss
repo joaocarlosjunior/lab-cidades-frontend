@@ -1,9 +1,23 @@
+.sectionbBuscador{
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+}
+
+.contentTop{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+}
+
 .contentMain {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 70px;
 }
 
 .cardArquivoList {
