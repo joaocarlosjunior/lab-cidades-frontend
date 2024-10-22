@@ -1,12 +1,11 @@
 .search-bar-container{
-    //padding: 0px 56px 0px 8px;
-    background: #eaf1fb;
-    border-radius: 32px;
+    background: #fff;
     display: flex;
     align-items: center;
     width: 345px;
     min-width: 345px;
     max-width: 345px;
+    box-shadow: 0 .2rem .3rem rgba(0,0,0,.15) !important;
 
     input{
         font-size: 1.1rem;
@@ -25,8 +24,8 @@
 @media (min-width: 860px){
     .search-bar-container{
         width: 664px;
-        min-width: 664px;
-        max-width: 664px;
+        min-width: 600px;
+        max-width: 600px;
 
         input{
             width: 80%;
