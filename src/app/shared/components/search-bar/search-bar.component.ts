@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { SearchBarService } from '../../services/search-bar/search-bar.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar',
@@ -7,9 +8,13 @@ import { SearchBarService } from '../../services/search-bar/search-bar.service';
   styleUrl: './search-bar.component.scss',
 })
 export class SearchBarComponent {
-  constructor(private searchService: SearchBarService) {}
+  @Output() assunto = new EventEmitter<string>();  // Mantemos a emissão do evento
 
-  @Output() assunto = new EventEmitter<string>();
+  constructor(
+    private searchService: SearchBarService,
+    private router: Router,
+    private route: ActivatedRoute  // Para verificar a rota atual
+  ) {}
 
   overlayOpen = this.searchService.overlayOpen;
 
@@ -20,11 +25,22 @@ export class SearchBarComponent {
     }
   }
 
-  setAssunto(event: Event){
+  setAssunto(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
-    this.assunto.emit(inputValue);
-    if (this.overlayOpen()) {
-      this.searchService.overlayOpen.set(false);  // Fecha o overlay ao rolar a página
+
+    if (inputValue.trim()) {
+      // Emite o termo de busca para o componente pai
+      this.assunto.emit(inputValue);
+
+      // Verifica se a rota atual é diferente de '/buscador' antes de redirecionar
+      if (this.route.snapshot.routeConfig?.path !== 'buscador') {
+        // Redireciona para a página do buscador com o termo de busca como query param
+        this.router.navigate(['/buscador'], { queryParams: { q: inputValue } });
+      }
+
+      if (this.overlayOpen()) {
+        this.searchService.overlayOpen.set(false);  // Fecha o overlay ao rolar a página
+      }
     }
   }
 }
