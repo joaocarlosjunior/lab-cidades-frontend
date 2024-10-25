@@ -1,0 +1,11 @@
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-button-primary',
+  templateUrl: './button-primary.component.html',
+  styleUrl: './button-primary.component.scss'
+})
+export class ButtonPrimaryComponent {
+  @Input({required: true}) text!: string;
+  @Input({required: true}) route!: string;
+}
