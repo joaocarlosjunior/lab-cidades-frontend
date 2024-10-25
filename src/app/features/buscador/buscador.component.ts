@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ArquivoService } from '../../shared/services/arquivo.service';
-import { Arquivo } from '../../shared/model/Arquivo';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+import { Arquivo } from '../../core/models/Arquivo';
 
 @Component({
   selector: 'app-buscador',
@@ -34,13 +34,13 @@ export class BuscadorComponent implements OnInit {
       const query = params['q'];
       if (query) {
         this.textoDigitado = query;
-        this.setAssunto(query); // Realiza a pesquisa automaticamente ao capturar o parâmetro
+        this.setAssunto(query);
       }
     });
   }
 
   setAssunto(assunto: string) {
-    this.searchTriggered = true; // A pesquisa foi disparada
+    this.searchTriggered = true; 
     this.textoDigitado = assunto;
     this.arquivos = this.arquivoService.buscarAssunto(assunto);
 
