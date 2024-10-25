@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Autor } from '../../model/Autor';
+import { Autor } from '../../../core/models/Autor';
 
 @Component({
   selector: 'app-card-arquivo',
