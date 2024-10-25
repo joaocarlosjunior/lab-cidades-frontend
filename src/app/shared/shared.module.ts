@@ -9,6 +9,9 @@ import { CoreModule } from '../core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ArquivoService } from './services/arquivo.service';
 import { NomeAutorPipe } from './components/card-arquivo/pipes/nome-autor.pipe';
+import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
+import { RouterModule } from '@angular/router';
+import { InfoArquivoComponent } from './components/info-arquivo/info-arquivo.component';
 
 
 
@@ -18,21 +21,27 @@ import { NomeAutorPipe } from './components/card-arquivo/pipes/nome-autor.pipe';
     SearchBarComponent,
     SearchOverlayComponent,
     CardArquivoComponent,
-    NomeAutorPipe
+    NomeAutorPipe,
+    ButtonPrimaryComponent,
+    InfoArquivoComponent
   ],
   imports: [
     CommonModule,
     AppMaterialModule,
     CoreModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   exports:[
     CommonModule,
     AppMaterialModule,
+    HttpClientModule,
+    RouterModule,
     CoreModule,
     CardComponent,
     SearchBarComponent,
-    CardArquivoComponent
+    CardArquivoComponent,
+    ButtonPrimaryComponent,
   ],
   providers: [ArquivoService]
 })
