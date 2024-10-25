@@ -4,9 +4,9 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, delay, map, Observable, tap, throwError } from 'rxjs';
-import { Arquivo } from '../model/Arquivo';
-import { ApiResponse } from '../interfaces/ApiResponse';
+import { catchError, map, throwError } from 'rxjs';
+import { ApiResponse } from '../../core/interfaces/ApiResponse';
+import { Arquivo } from '../../core/models/Arquivo';
 
 @Injectable({
   providedIn: 'root',
@@ -29,14 +29,12 @@ export class ArquivoService {
       ? { params: new HttpParams().set('assunto', assunto) }
       : {};
 
-    return this.httpClient
-      .get<ApiResponse>(this.API + '/search', options)
-      .pipe(
-        map(response => {
-          return response.content;
-        }),
-        catchError(this.handleError)
-      );
+    return this.httpClient.get<ApiResponse>(this.API + '/search', options).pipe(
+      map((response) => {
+        return response.content;
+      }),
+      catchError(this.handleError)
+    );
   }
 
   private handleError(error: HttpErrorResponse) {
