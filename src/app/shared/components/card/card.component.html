@@ -3,12 +3,12 @@
         <img [src]="cardIcon" alt="">
     </div>
     <div class="title">
-        {{title}}
+        <b>{{title}}</b>
     </div>
     <div class="description">
         {{description}}
     </div>
     <div>
-        <a class="btnCard" href="#">Confira</a>
+        <app-button-primary [text]="'Confira'" [route]="'#'"></app-button-primary>
     </div>
 </div>
