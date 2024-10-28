@@ -5,66 +5,56 @@
   position: relative;
 }
 
-.b-img{
-  display: flex;
-  background: linear-gradient(rgba(31, 91, 255, 0.2), rgba(20, 118, 247, 0.3)), url("../../../assets/images/img-cidade.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  height: 600px;
-  width: auto;
-  align-items: center;
-}
+.section-1 {
+  padding: 0;
 
-.mainContent {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  text-align: center;
-}
+  .content {
+    overflow: hidden;
+    max-width: 100%;
 
-.mainContent h1,p{
-  color: var(--white-color);
-  font-weight: var(--font-semi-bold);
-}
+    .b-img {
+      background: linear-gradient(rgba(31, 91, 255, 0.2), rgba(20, 118, 247, 0.3)),
+        url("../../../assets/images/img-cidade.jpg");
+      background-size: cover;
+      background-position: center center;
+      animation-duration: 30s;
+      animation-delay: 100ms;
+      height: 600px;
+      position: relative;
+    }
 
-.mainContent h2{
-  color: var(--white-color);
-  font-weight: var(--font-light);
-}
-
-.mainContent h1 {
-  font-size: 4em;
-  font-weight: var(--font-extra-bold);
-}
-
-.btnPrimary {
-  display: block;
-  background: var(--primary-color);
-  width: max-content;
-  color: #fff;
-  font-size: 1.2em;
-  font-weight: bold;
-  padding: 0.5em 1em;
-  border-radius: 0.5em;
-  cursor: pointer;
-  transition: all 300ms ease-out;
-  text-decoration: none;
-}
-
-.btnPrimary:hover {
-  background: var(--primary-color-hover);
-}
-
-.mainWrapper .mainContentPhoto {
-  display: none;
-  width: auto;
-  height: 400px;
+    .mainContent {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 100px 0;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    
+      h1, p{
+        color: var(--white-color);
+        font-weight: var(--font-semi-bold);
+      }
+    
+      h2{
+        color: var(--white-color);
+        font-weight: var(--font-light);
+      }
+    
+      h1{
+        font-size: 4em;
+        font-weight: var(--font-extra-bold);
+      }
+    }
+  }
 }
 
 .section-2 {
-
   background: var(--primary-color);
 
   .searchEngine {
@@ -76,18 +66,19 @@
     gap: 20px;
     text-align: center;
 
-    h2, p{
-      color:var(--white-color);
+    h2,
+    p {
+      color: var(--white-color);
       text-align: center;
     }
 
-    p{
+    p {
       font-weight: var(--font-light);
     }
   }
 }
 
-.section-3{
+.section-3 {
   .content {
     display: flex;
     flex-direction: column;
@@ -97,7 +88,7 @@
     text-align: center;
     gap: 15px;
   }
-  
+
   .cards {
     display: flex;
     flex-wrap: wrap;
@@ -107,62 +98,15 @@
     width: 100%;
     padding: 20px 0;
   }
-  
+
   .content h2 {
     color: var(--black-color);
   }
 }
 
-@keyframes appear {
-  from {
-    opacity: 0;
-    scale: 0.4;
-  }
-  to {
-    opacity: 1;
-    scale: 1;
-  }
-}
-
-.scrollAnimation{
-  animation: appear 5s linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 40%;
-}
-
-@keyframes slide-in {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-}
-
-.appearAnimation{
-  animation: slide-in 0.8s linear;
-}
-
-@keyframes slide {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-
-.appearAnimation-2{
-  animation: slide 0.8s linear;
-}
-
 @media (min-width: 860px) {
   .mainContent p {
-    width: 80%;
+    width: 50%;
     line-height: 1.5;
   }
 
@@ -177,7 +121,7 @@
     gap: 40px;
   }
 
-  app-search-bar{
+  app-search-bar {
     width: 60%;
   }
 
