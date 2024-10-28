@@ -4,6 +4,8 @@
 @import "./styles/utils/footer";
 @import "./styles/utils/header";
 @import "./styles/utils/section";
+@import "./styles/utils/hover_underline";
+@import "./styles/utils/animation";
 
 
 /*=============== BASE ===============*/
@@ -17,7 +19,6 @@
 }
 
 body {
-  //background: linear-gradient(90deg, #e2fff7, #a7ffe5 );
   background: #F6F6F6;
   height: 100%;
   width: 100vw;
