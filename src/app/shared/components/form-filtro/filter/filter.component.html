@@ -1,0 +1,52 @@
+<div [formGroup]="group" class="filtro-container">
+  <!--   <mat-form-field appearance="fill" *ngIf="exibirOperador">
+    <mat-select formControlName="operador">
+      <mat-option *ngFor="let operador of operadores" [value]="operador.value">
+        {{ operador.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
+  <div *ngIf="exibirOperador">
+    <select formControlName="operador">
+      <option *ngFor="let operador of operadores" value="operador.value">
+        {{ operador.viewValue }}
+      </option>
+    </select>
+  </div>
+
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Filtro</mat-label>
+    <mat-select formControlName="filtro">
+      <mat-option *ngFor="let filtro of filtros" [value]="filtro.value">
+        {{ filtro.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
+  <select formControlName="filtro">
+    <option *ngFor="let filtro of filtros" value="filtro.value">
+      {{ filtro.viewValue }}
+    </option>
+  </select>
+
+<!--   <mat-form-field appearance="fill">
+    <mat-label>Termo de Busca</mat-label>
+    <input
+      matInput
+      formControlName="searchTerm"
+      placeholder="Digite o termo de busca"
+    />
+  </mat-form-field> -->
+
+  <input type="text" placeholder="Digite os termos de busca">
+
+  <button
+    mat-icon-button
+    color="warn"
+    (click)="removeFiltro.emit()"
+    *ngIf="exibirBotaoRemover"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
