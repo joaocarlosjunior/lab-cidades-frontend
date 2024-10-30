@@ -1,9 +1,12 @@
-import { NgModule } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatDivider } from '@angular/material/divider';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatDivider } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -14,7 +17,12 @@ import { MatListModule } from '@angular/material/list';
     OverlayModule,
     MatDivider,
     MatListModule,
-    MatIconButton
+    MatIconButton,
+    MatSelectModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    
   ],
   exports:[
     MatIconButton,
@@ -22,7 +30,11 @@ import { MatListModule } from '@angular/material/list';
     OverlayModule,
     MatDivider,
     MatListModule,
-    MatIconButton
+    MatIconButton,
+    MatSelectModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatButtonModule
   ]
 })
 export class AppMaterialModule { }
