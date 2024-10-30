@@ -1,17 +1,20 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardComponent } from './components/card/card.component';
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
-import { AppMaterialModule } from './app-material/app-material.module';
-import { SearchOverlayComponent } from './components/search-overlay/search-overlay.component';
-import { CardArquivoComponent } from './components/card-arquivo/card-arquivo.component';
-import { CoreModule } from '../core/core.module';
 import { HttpClientModule } from '@angular/common/http';
-import { ArquivoService } from './services/arquivo.service';
-import { NomeAutorPipe } from './components/card-arquivo/pipes/nome-autor.pipe';
-import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CoreModule } from '../core/core.module';
+import { AppMaterialModule } from './app-material/app-material.module';
+import { BuscadorFormComponent } from './components/buscador-form/buscador-form.component';
+import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
+import { CardArquivoComponent } from './components/card-arquivo/card-arquivo.component';
+import { NomeAutorPipe } from './components/card-arquivo/pipes/nome-autor.pipe';
+import { CardComponent } from './components/card/card.component';
+import { FilterComponent } from './components/form-filtro/filter/filter.component';
+import { FormFiltroComponent } from './components/form-filtro/form-filtro.component';
 import { InfoArquivoComponent } from './components/info-arquivo/info-arquivo.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { SearchOverlayComponent } from './components/search-overlay/search-overlay.component';
+import { ArquivoService } from './services/arquivo.service';
 
 
 
@@ -23,7 +26,10 @@ import { InfoArquivoComponent } from './components/info-arquivo/info-arquivo.com
     CardArquivoComponent,
     NomeAutorPipe,
     ButtonPrimaryComponent,
-    InfoArquivoComponent
+    InfoArquivoComponent,
+    FormFiltroComponent,
+    FilterComponent,
+    BuscadorFormComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +48,8 @@ import { InfoArquivoComponent } from './components/info-arquivo/info-arquivo.com
     SearchBarComponent,
     CardArquivoComponent,
     ButtonPrimaryComponent,
+    FormFiltroComponent,
+    BuscadorFormComponent
   ],
   providers: [ArquivoService]
 })
