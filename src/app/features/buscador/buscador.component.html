@@ -17,14 +17,14 @@
           </p>
         </div>
 
-        <app-search-bar></app-search-bar>
+        <app-buscador-form class="buscador-form" (arquivosEncontradosEvent)="setArquivosEncontrados($event)"></app-buscador-form>
 
         <!-- Verifica se a pesquisa foi feita e se há arquivos -->
         <div
           class="cardArquivoList"
-          *ngIf="searchTriggered && arquivosEncontrados; else naoEncontrado"
+          *ngIf="hasArquivos | async; else naoEncontrado"
         >
-          <div *ngFor="let arquivo of arquivos | async; let i = index">
+          <div *ngFor="let arquivo of arquivosEncontrado | async ; let i = index">
             <app-card-arquivo
               [index]="i + 1"
               [title]="arquivo.titulo"
@@ -67,6 +67,6 @@
   </section>
 </main>
 
-<footer style="bottom: 0;">
+<footer>
   <app-footer></app-footer>
 </footer>
