@@ -25,8 +25,8 @@ export class SearchBarComponent {
     }
   }
 
-  setAssunto(event: Event) {
-    const inputValue = (event.target as HTMLInputElement).value;
+  setAssunto(inputValue: string) {
+    //const inputValue = input.value;
 
     if (inputValue.trim()) {
       // Emite o termo de busca para o componente pai
@@ -36,10 +36,6 @@ export class SearchBarComponent {
       if (this.route.snapshot.routeConfig?.path !== 'buscador') {
         // Redireciona para a página do buscador com o termo de busca como query param
         this.router.navigate(['/buscador'], { queryParams: { q: inputValue } });
-      }
-
-      if (this.overlayOpen()) {
-        this.searchService.overlayOpen.set(false);  // Fecha o overlay ao rolar a página
       }
     }
   }

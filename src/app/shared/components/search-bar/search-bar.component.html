@@ -5,14 +5,15 @@
   [ngClass]="{'opened mat-elevation-z2': overlayOpen()}"
 >
   <button mat-icon-button
+  (click)="setAssunto(searchInput.value)"
   >
     <mat-icon>search</mat-icon>
   </button>
   <input 
-  action
+  #searchInput
   placeholder="O que você está procurando?" 
   (click)="overlayOpen.set(true)"
-  (keyup.enter)="setAssunto($event)"
+  (keyup.enter)="setAssunto(searchInput.value)"
   />
 </div>
 
