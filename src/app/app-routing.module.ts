@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'sobre',
     loadChildren: () => import('./features/sobre/sobre.module').then(m => m.SobreModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule)
   }
 ]
 @NgModule({
