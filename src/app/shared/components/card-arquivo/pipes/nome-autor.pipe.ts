@@ -11,10 +11,10 @@ export class NomeAutorPipe implements PipeTransform {
       return '';
     }
     if (autores.length === 1) {
-      return autores[0].nomeAutor;
+      return autores[0].nome_autor;
     }
     
-    return autores.map(autor => autor.nomeAutor).join(', ');
+    return autores.map(autor => autor.nome_autor).join(', ');
   }
 
 }
