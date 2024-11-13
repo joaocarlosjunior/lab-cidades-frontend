@@ -10,9 +10,10 @@ import { Operador } from './interfaces/Operador';
   styleUrl: './filter.component.scss'
 })
 export class FilterComponent {
-  @Input() group!: FormGroup;
-  @Input() exibirOperador = false;
-  @Input() exibirBotaoRemover = false;
+  @Input({ required: true }) group!: FormGroup;
+  @Input({ required: true }) exibirOperador: boolean = false;
+  @Input({ required: true }) exibirBotaoRemover: boolean = false;
+  @Input({ required: true }) formValid: boolean = false;
   @Output() removeFiltro = new EventEmitter<void>();
 
   filtros: Filtro[] = [
@@ -20,11 +21,14 @@ export class FilterComponent {
     { value: 'autor', viewValue: 'Autor' },
     { value: 'titulo', viewValue: 'Título' },
     { value: 'assunto', viewValue: 'Assunto' },
+    { value: 'mesorregiao', viewValue: 'Mesorregiao' },
+    { value: 'cidade', viewValue: 'Cidade' },
+    { value: 'estado', viewValue: 'Estado' }
   ];
 
   operadores: Operador[] = [
-    { value: 'and', viewValue: 'E' },
-    { value: 'or', viewValue: 'Ou' }
+    { value: 'AND', viewValue: 'E' },
+    { value: 'OR', viewValue: 'Ou' }
   ];
 
 }

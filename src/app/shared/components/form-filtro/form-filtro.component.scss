@@ -4,14 +4,38 @@
   width: 1000px;
   border-radius: 0.25rem;
   border: 1px solid rgba(0, 0, 0, 0.125);
+
+  .content-busca-avancada{
+    display: flex;
+    width: 100%;
+
+    .form-filtro-body {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      gap: 10px;
+      width: 70%;
+    }
+
+    .tipo-arquivo{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 30%;
+    }
+  }
 }
 
-.form-filtro-body {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  gap: 10px;
+select {
+  height: calc(1.5em + .5rem + 2px);
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+  padding-left: .5rem;
+  font-size: .875rem;
+  border-radius: 4px;
 }
+
 
 .form-card-footer {
   display: flex;
@@ -24,5 +48,14 @@
 @media (max-width: 860px) {
   .busca-avancada {
     width: 100%;
+
+    .content-busca-avancada{
+      display: flex;
+      flex-direction: column;
+
+      .form-filtro-body {
+        width: 100%;
+      }
+    }
   }
 }
