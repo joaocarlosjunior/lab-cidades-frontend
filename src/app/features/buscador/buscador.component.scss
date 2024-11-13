@@ -1,6 +1,9 @@
 main{
   position: relative;
-  min-height: 60vh; // Garante que o main ocupe a tela inteira se precisar
+  min-height: 70vh; // Garante que o main ocupe a tela inteira se precisar
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sectionbBuscador{
@@ -8,6 +11,11 @@ main{
   min-height: 500px;
   display: flex;
   //align-items: center;
+}
+
+.d-flex-a-center{
+  display: flex;
+  align-items: center;
 }
 
 .contentTop{
@@ -26,12 +34,8 @@ main{
   gap: 30px;
 }
 
-.cardArquivoList {
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
+.card-arquivo{
   width: 100%;
-  gap: 25px;
 }
 
 .arquivoNaoEncontrado {
@@ -62,6 +66,10 @@ main{
 
   .arquivoNaoEncontrado {
     padding: 30px;
+  }
+
+  .buscador-form{
+    width: 100%;
   }
 
   .buscador-form{

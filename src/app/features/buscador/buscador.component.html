@@ -4,47 +4,42 @@
 
 <main>
   <section class="sectionbBuscador">
-    <div class="maxWidthWrapper">
+    <div class="maxWidthWrapper d-flex-a-center">
       <div class="contentMain">
         <div class="contentTop">
           <h1>
             Aqui você encontra conteúdo sobre politicas urbanas e planejamento
-            público municipais.
+            público municipais
           </h1>
           <p>
-            Desde artigos, pesquisas, trabalhos técnicos e mapas tudo reunido em um
-            só lugar.
+            Desde artigos, pesquisas, trabalhos técnicos e mapas tudo reunido em
+            um só lugar
           </p>
         </div>
 
-        <app-buscador-form class="buscador-form" (arquivosEncontradosEvent)="setArquivosEncontrados($event)"></app-buscador-form>
+        <app-buscador-form
+          (buscaIniciada)="onBuscaIniciada($event)"
+          (arquivosEncontradoEvent)="onArquivosEncontrado($event)"
+          class="buscador-form"
+        ></app-buscador-form>
 
-        <!-- Verifica se a pesquisa foi feita e se há arquivos -->
-        <div
-          class="cardArquivoList"
-          *ngIf="hasArquivos | async; else naoEncontrado"
-        >
-          <div *ngFor="let arquivo of arquivosEncontrado | async ; let i = index">
-            <app-card-arquivo
-              [index]="i + 1"
-              [title]="arquivo.titulo"
-              [autores]="arquivo.autores"
-              [description]="arquivo.descricao"
-              [yearPublication]="arquivo.anoPublicacao"
-              [urlArchive]="arquivo.arquivoUrl"
-            ></app-card-arquivo>
-          </div>
-        </div>
+        <app-card-arquivo
+          *ngIf="!carregando && arquivosList.length > 0; else naoEncontrado"
+          [arquivosList]="arquivosList"
+          class="card-arquivo"
+        ></app-card-arquivo>
 
         <ng-template #naoEncontrado>
-          <div *ngIf="searchTriggered" class="arquivoNaoEncontrado">
+          <div *ngIf="carregando">
+            <mat-spinner></mat-spinner>
+          </div>
+          <div
+            *ngIf="!carregando && arquivoNaoEncontrado"
+            class="arquivoNaoEncontrado"
+          >
             <div class="header">
               <h3>Nenhum registro encontrado</h3>
-              <p>
-                Não há resultados que correspondam à sua pesquisa "{{
-                  textoDigitado
-                }}"
-              </p>
+              <p>Não há resultados que correspondam à sua pesquisa.</p>
             </div>
             <ul class="list">
               <li>

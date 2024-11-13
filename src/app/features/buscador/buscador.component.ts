@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Event, NavigationEnd, Router } from '@angular/router';
-import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Arquivo } from '../../core/models/Arquivo';
 
 @Component({
@@ -9,21 +8,13 @@ import { Arquivo } from '../../core/models/Arquivo';
   styleUrls: ['./buscador.component.scss'],
 })
 export class BuscadorComponent {
-  arquivos!: Observable<Arquivo[]>;
-  arquivosEncontrado = new BehaviorSubject<Arquivo[]>([]);
-  hasArquivos: Observable<boolean> = this.arquivosEncontrado.pipe(
-    map((arquivos) => {
-      this.searchTriggered = !(arquivos.length > 0);
-      return arquivos.length > 0;
-    })
-  );
-
-  searchTriggered = false;
+  arquivosList: Arquivo[] = [];
+  buscaIniciada: boolean = false;
+  arquivoNaoEncontrado = false;
   textoDigitado!: string;
+  carregando: boolean = false;
 
-  constructor(
-    private router: Router
-  ) {
+  constructor(private router: Router) {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         window.scroll(0, 0);
@@ -31,11 +22,19 @@ export class BuscadorComponent {
     });
   }
 
-  ngOnInit(): void {
-    console.log(this.searchTriggered);
+  onBuscaIniciada(buscaIniciada: boolean) {
+    this.carregando = buscaIniciada; // Inicia o estado de carregamento
   }
 
-  setArquivosEncontrados(arquivos: Arquivo[]) {
-    this.arquivosEncontrado.next(arquivos);
+  onArquivosEncontrado(arquivos: Arquivo[]) {
+    this.carregando = false; // Conclui o carregamento
+
+    if(arquivos.length > 0){
+      this.arquivosList = arquivos
+    }else{
+      this.arquivoNaoEncontrado = true;
+      this.arquivosList = [];
+    }
+    
   }
 }
