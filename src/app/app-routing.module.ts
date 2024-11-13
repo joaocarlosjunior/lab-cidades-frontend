@@ -20,8 +20,8 @@ const routes: Routes = [
     loadChildren: () => import('./features/sobre/sobre.module').then(m => m.SobreModule)
   },
   {
-    path: 'admin',
-    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule)
+    path: 'dashboard',
+    loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule)
   }
 ]
 @NgModule({
