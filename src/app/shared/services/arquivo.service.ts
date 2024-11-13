@@ -4,37 +4,74 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, throwError } from 'rxjs';
-import { ApiResponse } from '../../core/interfaces/ApiResponse';
+import { map, Observable, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import { ArquivoResponse } from '../../core/interfaces/ArquivoResponse';
 import { Arquivo } from '../../core/models/Arquivo';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ArquivoService {
-  private readonly API = 'http://localhost:8080/api/v1/arquivos';
+  private readonly API = `${environment.apiUrl}/arquivos`;
 
   constructor(private httpClient: HttpClient) {}
 
-  list() {
-    return this.httpClient.get<Arquivo[]>(this.API);
+  list(page: number = 0, size: number = 10): Observable<ArquivoResponse> {
+      return this.httpClient.get<ArquivoResponse>(this.API, { params: { page, size} });
   }
 
   buscarAssunto(assunto: string) {
     assunto = assunto.trim();
 
-    console.log('Assunto: ' + assunto);
+    let params = new HttpParams()
+    .set('q', assunto);
 
-    const options = assunto
-      ? { params: new HttpParams().set('assunto', assunto) }
-      : {};
-
-    return this.httpClient.get<ApiResponse>(this.API + '/search', options).pipe(
+    return this.httpClient.get<ArquivoResponse>(this.API + '/search', { params }).pipe(
       map((response) => {
         return response.content;
-      }),
-      catchError(this.handleError)
+      })
     );
+  }
+
+  buscaAvancada(query: string, source: number) {
+    const options = query
+      ? {
+          params: new HttpParams().set('q', query).set('source', source), // Adiciona o segundo parâmetro 'source'
+        }
+      : {};
+
+    return this.httpClient
+      .get<ArquivoResponse>(this.API + '/search-advanced', options)
+      .pipe(
+        map((response) => {
+          return response.content;
+        })
+      );
+  }
+
+  getArquivoByCode(code: any) {
+    const options = { params: new HttpParams().set('id', code) };
+    return this.httpClient.get<Arquivo>(this.API + '/{id}', options).pipe(
+      map((response) => {
+        return response;
+      })
+    );
+  }
+
+  criarArquivo(formData: FormData) {
+    return this.httpClient.post<void>(this.API, formData);
+  }
+
+  downloadArquivo(arquivoId: number) {
+    return this.httpClient.get(`${this.API}/arquivo/${arquivoId}`, {
+      responseType: 'blob',
+      observe: 'response',
+    });
+  }
+
+  buscarArquivoPorTitulo(q: string, page: number = 0, size: number = 10){
+    return this.httpClient.get<ArquivoResponse>(this.API + '/titulo', { params: { q, page, size} });
   }
 
   private handleError(error: HttpErrorResponse) {
