@@ -26,10 +26,9 @@ export class SearchBarComponent {
   }
 
   setAssunto(inputValue: string) {
-    //const inputValue = input.value;
-
     if (inputValue.trim()) {
-      // Emite o termo de busca para o componente pai
+      this.searchService.overlayOpen.set(false);
+
       this.assunto.emit(inputValue);
 
       // Verifica se a rota atual é diferente de '/buscador' antes de redirecionar
