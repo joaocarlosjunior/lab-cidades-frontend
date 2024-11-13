@@ -1,0 +1,46 @@
+.side-menu {
+    position: fixed;
+    background: var(--primary-color);
+    width: 20vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.side-menu .brand-name {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    h1{
+        color: var(--white-color)
+    }
+}
+.side-menu li {
+    font-size: 24px;
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.side-menu li:hover {
+    background: white;
+
+    .itens{
+        color: var(--black-color)
+    }
+    
+}
+
+.itens {
+    color: var(--white-color)
+}
+
+.itens:hover{
+    color: var(--black-color)
+}
+
+a{
+    text-decoration: none;
+}
+

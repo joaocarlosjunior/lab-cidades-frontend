@@ -1,0 +1,210 @@
+<mat-card>
+  <mat-card-title style="padding: 20px">{{ inputData.title }}</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="arquivoForm" (ngSubmit)="onSubmit()">
+      <div class="box-1">
+        <!-- Título -->
+        <mat-form-field appearance="outline">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="titulo" />
+          <mat-error *ngIf="arquivoForm.get('titulo')?.hasError('required')">
+            {{
+              arquivoForm.get("titulo")?.hasError("required")
+                ? "O título é obrigatório"
+                : errorMessage
+            }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Ano de Publicação -->
+        <mat-form-field appearance="outline">
+          <mat-label>Ano de Publicação</mat-label>
+          <input matInput type="number" formControlName="ano_publicacao" />
+          <mat-error *ngIf="arquivoForm.get('ano_publicacao')?.hasError('min')">
+            Ano inválido
+          </mat-error>
+          <mat-error
+            *ngIf="arquivoForm.get('ano_publicacao')?.hasError('required')"
+          >
+            O ano de publicação é obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Descrição -->
+      <mat-form-field appearance="outline" class="full-width m-top">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="descricao"></textarea>
+      </mat-form-field>
+
+      <div class="box-2">
+        <!-- Autores -->
+        <label>Autores:</label>
+        <div class="content">
+          <div
+            formArrayName="autores"
+            style="display: flex; flex-direction: column"
+          >
+            <div
+              *ngFor="let autor of autores.controls; let i = index"
+              class="input-group"
+            >
+              <div class="flex-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Autor {{ i + 1 }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="i"
+                    placeholder="Nome do Autor"
+                  />
+                  <mat-error
+                    *ngIf="arquivoForm.get('autores')?.hasError('required')"
+                  >
+                    O autor é obrigatório
+                  </mat-error>
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="autores.removeAt(i)"
+                  *ngIf="autores.length > 1"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tipo Arquivo -->
+          <div class="tipo-arquivo">
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo Arquivo</mat-label>
+              <mat-error
+                *ngIf="arquivoForm.get('tipo_arquivo')?.hasError('required')"
+              >
+                O tipo do arquivo é obrigatório
+              </mat-error>
+              <mat-select formControlName="tipo_arquivo">
+                <mat-option
+                  *ngFor="let tipoArquivo of tiposArquivoOptions"
+                  [value]="tipoArquivo.id"
+                >
+                  {{ tipoArquivo.nome_tipo_arquivo }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Cidade e Estado -->
+          <div class="cidade-estado" *ngIf="adicionarCidade">
+            <!-- Estado -->
+            <mat-form-field appearance="outline">
+              <mat-label>Estados</mat-label>
+              <mat-select (selectionChange)="estadoSelecionado($event)">
+                <mat-option
+                  *ngFor="let estado of estadosOptions"
+                  [value]="estado.id"
+                >
+                  {{ estado.nome_estado }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Cidade</mat-label>
+              <input
+                type="text"
+                placeholder="Selecione uma"
+                aria-label="Cidade"
+                matInput
+                formControlName="cidade"
+                [matAutocomplete]="auto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayCidade"
+              >
+                <mat-option
+                  *ngFor="let cidade of filteredCidadeOptions | async"
+                  [value]="cidade"
+                >
+                  {{ cidade.nome_cidade }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error
+                *ngIf="arquivoForm.get('cidade')?.hasError('cidadeInvalida')"
+              >
+                Cidade inválida. Por favor, selecione uma cidade da lista.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="addAutor()"
+          >
+            <mat-icon>add</mat-icon> Adicionar Autor
+          </button>
+          <button type="button" mat-stroked-button color="primary">
+            <mat-icon>add</mat-icon> Cadastrar tipo arquivo
+          </button>
+
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="addCidade()"
+            *ngIf="!adicionarCidade"
+          >
+            <mat-icon>add</mat-icon>Adicionar Cidade
+          </button>
+
+          <button
+            type="button"
+            mat-stroked-button
+            color="warn"
+            *ngIf="adicionarCidade"
+            (click)="removerCidade()"
+          >
+            <mat-icon>remove</mat-icon> Remover Cidade
+          </button>
+        </div>
+      </div>
+
+      <!-- Upload do Arquivo -->
+      <div class="upload-arquivo">
+        <label for="file" class="custom-file-button">Escolha Arquivo:</label>
+        <div class="input-arquivo">
+          <input type="file" (change)="onFileSelected($event)" />
+          <button
+            *ngIf="file"
+            type="button"
+            mat-stroked-button
+            color="warn"
+            (click)="removerArquivoSelecionado()"
+          >
+            <mat-icon>close</mat-icon> Remover Arquivo
+          </button>
+        </div>
+      </div>
+
+      <!-- URL do Arquivo -->
+      <mat-form-field appearance="outline" class="full-width m-top">
+        <mat-label>URL do Arquivo</mat-label>
+        <input matInput type="url" formControlName="arquivo_url" />
+      </mat-form-field>
+
+      <div class="box-3">
+        <button type="button" mat-raised-button color="warn" (click)="cancelarCadastroArquivo()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="arquivoForm.invalid">
+          Enviar
+        </button>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>
