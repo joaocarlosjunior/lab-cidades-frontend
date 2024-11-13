@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonPrimaryComponent {
   @Input({required: true}) text!: string;
-  @Input({required: true}) route!: string;
+  @Input() route!: string;
 }
