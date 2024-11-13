@@ -2,8 +2,11 @@
     <app-search-bar 
     *ngIf="!mostrarBuscaAvancada"
     ></app-search-bar>
+    
     <app-form-filtro 
     *ngIf="mostrarBuscaAvancada"
+    (formEvent)="setBuscaAvancada($event)"
+    class="form-filtro"
     ></app-form-filtro>
     
     <div class="buttons" >
