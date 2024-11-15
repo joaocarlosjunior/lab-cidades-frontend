@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { TipoArquivo } from '../../core/models/TipoArquivo';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
+import { ApiResponse } from '../../core/interfaces/ApiResponse';
+import { TipoArquivo } from '../../core/models/TipoArquivo';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,11 @@ export class TipoArquivoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  list(): Observable<TipoArquivo[]> { 
+  listarPaginado(page: number = 0, size: number = 10): Observable<ApiResponse<TipoArquivo>> { 
+    return this.httpClient.get<ApiResponse<TipoArquivo>>(this.API + '/all', { params: { page, size} });
+  }
+
+  list(): Observable<TipoArquivo[]>{
     return this.httpClient.get<TipoArquivo[]>(this.API);
   }
 }
