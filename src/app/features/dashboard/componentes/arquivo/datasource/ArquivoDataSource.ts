@@ -1,6 +1,6 @@
 import { DataSource } from '@angular/cdk/table';
-import { BehaviorSubject, catchError, finalize, Observable, of } from 'rxjs';
-import { ArquivoResponse } from '../../../../../core/interfaces/ArquivoResponse';
+import { BehaviorSubject, catchError, delay, finalize, Observable, of } from 'rxjs';
+import { ApiResponse } from '../../../../../core/interfaces/ApiResponse';
 import { Arquivo } from '../../../../../core/models/Arquivo';
 import { ArquivoService } from '../../../../../shared/services/arquivo.service';
 import { CollectionViewer } from '@angular/cdk/collections';
@@ -10,7 +10,9 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
   private arquivoSubject = new BehaviorSubject<Arquivo[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private countSubject = new BehaviorSubject<number>(0);
+
   public counter$ = this.countSubject.asObservable();
+  public loading$ = this.loadingSubject.asObservable();
 
   constructor(
     private _arquivoService: ArquivoService,
@@ -28,7 +30,7 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
   }
 
   carregarArquivos(page = 0, size = 10) {
-    const emptyResponse: ArquivoResponse = {
+    const emptyResponse: ApiResponse<Arquivo> = {
       content: [],
       page: {
         totalElements: 0,
@@ -42,13 +44,14 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
     this._arquivoService
       .list(page, size)
       .pipe(
+        delay(3000), 
         catchError((error) => {
           this._toastr.error('Erro ao carregar arquivos', 'Erro');
           return of(emptyResponse);
         }),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe((result: ArquivoResponse) => {
+      .subscribe((result: ApiResponse<Arquivo>) => {
         if (result && result.content && result.content.length > 0) {
           this.arquivoSubject.next(result.content);
           this.countSubject.next(result.page.totalElements);
@@ -58,7 +61,7 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
   }
 
   carregarArquivosPorTitulo(titulo: string, page = 0, size = 10) {
-    const emptyResponse: ArquivoResponse = {
+    const emptyResponse: ApiResponse<Arquivo> = {
       content: [],
       page: {
         totalElements: 0,
@@ -71,13 +74,14 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
     this._arquivoService
       .buscarArquivoPorTitulo(titulo, page, size)
       .pipe(
+        delay(3000),
         catchError((error) => {
           this._toastr.error(error.error.detail, 'Erro ao carregar arquivo');
           return of(emptyResponse);
         }),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe((result: ArquivoResponse) => {
+      .subscribe((result: ApiResponse<Arquivo>) => {
         if (result && result.content && result.content.length > 0) {
           this.arquivoSubject.next(result.content);
           this.countSubject.next(result.page.totalElements);
