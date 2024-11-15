@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { map, Observable, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { ArquivoResponse } from '../../core/interfaces/ArquivoResponse';
+import { ApiResponse } from '../../core/interfaces/ApiResponse';
 import { Arquivo } from '../../core/models/Arquivo';
 
 @Injectable({
@@ -17,8 +17,8 @@ export class ArquivoService {
 
   constructor(private httpClient: HttpClient) {}
 
-  list(page: number = 0, size: number = 10): Observable<ArquivoResponse> {
-      return this.httpClient.get<ArquivoResponse>(this.API, { params: { page, size} });
+  list(page: number = 0, size: number = 10): Observable<ApiResponse<Arquivo>> {
+      return this.httpClient.get<ApiResponse<Arquivo>>(this.API, { params: { page, size} });
   }
 
   buscarAssunto(assunto: string) {
@@ -27,7 +27,7 @@ export class ArquivoService {
     let params = new HttpParams()
     .set('q', assunto);
 
-    return this.httpClient.get<ArquivoResponse>(this.API + '/search', { params }).pipe(
+    return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/search', { params }).pipe(
       map((response) => {
         return response.content;
       })
@@ -42,7 +42,7 @@ export class ArquivoService {
       : {};
 
     return this.httpClient
-      .get<ArquivoResponse>(this.API + '/search-advanced', options)
+      .get<ApiResponse<Arquivo>>(this.API + '/search-advanced', options)
       .pipe(
         map((response) => {
           return response.content;
@@ -71,7 +71,7 @@ export class ArquivoService {
   }
 
   buscarArquivoPorTitulo(q: string, page: number = 0, size: number = 10){
-    return this.httpClient.get<ArquivoResponse>(this.API + '/titulo', { params: { q, page, size} });
+    return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/titulo', { params: { q, page, size} });
   }
 
   private handleError(error: HttpErrorResponse) {
