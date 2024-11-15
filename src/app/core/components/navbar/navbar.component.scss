@@ -95,6 +95,14 @@ i {
   opacity: 0;
 }
 
+.nav__close {
+  color: var(--cancel-color);
+}
+
+.nav__burger {
+  color: var(--primary-color);
+}
+
 /* Navigation for mobile devices */
 @media screen and (max-width: 1118px) {
   .nav__menu {
@@ -171,6 +179,8 @@ i {
   font-size: 1.25rem;
   font-weight: initial;
   transition: transform .4s;
+  width: 20px;
+  height: 20px;
 }
 
 .dropdown__link, 
