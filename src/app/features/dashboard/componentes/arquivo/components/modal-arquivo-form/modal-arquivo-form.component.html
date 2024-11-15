@@ -199,12 +199,23 @@
       </mat-form-field>
 
       <div class="box-3">
-        <button type="button" mat-raised-button color="warn" (click)="cancelarCadastroArquivo()">Cancelar</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="arquivoForm.invalid">
+        <button
+          type="button"
+          mat-raised-button
+          color="warn"
+          (click)="cancelarCadastroArquivo()"
+        >
+          Cancelar
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="arquivoForm.invalid"
+        >
           Enviar
         </button>
       </div>
-
     </form>
   </mat-card-content>
 </mat-card>
