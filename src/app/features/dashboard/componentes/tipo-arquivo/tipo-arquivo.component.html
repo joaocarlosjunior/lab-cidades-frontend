@@ -1,1 +1,21 @@
-<p>tipo-arquivo works!</p>
+<div class="content">
+    <div class="content-top" >
+      <button
+      mat-raised-button
+      color="primary"
+      (click)="onClickCadastrarTipoArquivo()"
+    >
+      Cadastrar Tipo Arquivo
+    </button>
+      <button
+      mat-raised-button
+      color="primary"
+    >
+      Recarregar Arquivos
+    </button>
+    </div>
+  
+    <app-tipo-arquivo-table ngSkipHydration/>
+  
+  </div>
+  
