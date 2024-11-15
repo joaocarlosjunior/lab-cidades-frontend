@@ -1,0 +1,16 @@
+<div class="search-component">
+    <app-search-bar 
+    *ngIf="!mostrarBuscaAvancada"
+    ></app-search-bar>
+    
+    <app-form-filtro 
+    *ngIf="mostrarBuscaAvancada"
+    (formEvent)="setBuscaAvancada($event)"
+    class="form-filtro"
+    ></app-form-filtro>
+    
+    <div class="buttons" >
+        <button type="button" (click)="toggleBuscaAvancada()" *ngIf="mostrarBuscaAvancada">Busca Simples</button>
+        <button type="button" (click)="toggleBuscaAvancada()" *ngIf="!mostrarBuscaAvancada">Busca Avançada</button>
+    </div>
+</div>
