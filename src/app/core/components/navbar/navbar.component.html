@@ -8,8 +8,10 @@
      </a>
 
       <div class="nav__toggle" id="nav-toggle">
-        <i class="ri-menu-line nav__burger"></i>
-        <i class="ri-close-line nav__close"></i>
+        <mat-icon class="nav__burger">menu</mat-icon>
+        <mat-icon class="nav__close">close</mat-icon>
+<!--         <i class="nav__burger"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="undefined"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></i>
+        <i class="nav__close"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg></i> -->
       </div>
     </div>
 
@@ -22,13 +24,13 @@
         
         <li class="dropdown__item" >
           <div class="nav__link">
-            Acervo <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+            Acervo <mat-icon class="dropdown__arrow">keyboard_arrow_down</mat-icon>
           </div>
 
           <ul class="dropdown__menu">
             <li>
               <a routerLink="/buscador" class="dropdown__link">
-                Buscar Assunto <i class="ri-search-line"></i>
+                Buscar Assunto <mat-icon>search</mat-icon>
               </a>
             </li>
           </ul>
