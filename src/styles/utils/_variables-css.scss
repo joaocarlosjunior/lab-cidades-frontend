@@ -1,6 +1,6 @@
 /*=============== VARIABLES CSS ===============*/
 :root {
-    --header-height: 5.1rem;
+    --header-height: 5rem;
   
     /*========== Colors ==========*/
     /*Color mode HSL(hue, saturation, lightness)*/
@@ -12,8 +12,6 @@
     --text-color: #232323;
     --primary-color: #304AA0;
     --primary-color-hover: #496bdd ;
-    --secondary-color: #f0e63a;
-    --secondary-color-hover: #f0d400;
     --header-footer-color: #fff;
     --text-header-footer-color: #000;
     --text-header-footer-color-hover: #cacaca;
@@ -35,6 +33,7 @@
     --font-semi-bold: 600;
     --font-bold: 700;
     --font-extra-bold: 800;
+    --font-black: 900; 
   
     --text-color: #232323;
   
