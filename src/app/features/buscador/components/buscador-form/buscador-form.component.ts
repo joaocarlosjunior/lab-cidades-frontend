@@ -4,6 +4,7 @@ import { Observable, take } from 'rxjs';
 import { Arquivo } from '../../../../core/models/Arquivo';
 import { ArquivoService } from '../../../../shared/services/arquivo.service';
 import { FormArray, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-buscador-form',
@@ -15,12 +16,13 @@ export class BuscadorFormComponent {
   mostrarBuscaAvancada = false;
   @Output() buscaIniciada = new EventEmitter<boolean>();
   @Output() arquivosEncontradoEvent = new EventEmitter<Arquivo[]>();
-  
+
   
   constructor(
     private arquivoService: ArquivoService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _toastr: ToastrService
   ) {
   }
 
@@ -36,20 +38,33 @@ export class BuscadorFormComponent {
 
   setBusca(assunto: string) {
     this.buscaIniciada.emit(true); // Emite que a busca iniciou
+ 
+      setTimeout(() => {
+        // Simula a chamada HTTP com delay
+        this.arquivos = this.arquivoService.buscarAssunto(assunto);
+        
+        this.arquivos.pipe(take(1)).subscribe({
+          next: (data) => {
+            this.arquivosEncontradoEvent.emit(data);
+            this._toastr.success('','Arquivo encontrado');
+          },
+          error: (err) => {
+            this.arquivosEncontradoEvent.emit([]);
+            switch (err.error.status) {
+              case 404:
+                this._toastr.error('Por favor tente novamente',err.error.detail);
+                break;
+              case 400:
+                this._toastr.error('Por favor tente novamente',err.error.detail);
+                break;
+              default:
+                this._toastr.error('Por favor tente novamente','Erro ao buscar arquivo');
+                break;
+            }
+          },
+        });
+      }, 3000); // Atraso de 3 segundos para simular o tempo de resposta
 
-    setTimeout(() => {
-      // Simula a chamada HTTP com delay
-      this.arquivos = this.arquivoService.buscarAssunto(assunto);
-      
-      this.arquivos.pipe(take(1)).subscribe({
-        next: (data) => {
-          this.arquivosEncontradoEvent.emit(data);
-        },
-        error: (err) => {
-          this.arquivosEncontradoEvent.emit(err);
-        },
-      });
-    }, 3000); // Atraso de 3 segundos para simular o tempo de resposta
   }
 
   setBuscaAvancada(form: FormGroup) {
@@ -57,20 +72,33 @@ export class BuscadorFormComponent {
 
     const query = this._gerarQuery(form)
     const source = this._getTipoArquivo(form);
-
-  
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { q: query, source: source}
+      queryParams: { advanced: query, source: source}
     });
 
     setTimeout(() => {
-      this.arquivoService.buscaAvancada(query, source).pipe(take(1)).subscribe({
+      this.arquivoService.buscaAvancada(query, source)
+      .pipe(take(1))
+      .subscribe({
         next: (arquivos) => {
           this.arquivosEncontradoEvent.emit(arquivos);
+          this._toastr.success('','Arquivo encontrado');
         },
-        error: (error) => {
-          this.arquivosEncontradoEvent.emit(error);
+        error: (err) => {
+          this.arquivosEncontradoEvent.emit([]);
+          console.log(err)
+          switch (err.error.status) {
+            case 404:
+              this._toastr.error('Por favor tente novamente',err.error.detail);
+              break;
+            case 400:
+              this._toastr.error('Por favor tente novamente',err.error.detail);
+              break;
+            default:
+              this._toastr.error('Por favor tente novamente','Erro ao buscar arquivo');
+              break;
+          }
         },
       });
     }, 3000); // Atraso de 3 segundos
