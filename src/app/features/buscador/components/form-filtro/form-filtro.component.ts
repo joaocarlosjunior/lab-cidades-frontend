@@ -38,7 +38,7 @@ export class FormFiltroComponent implements OnInit{
   carregaTipoArquivos(): void {
     this.tipoArquivoService.list().subscribe({
       next: (tiposArquivo: TipoArquivo[]) => {
-        this.tipoArquivoOptions = [{ id: 0, nome_tipo_arquivo: 'Todos os tipos' }, ...tiposArquivo];
+        this.tipoArquivoOptions = [{ id: 0, nome_tipo_arquivo: 'Todos os tipos', created_at: '', updated_at: '' }, ...tiposArquivo];
       },
       error: (err) => {
         console.error(err);
