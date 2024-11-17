@@ -6,4 +6,6 @@ export interface Cidade{
     nome_cidade: string;
     mesorregiao: Mesorregiao;
     estado: Estado;
+    created_at: string;
+    updated_at: string;
 }
