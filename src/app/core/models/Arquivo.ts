@@ -1,8 +1,5 @@
 import { Autor } from "./Autor";
-import { Categoria } from "./Categoria";
 import { Cidade } from "./Cidade";
-import { Localidade } from "./Localidade";
-import { PalavraChave } from "./PalavraChave";
 import { TipoArquivo } from "./TipoArquivo";
 
 export interface Arquivo {
