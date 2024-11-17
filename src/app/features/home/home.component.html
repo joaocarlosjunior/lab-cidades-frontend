@@ -4,21 +4,29 @@
 <main>
   <section class="section-1">
     <div class="content">
-      <div class="b-img kenBurnsToLeft kenBurnsToLeftTop"></div>
+      <div
+        rel="preload"
+        class="b-img kenBurnsToLeft kenBurnsToLeftTop"
+        lazyload
+      ></div>
       <div class="mainContent">
         <h2 class="appearAnimation-500">Bem vindo à página do</h2>
         <h1 class="appearAnimation-750">Lab Cidades Uesc</h1>
         <p class="appearAnimation-1000">
-          Lab Cidades é um projeto de extensão da Universidade Estadual de
-          Santa Cruz (UESC), localizado na região cacaueira do sul da Bahia,
-          que tem como principal objetivo mapear e analisar os problemas
-          urbanos enfrentados por essa região.
+          Lab Cidades é um projeto de extensão da Universidade Estadual de Santa
+          Cruz (UESC), localizado na região cacaueira do sul da Bahia, que tem
+          como principal objetivo mapear e analisar os problemas urbanos
+          enfrentados por essa região.
         </p>
-        <app-button-primary class="appearAnimation-1250" [text]="'Saiba Mais'" [route]="'/sobre'" ></app-button-primary>
+        <app-button-primary
+          class="appearAnimation-1250"
+          [text]="'Saiba Mais'"
+          [route]="'/sobre'"
+        ></app-button-primary>
       </div>
     </div>
   </section>
-  
+
   <section class="section-2">
     <div class="maxWidthWrapper">
       <div class="searchEngine appearAnimation scrollAnimation">
@@ -27,8 +35,8 @@
           público municipais
         </h2>
         <p>
-          Busque por artigos, pesquisas, trabalhos técnicos e mapas tudo reunido em um só
-          lugar
+          Busque por artigos, pesquisas, trabalhos técnicos e mapas tudo reunido
+          em um só lugar
         </p>
         <app-search-bar></app-search-bar>
       </div>
