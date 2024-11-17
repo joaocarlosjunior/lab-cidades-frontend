@@ -1,3 +1,21 @@
+@use '@angular/material' as mat;
+
+// Importa os estilos principais do Angular Material
+@include mat.core();
+
+// Define paletas personalizadas
+$custom-app-primary: mat.define-palette(mat.$indigo-palette, 500); // Paleta primária
+$custom-app-accent: mat.define-palette(mat.$blue-gray-palette, 700);    // Paleta de destaque
+
+// Define o tema principal com foreground personalizado para accent
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-app-primary, // Paleta primária
+    accent: $custom-app-accent,   // Paleta de destaque
+  )
+));
+
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "./styles/utils/variables-css";
 @import "./styles/utils/max-width-wrapper";
@@ -8,6 +26,9 @@
 @import "./styles/utils/animation";
 @import "./styles/utils/utils";
 
+html{
+  @include mat.all-component-themes($custom-theme);
+}
 
 /*=============== BASE ===============*/
 * {
