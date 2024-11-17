@@ -52,12 +52,14 @@ i {
   align-items: center;
 }
 
-/* .nav__logo {
+.nav__logo {
   display: inline-flex;
   align-items: center;
-  column-gap: .25rem;
-  font-weight: var(--font-semi-bold);
-} */
+  column-gap: .5rem;
+  font-size: x-large;
+  color: var(--primary-color);
+  font-weight: var(--font-black);
+}
 
 .nav__logo{
   height: 50%;
