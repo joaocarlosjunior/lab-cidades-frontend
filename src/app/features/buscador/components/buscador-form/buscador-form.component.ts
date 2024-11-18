@@ -69,9 +69,11 @@ export class BuscadorFormComponent {
 
   setBuscaAvancada(form: FormGroup) {
     this.buscaIniciada.emit(true);
+    console.log(form.value)
 
     const query = this._gerarQuery(form);
     const source = this._getTipoArquivo(form);
+    console.log(query)
     
     this.router.navigate([], {
       relativeTo: this.route,
@@ -121,51 +123,45 @@ export class BuscadorFormComponent {
 
   private _gerarQuery(formGroup: FormGroup): string {
     const filtros = formGroup.get('filtros')?.value;
-
+  
     if (!filtros || filtros.length === 0) {
       return '';
     }
-
-    const operadores: string[] = [];
-    const queryParts: string[] = [];
-    let currentGroup: string[] = [];
-
-    // Extrair os operadores em um array, começando pelo segundo filtro
-    for (let i = 1; i < filtros.length; i++) {
-      operadores.push(filtros[i].operador || 'AND');
-    }
-
-    // Processar os filtros e criar os grupos
+  
+    const grupos: string[] = [];
+    let grupoAtual: string[] = [];
+    let operadorAnterior: string | null = null;
+  
     filtros.forEach((filter: any, index: number) => {
-      const { filtro, searchTerm } = filter;
+      const { filtro, searchTerm, operador } = filter;
       const filterExpression = `${filtro}:contains(${searchTerm})`;
-
+  
       if (index === 0) {
         // O primeiro filtro inicia o primeiro grupo
-        currentGroup.push(filterExpression);
-      } else {
-        const operadorAtual = operadores[index - 1];
-
-        if (operadorAtual === 'OR') {
-          // Se for OR, mantém no mesmo grupo
-          currentGroup.push(filterExpression);
-        } else if (operadorAtual === 'AND') {
-          // Se for AND, fecha o grupo atual e inicia um novo
-          queryParts.push(`(${currentGroup.join(' OR ')})`);
-          currentGroup = [filterExpression];
+        grupoAtual.push(filterExpression);
+      } else if (operador === 'AND') {
+        // Filtros com 'AND' permanecem no mesmo grupo
+        grupoAtual.push(filterExpression);
+      } else if (operador === 'OR') {
+        // Se for 'OR', fecha o grupo atual e inicia um novo
+        if (grupoAtual.length > 0) {
+          grupos.push(`(${grupoAtual.join(' AND ')})`);
         }
+        grupoAtual = [filterExpression];
       }
+  
+      operadorAnterior = operador;
     });
-
+  
     // Adicionar o último grupo à query
-    if (currentGroup.length > 0) {
-      queryParts.push(`(${currentGroup.join(' OR ')})`);
+    if (grupoAtual.length > 0) {
+      grupos.push(`(${grupoAtual.join(' AND ')})`);
     }
-
-    // Unir todos os grupos com AND
-    return queryParts.join(' AND ');
+  
+    // Unir todos os grupos com OR
+    return grupos.join(' OR ');
   }
-
+  
   private _getTipoArquivo(form: FormGroup) {
     return form.get('tipoArquivo')?.value;
   }
