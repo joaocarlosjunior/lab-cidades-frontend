@@ -1,0 +1,70 @@
+main{
+    position: relative;
+    min-height: 70vh; // Garante que o main ocupe a tela inteira se precisar
+    height: auto;
+    display: flex;
+    justify-content: center;
+}
+.content{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    gap: 50px;
+
+    .arquivo-detail{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 70%;
+
+        h5{
+            font-size: 1.25rem;
+            font-weight: var(--font-bold);
+            line-height: 1.2;
+            color: var(--title-archive)
+        }
+
+        .descricao{
+            text-align: justify;
+            line-height: 1.5;
+        }
+    }
+
+    .arquivo-links{
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .btn{
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+            font-weight: var(--font-regular);
+            cursor: pointer;
+            color: var(--title-archive);
+            border: 1px solid var(--title-archive);
+            font-size: 13px;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            background-color: transparent;
+            padding: .375rem .75rem;
+            line-height: 1.5;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .btn:hover{
+            background-color: var(--primary-color-hover);
+            color: var(--white-color);
+        }
+
+    }
+}
+
+.m-b{
+    margin-bottom: 6px;
+}
