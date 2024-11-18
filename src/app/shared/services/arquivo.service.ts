@@ -50,15 +50,12 @@ export class ArquivoService {
       );
   }
 
-  getArquivoByCode(code: any) {
-    const options = { params: new HttpParams().set('id', code) };
-    return this.httpClient.get<Arquivo>(this.API + '/{id}', options).pipe(
-      map((response) => {
-        return response;
-      })
+  getArquivoByCode(id: number): Observable<Arquivo> {
+    return this.httpClient.get<Arquivo>(`${this.API}/${id}`).pipe(
+      map((response) => response)
     );
   }
-
+  
   criarArquivo(formData: FormData) {
     return this.httpClient.post<void>(this.API, formData);
   }
@@ -72,6 +69,10 @@ export class ArquivoService {
 
   buscarArquivoPorTitulo(q: string, page: number = 0, size: number = 10){
     return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/titulo', { params: { q, page, size} });
+  }
+
+  editarArquivo(formData: FormData, id: number){
+    return this.httpClient.put(`${this.API}/${id}`, formData)
   }
 
   private handleError(error: HttpErrorResponse) {
