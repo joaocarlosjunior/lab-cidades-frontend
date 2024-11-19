@@ -8,6 +8,7 @@ import { SideBarComponent } from './componentes/side-bar/side-bar.component';
 import { TipoArquivoModule } from './componentes/tipo-arquivo/tipo-arquivo.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { CardInfoDashboardComponent } from './componentes/home-dashboard/components/card-info-dashboard/card-info-dashboard.component';
 
 
 
@@ -18,6 +19,7 @@ import { DashboardComponent } from './dashboard.component';
     LocalidadeComponent,
     SideBarComponent,
     HomeDashboardComponent,
+    CardInfoDashboardComponent,
   ],
   imports: [
     SharedModule,
