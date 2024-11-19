@@ -13,6 +13,7 @@ import { CidadeService } from './services/cidade.service';
 import { EstadoService } from './services/estado.service';
 import { MesorregiaoService } from './services/mesorregiao.service';
 import { TipoArquivoService } from './services/tipo-arquivo.service';
+import { DashboardService } from './services/dashboard.service';
 
 
 
@@ -40,6 +41,6 @@ import { TipoArquivoService } from './services/tipo-arquivo.service';
     SearchBarComponent,
     ButtonPrimaryComponent
   ],
-  providers: [ArquivoService, TipoArquivoService, MesorregiaoService, CidadeService, EstadoService]
+  providers: [ArquivoService, TipoArquivoService, MesorregiaoService, CidadeService, EstadoService, DashboardService]
 })
 export class SharedModule { }
