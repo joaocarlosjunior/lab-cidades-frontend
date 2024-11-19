@@ -1,1 +1,43 @@
-<p>login works!</p>
+<mat-card class="mat-card">
+  <div class="header">
+    <div class="logo">
+        <img width="70" height="70" src="assets/icons/city-icon.svg" alt="">
+        <span>LAB CIDADES</span>
+    </div>
+    <h1>Login</h1>
+  </div>
+  <mat-card-content cl>
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field class="wd" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input type="text" matInput formControlName="login" />
+        <mat-error *ngIf="loginForm.get('login')?.hasError('required')">
+          Insira email
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="wd" appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input type="password" matInput formControlName="password" />
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Insira senha
+        </mat-error>
+      </mat-form-field>
+
+      <p *ngIf="error" class="error">
+        {{ error }}
+      </p>
+
+      <div class="button">
+        <button
+          [disabled]="loginForm.invalid"
+          mat-raised-button
+          color="primary"
+          type="submit"
+        >
+          Entrar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
