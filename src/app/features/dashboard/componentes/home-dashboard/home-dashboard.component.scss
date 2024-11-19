@@ -1,0 +1,12 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    padding: 100px 50px;
+    gap: 20px;
+
+    .cards{
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+}

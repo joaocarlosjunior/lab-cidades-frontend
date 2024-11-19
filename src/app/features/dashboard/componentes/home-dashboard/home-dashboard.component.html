@@ -1,3 +1,26 @@
 <div class="content">
-  <span>HOME DASHBOARD</span>
+  <h2>Olá. <br>Essas são as informações da aplicação no momento:</h2>
+  <div class="cards" >
+    
+    <app-card-info-dashboard 
+    [tituloCard]="'Número de arquivos cadastrados'" 
+    [infoCard]="quantidadeArquivo"
+    />
+
+    <app-card-info-dashboard 
+    [tituloCard]="'Número de tipos arquivo cadastrados'" 
+    [infoCard]="quantidadeTipoArquivo"
+    />
+
+    <app-card-info-dashboard 
+    [tituloCard]="'Total de buscas realizadas'" 
+    [infoCard]="175"
+    />
+
+    <app-card-info-dashboard 
+    [tituloCard]="'Buscas realizadas esse mês'" 
+    [infoCard]="67"
+    />
+    
+  </div>
 </div>
