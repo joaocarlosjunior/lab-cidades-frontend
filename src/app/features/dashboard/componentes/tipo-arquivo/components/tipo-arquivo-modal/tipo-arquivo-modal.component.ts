@@ -1,0 +1,99 @@
+import { AfterViewInit, Component, Inject, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
+import { TipoArquivoTableComponent } from '../tipo-arquivo-table/tipo-arquivo-table.component';
+
+@Component({
+  selector: 'app-tipo-arquivo-modal',
+  templateUrl: './tipo-arquivo-modal.component.html',
+  styleUrl: './tipo-arquivo-modal.component.scss',
+})
+export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
+  nomeTipoArquivoForm = new FormControl('', Validators.required);
+
+  @ViewChild(TipoArquivoTableComponent) tipoArquivoTableComponent!: TipoArquivoTableComponent;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _ref: MatDialogRef<TipoArquivoModalComponent>,
+    private _tipoArquivoService: TipoArquivoService,
+    private _toastr: ToastrService
+  ) {}
+
+
+  ngOnInit(): void {
+    if(this.data.id !== 0){
+      this.setModalData(this.data.id)
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // Espera a inicialização completa do @ViewChild
+    if (this.tipoArquivoTableComponent) {
+      // Esse método só será chamado após o componente ser totalmente carregado
+      console.log('TipoArquivoTableComponent foi inicializado!');
+    }
+  }
+
+  setModalData(id: number){
+    this._tipoArquivoService.buscarTipoArquivoPeloId(id).subscribe({
+      next: (tipoArquivo) => {
+        this.nomeTipoArquivoForm.setValue(tipoArquivo.nome_tipo_arquivo);
+      },
+      error: (error) => {
+        this._toastr.error('', 'Erro ao buscar Tipo Arquivo');
+        this.closeModal();
+      }
+    })
+  }
+
+  closeModal(){
+    this._ref.close();
+  }
+
+  onSubmit() {
+    let nomeTipoArquivo = this.nomeTipoArquivoForm.value as string;
+
+    if(this.data.id === 0){
+      this._tipoArquivoService.criarTipoArquivo(nomeTipoArquivo).subscribe({
+        next: () => {
+          this._toastr.success('', 'Tipo Arquivo salvo com sucesso');
+          this.closeModal();
+        },
+        error: (error) => {
+          switch(error?.error?.status){
+            case 409:
+              this._toastr.error(
+                error?.error?.detail,
+                'Erro ao salvar o arquivo'
+              );
+              break;
+            default:
+              this._toastr.error('', 'Erro ao salvar o tipo arquivo');
+          }
+        }
+      });
+    }else{
+      this._tipoArquivoService.editarTipoArquivo(this.data.id, nomeTipoArquivo).subscribe({
+        next: () => {
+          this._toastr.success('', 'Tipo Arquivo editado com sucesso');
+          this.closeModal();
+        },
+        error: (error) => {
+          switch(error?.error?.status){
+            case 409:
+              this._toastr.error(
+                error?.error?.detail,
+                'Erro ao salvar o arquivo'
+              );
+              break;
+            default:
+              this._toastr.error('', 'Erro ao editar tipo arquivo');
+          }
+        }
+      });
+    }
+  }
+}

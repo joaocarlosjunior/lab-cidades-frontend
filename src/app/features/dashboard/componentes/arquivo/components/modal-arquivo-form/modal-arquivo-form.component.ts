@@ -1,25 +1,32 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
+import { ToastrService } from 'ngx-toastr';
+import { map, Observable, startWith } from 'rxjs';
+import { Autor } from '../../../../../../core/models/Autor';
+import { Cidade } from '../../../../../../core/models/Cidade';
+import { Estado } from '../../../../../../core/models/Estado';
+import { TipoArquivo } from '../../../../../../core/models/TipoArquivo';
 import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
-import { Arquivo } from '../../../../../../core/models/Arquivo';
-import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
 import { CidadeService } from '../../../../../../shared/services/cidade.service';
 import { EstadoService } from '../../../../../../shared/services/estado.service';
-import { TipoArquivo } from '../../../../../../core/models/TipoArquivo';
-import { Cidade } from '../../../../../../core/models/Cidade';
-import { map, Observable, startWith } from 'rxjs';
-import { Estado } from '../../../../../../core/models/Estado';
+import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
 import { cidadeValida } from '../../../../../../shared/validators/cidade-valida.validator';
-import { ToastrService } from 'ngx-toastr';
-import { MatSelectChange } from '@angular/material/select';
+import { DownloadArquivo } from '../../../../../../shared/Class/DownloadArquivo';
 
 @Component({
   selector: 'app-modal-arquivo-form',
   templateUrl: './modal-arquivo-form.component.html',
   styleUrl: './modal-arquivo-form.component.scss',
 })
-export class ModalArquivoFormComponent implements OnInit{
+export class ModalArquivoFormComponent implements OnInit {
   arquivoForm!: FormGroup;
 
   tiposArquivoOptions!: TipoArquivo[];
@@ -31,11 +38,17 @@ export class ModalArquivoFormComponent implements OnInit{
   adicionarCidade: boolean = false;
   file: File | null = null;
 
+  tituloForm: string = '';
+
   errorMessage: string = '';
 
-  inputData: any;
-  editData!: any;
-  closeMessage = 'closed using directive';
+  nomeArquivoCadastrado: string = '';
+
+  idArquivo!: number;
+
+  downloadArquivo!:DownloadArquivo
+
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -46,32 +59,58 @@ export class ModalArquivoFormComponent implements OnInit{
     private _cidadeService: CidadeService,
     private _estadoService: EstadoService,
     private _cdr: ChangeDetectorRef,
-    private _toastr: ToastrService,
+    private _toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.inicializarForm();
+    this.tituloForm = this.data.tituloModal;
+    this.carregarEstados();
     this.carregarTipoArquivos();
 
-    this.inputData = this.data;
-    if (this.inputData > 0) {
-      this.setModalData(this.inputData.code);
+    if (this.data.id !== 0) {
+      this.setModalData(this.data.id);
     }
   }
 
-  setModalData(code: any) {
-    this._arquivoService.getArquivoByCode(code).subscribe((item) => {
-      this.editData = item;
-      this.arquivoForm.setValue({
-        titulo: this.editData.titulo,
-        descricao: this.editData.descricao,
-        ano_publicacao: this.editData.anoPublicacao,
-        arquivo_url: this.editData.arquivoUrl,
-        autores: this.editData.autores,
-        categorias: this.editData.categorias,
-        palavras_chave: this.editData.palavrasChave,
-
-      });
+  setModalData(id: number) {
+    this._arquivoService.getArquivoByCode(id).subscribe({
+      next: (arquivo) => {
+        this.arquivoForm.patchValue({
+          titulo: arquivo.titulo,
+          descricao: arquivo.descricao,
+          ano_publicacao: arquivo.ano_publicacao,
+          arquivo_url: arquivo.arquivo_url,
+          tipo_arquivo: arquivo.tipo_arquivo.id || null,
+        });
+  
+        this.nomeArquivoCadastrado = arquivo.nome_arquivo;
+        this.idArquivo = id;
+  
+        // Configura os autores (FormArray)
+        const autoresFormArray = this._fb.array([]);
+        arquivo.autores.forEach((autor: Autor) => {
+          autoresFormArray.push(
+            this._fb.control(autor.nome_autor, Validators.required)
+          );
+        });
+        this.arquivoForm.setControl('autores', autoresFormArray);
+  
+        // Configura a cidade e estado, se disponíveis
+        if (arquivo.cidade) {
+          this.adicionarCidade = true;
+          this.carregarEstados();
+          this.carregarCidades(arquivo.cidade.estado.id);
+  
+          this.arquivoForm.patchValue({
+            cidade: arquivo.cidade, // Cidade será exibida no autocomplete
+          });
+        }
+      },
+      error: (error) => {
+        this._toastr.error('', 'Erro ao buscar arquivo');
+        this.closeModal();
+      }
     });
   }
 
@@ -83,6 +122,7 @@ export class ModalArquivoFormComponent implements OnInit{
       arquivo_url: [''],
       autores: this._fb.array([this._fb.control('', Validators.required)]),
       tipo_arquivo: [null, Validators.required],
+      cidade: [null],
     });
   }
 
@@ -90,26 +130,27 @@ export class ModalArquivoFormComponent implements OnInit{
     this._estadoService.list().subscribe({
       next: (estados: Estado[]) => {
         this.estadosOptions = estados;
+        // Seleciona o estado correspondente
+        if (this.arquivoForm.get('cidade')?.value?.estado) {
+          const estadoId = this.arquivoForm.get('cidade')?.value?.estado?.id;
+          this.arquivoForm.patchValue({
+            estado: estadoId,
+          });
+        }
       },
-      error: (err) => {
-        console.error(err);
-      },
+      error: (err) => console.error(err),
     });
   }
-
 
   carregarCidades(estadoId: number) {
     this._cidadeService.listaCidadesPeloIdEstado(estadoId).subscribe({
       next: (cidades: Cidade[]) => {
         this.cidadeOptions = cidades;
-        console.log(cidades);
         this.arquivoForm.controls['cidade'].setValidators([
           cidadeValida(this.cidadeOptions),
         ]);
       },
-      error: (err) => {
-        console.error(err);
-      },
+      error: (err) => console.error(err),
     });
   }
 
@@ -119,8 +160,10 @@ export class ModalArquivoFormComponent implements OnInit{
         this.tiposArquivoOptions = tiposArquivo;
       },
       error: (err) => {
-        console.error(err);
-        this._toastr.error('Por favor recarregue a página!', 'Erro ao carregar tipo arquivo');
+        this._toastr.error(
+          'Por favor recarregue a página!',
+          'Erro ao carregar tipo arquivo'
+        );
       },
     });
   }
@@ -142,7 +185,7 @@ export class ModalArquivoFormComponent implements OnInit{
   }
 
   closeModal() {
-    this._ref.close('Closed using function');
+    this._ref.close();
   }
 
   onSubmit() {
@@ -179,39 +222,67 @@ export class ModalArquivoFormComponent implements OnInit{
         })
       );
 
-      this._arquivoService.criarArquivo(formData).subscribe({
-        next: () => {
-          this._toastr.success('', 'Arquivo salvo com sucesso');
-          this.arquivoForm.reset();
-          this.file = null;
-        },
-        error: (error) => {
-        
-          switch(error?.error?.status){
-            case 409:
-              this._toastr.error(error?.error?.detail, 'Erro ao salvar o arquivo');
-              this.errorMessage = error?.error?.detail as string;
-              console.log(this.errorMessage)
-              this._cdr.detectChanges();
-              break;
-            default:
-              this._toastr.error('', 'Erro ao salvar o arquivo');
-          }
-          
-        },
-      });
-    } else {
-      console.log(this.arquivoForm.value);
-      alert('Erro ao cadastrar arquivo');
+      if (this.data.id === 0) {
+        this._arquivoService.criarArquivo(formData).subscribe({
+          next: () => {
+            this._toastr.success('', 'Arquivo salvo com sucesso');
+            this.closeModal();
+            this.arquivoForm.reset();
+            this.file = null;
+          },
+          error: (error) => {
+            switch (error?.error?.status) {
+              case 409:
+                this._toastr.error(
+                  error?.error?.detail,
+                  'Erro ao salvar o arquivo'
+                );
+                this.errorMessage = error?.error?.detail as string;
+                this._cdr.detectChanges();
+                break;
+              default:
+                this._toastr.error('', 'Erro ao salvar o arquivo');
+            }
+          },
+        });
+      }else{
+        this._arquivoService.editarArquivo(formData, this.data.id).subscribe({
+          next: () => {
+            this._toastr.success('', 'Arquivo editado com sucesso');
+            this.arquivoForm.reset();
+            this.closeModal();
+            this.file = null;
+          },
+          error: (error) => {
+            switch (error?.error?.status) {
+              case 409:
+                this._toastr.error(
+                  error?.error?.detail,
+                  'Erro ao editar o arquivo'
+                );
+                console.log(error);
+                this.errorMessage = error?.error?.detail as string;
+                this._cdr.detectChanges();
+                break;
+              default:
+                this._toastr.error('', 'Erro ao editar o arquivo');
+                console.log(error);
+            }
+          },
+        });
+      }
     }
   }
 
-  // Métodos auxiliares para obter os arrays do formulário
+  onDownloadArquivo(arquivoId: number){
+    this.downloadArquivo = new DownloadArquivo(this._arquivoService, this._toastr);
+    this.downloadArquivo.downloadArquivo(arquivoId);
+  }
+
   get autores(): FormArray {
     return this.arquivoForm.get('autores') as FormArray;
   }
 
-  // Métodos para adicionar novos controles aos arrays
   addAutor(): void {
     this.autores.push(this._fb.control('', Validators.required));
   }
@@ -247,13 +318,12 @@ export class ModalArquivoFormComponent implements OnInit{
   removerArquivoSelecionado() {
     this.file = null;
 
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
   }
 
-  cancelarCadastroArquivo(){
-    alert('Cadastro de arquivo cancelado');
-  }
 }

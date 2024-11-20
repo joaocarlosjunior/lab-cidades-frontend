@@ -1,0 +1,11 @@
+.modal{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

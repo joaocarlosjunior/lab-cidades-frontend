@@ -1,5 +1,5 @@
-<mat-card>
-  <mat-card-title style="padding: 20px">{{ inputData.title }}</mat-card-title>
+<div class="modal">
+  <h1 style="padding: 20px">{{ tituloForm }}</h1>
   <mat-card-content>
     <form [formGroup]="arquivoForm" (ngSubmit)="onSubmit()">
       <div class="box-1">
@@ -17,9 +17,9 @@
         </mat-form-field>
 
         <!-- Ano de Publicação -->
-        <mat-form-field appearance="outline">
+        <mat-form-field style="width: 224px" appearance="outline">
           <mat-label>Ano de Publicação</mat-label>
-          <input matInput type="number" formControlName="ano_publicacao" />
+          <input style="text-align: center;" matInput type="number" formControlName="ano_publicacao" />
           <mat-error *ngIf="arquivoForm.get('ano_publicacao')?.hasError('min')">
             Ano inválido
           </mat-error>
@@ -78,7 +78,7 @@
           <!-- Tipo Arquivo -->
           <div class="tipo-arquivo">
             <mat-form-field appearance="outline">
-              <mat-label>Tipo Arquivo</mat-label>
+              <mat-label>Tipo Documento</mat-label>
               <mat-error
                 *ngIf="arquivoForm.get('tipo_arquivo')?.hasError('required')"
               >
@@ -96,7 +96,7 @@
           </div>
 
           <!-- Cidade e Estado -->
-          <div class="cidade-estado" *ngIf="adicionarCidade">
+          <div class="cidade-estado">
             <!-- Estado -->
             <mat-form-field appearance="outline">
               <mat-label>Estados</mat-label>
@@ -150,33 +150,19 @@
             <mat-icon>add</mat-icon> Adicionar Autor
           </button>
           <button type="button" mat-stroked-button color="primary">
-            <mat-icon>add</mat-icon> Cadastrar tipo arquivo
-          </button>
-
-          <button
-            type="button"
-            mat-stroked-button
-            color="primary"
-            (click)="addCidade()"
-            *ngIf="!adicionarCidade"
-          >
-            <mat-icon>add</mat-icon>Adicionar Cidade
-          </button>
-
-          <button
-            type="button"
-            mat-stroked-button
-            color="warn"
-            *ngIf="adicionarCidade"
-            (click)="removerCidade()"
-          >
-            <mat-icon>remove</mat-icon> Remover Cidade
+            <mat-icon>add</mat-icon> Cadastrar Tipo Documento
           </button>
         </div>
       </div>
 
       <!-- Upload do Arquivo -->
       <div class="upload-arquivo">
+        <div class="arquivo-cadastrado" *ngIf="nomeArquivoCadastrado">
+          <span>Arquivo cadastrado: {{ nomeArquivoCadastrado }}</span>
+          <button type="button" mat-stroked-button color="primary" (click)="onDownloadArquivo(idArquivo)">
+            <mat-icon>download</mat-icon> Download Arquivo
+          </button>
+        </div>
         <label for="file" class="custom-file-button">Escolha Arquivo:</label>
         <div class="input-arquivo">
           <input type="file" (change)="onFileSelected($event)" />
@@ -187,7 +173,7 @@
             color="warn"
             (click)="removerArquivoSelecionado()"
           >
-            <mat-icon>close</mat-icon> Remover Arquivo
+            <mat-icon>close</mat-icon> Remover Documento
           </button>
         </div>
       </div>
@@ -203,7 +189,7 @@
           type="button"
           mat-raised-button
           color="warn"
-          (click)="cancelarCadastroArquivo()"
+          (click)="closeModal()"
         >
           Cancelar
         </button>
@@ -218,4 +204,4 @@
       </div>
     </form>
   </mat-card-content>
-</mat-card>
+</div>

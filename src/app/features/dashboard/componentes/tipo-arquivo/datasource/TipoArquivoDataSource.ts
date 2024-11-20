@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/table';
 import { TipoArquivo } from "../../../../../core/models/TipoArquivo";
 import { CollectionViewer } from '@angular/cdk/collections';
-import { BehaviorSubject, catchError, finalize, Observable, of } from 'rxjs';
+import { BehaviorSubject, catchError, delay, finalize, Observable, of } from 'rxjs';
 import { TipoArquivoService } from '../../../../../shared/services/tipo-arquivo.service';
 import { ToastrService } from 'ngx-toastr';
 import { ApiResponse } from '../../../../../core/interfaces/ApiResponse';
@@ -10,7 +10,9 @@ export class TipoArquivoDataSource implements DataSource<TipoArquivo>{
     private tipoArquivoSubject = new BehaviorSubject<TipoArquivo[]>([]);
     private loadingSubject = new BehaviorSubject<boolean>(false);
     private countSubject = new BehaviorSubject<number>(0);
+
     public counter$ = this.countSubject.asObservable();
+    public loading$ = this.loadingSubject.asObservable();
 
     constructor(
         private _tipoArquivoService: TipoArquivoService,
@@ -18,7 +20,7 @@ export class TipoArquivoDataSource implements DataSource<TipoArquivo>{
     ){}
 
     connect(collectionViewer: CollectionViewer): Observable<TipoArquivo[]> {
-        return this.tipoArquivoSubject.asObservable();
+        return this._tipoArquivoService.tiposArquivo$;
     }
     
     disconnect(collectionViewer: CollectionViewer): void {
@@ -42,6 +44,7 @@ export class TipoArquivoDataSource implements DataSource<TipoArquivo>{
         this._tipoArquivoService
         .listarPaginado(page, size)
         .pipe(
+            delay(2000),
             catchError((error) => {
                 this._toastr.error('Erro ao carregar tipos arquivos', 'Erro');
                 return of(emptyResponse);

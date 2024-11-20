@@ -2,6 +2,12 @@
   height: 100%;
 }
 
+.modal{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
 form{
     display: flex;
     flex-direction: column;
@@ -15,6 +21,7 @@ form{
   
   .box-1 {
     display: flex;
+    flex-direction: column;
     gap: 20px;
   }
   
@@ -53,6 +60,8 @@ form{
     justify-content: end;
     gap: 10px;
   }
+
+
   
   input[type="file"]::file-selector-button {
     border-radius: 4px;
@@ -80,6 +89,12 @@ form{
     flex-direction: column;
     gap: 10px;
     margin-top: 15px;
+
+    .arquivo-cadastrado{
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
   }
   
   

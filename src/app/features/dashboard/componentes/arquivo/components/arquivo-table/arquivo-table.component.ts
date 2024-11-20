@@ -1,8 +1,11 @@
 import {
   AfterViewInit,
   Component,
+  Input,
+  OnChanges,
   OnInit,
-  ViewChild
+  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -10,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 import { tap } from 'rxjs';
 import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
 import { ArquivoDataSource } from '../../datasource/ArquivoDataSource';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalArquivoFormComponent } from '../modal-arquivo-form/modal-arquivo-form.component';
 
 @Component({
   selector: 'app-arquivo-table',
@@ -22,7 +27,11 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
     'titulo',
     'anoPublicacao',
     'cidade',
+    'estado',
+    'mesorregiao',
     'tipoArquivo',
+    'criadoEm',
+    'atualizadoEm',
     'acao',
   ];
   arquivoDataSource!: ArquivoDataSource;
@@ -32,21 +41,22 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
 
   ultimoTitulo: string = '';
 
-  carregando!:boolean;
+  carregando!: boolean;
 
   constructor(
     private _arquivoService: ArquivoService,
+    private _dialog: MatDialog,
     private _toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.arquivoDataSource = new ArquivoDataSource( 
+    this.arquivoDataSource = new ArquivoDataSource(
       this._arquivoService,
       this._toastr
     );
-  
+
     this.arquivoDataSource.carregarArquivos();
-    this.arquivoDataSource.loading$.subscribe((loading) =>{
+    this.arquivoDataSource.loading$.subscribe((loading) => {
       this.carregando = loading;
     });
   }
@@ -69,8 +79,15 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
 
   buscarArquivosPorTitulos(event: Event) {
     const input = (event.target as HTMLInputElement).value as string;
-    this.ultimoTitulo = input.trim();   
+    this.ultimoTitulo = input.trim();
 
+    this.paginator.pageIndex = 0;
+
+    this.carregarArquivos();
+  }
+
+  recarregarTabela() {
+    this.ultimoTitulo = '';
     this.carregarArquivos();
   }
 
@@ -94,5 +111,22 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
   buscarArquivosPeloId(event: Event) {
     const input = (event.target as HTMLInputElement).value;
     console.log(input);
+  }
+
+  onClickEditarArquivo(id: number) {
+    this.abrirArquivoModal(id, 'Editar Documento');
+  }
+
+  abrirArquivoModal(id: number, titulo: string) {
+    this._dialog.open(ModalArquivoFormComponent, {
+      width: 'auto',
+      height: '80vh',
+      enterAnimationDuration: '500ms',
+      exitAnimationDuration: '500ms',
+      data: {
+        tituloModal: titulo,
+        id: id,
+      },
+    });
   }
 }

@@ -10,8 +10,8 @@ const routes: Routes = [
     { path: '',  component:  DashboardComponent,
       children: [
         { path: '', component: HomeDashboardComponent },  // Rota padrão quando não há rota filha ativa
-        { path: 'arquivo', component: ArquivoComponent },
-        { path: 'tipo-arquivo', component: TipoArquivoComponent },
+        { path: 'documento', component: ArquivoComponent },
+        { path: 'tipo-documento', component: TipoArquivoComponent },
         { path: 'localidade', component: LocalidadeComponent },
       ]
     }
