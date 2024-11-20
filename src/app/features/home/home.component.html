@@ -22,6 +22,7 @@
           class="appearAnimation-1250"
           [text]="'Saiba Mais'"
           [route]="'/sobre'"
+          [ariaLabelText]="'Botão direcionar página sobre'"
         ></app-button-primary>
       </div>
     </div>
@@ -54,18 +55,21 @@
             [title]="'Artigos'"
             [description]="'Confira os artigos publicados'"
             [cardIcon]="'assets/icons/article-icon.svg'"
+            [ariaLabelText]="'Botão confira artigos publicados'"
           ></app-card>
           <app-card
             class="scrollAnimation"
             [title]="'Mini Cursos'"
             [description]="'Confira os mini cursos disponiveis'"
             [cardIcon]="'assets/icons/classroom.svg'"
+            [ariaLabelText]="'Botão confira mini cursos disponiveis'"
           ></app-card>
           <app-card
             class="scrollAnimation"
             [title]="'Analises'"
             [description]="'Confira as analises publicadas'"
             [cardIcon]="'assets/icons/analytics.svg'"
+            [ariaLabelText]="'Botão confira as analises publicadas'"
           ></app-card>
         </div>
       </div>
