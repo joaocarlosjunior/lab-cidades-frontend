@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class ButtonPrimaryComponent {
   @Input({required: true}) text!: string;
   @Input() route!: string;
+  @Input({required: true}) ariaLabelText!: string;
 }

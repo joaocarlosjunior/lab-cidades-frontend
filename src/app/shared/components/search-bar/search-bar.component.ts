@@ -29,7 +29,7 @@ export class SearchBarComponent {
     if (inputValue.trim()) {
       this.searchService.overlayOpen.set(false);
 
-      this.assunto.emit(inputValue);
+      //this.assunto.emit(inputValue);
 
       // Verifica se a rota atual é diferente de '/buscador' antes de redirecionar
       if (this.route.snapshot.routeConfig?.path !== 'buscador') {

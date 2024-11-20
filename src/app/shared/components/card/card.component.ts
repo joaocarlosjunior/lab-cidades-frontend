@@ -9,5 +9,6 @@ export class CardComponent {
   @Input({required: true}) title!: string;
   @Input({required: true}) description!: string;
   @Input({required: true}) cardIcon!: string;
+  @Input({required: true}) ariaLabelText!: string;
 
 }
