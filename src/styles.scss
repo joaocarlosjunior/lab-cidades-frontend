@@ -1,17 +1,14 @@
 @use '@angular/material' as mat;
 
-// Importa os estilos principais do Angular Material
 @include mat.core();
 
-// Define paletas personalizadas
-$custom-app-primary: mat.define-palette(mat.$indigo-palette, 500); // Paleta primária
-$custom-app-accent: mat.define-palette(mat.$blue-gray-palette, 700);    // Paleta de destaque
+$custom-app-primary: mat.define-palette(mat.$blue-palette, 800); 
+$custom-app-accent: mat.define-palette(mat.$blue-gray-palette, 600);    
 
-// Define o tema principal com foreground personalizado para accent
 $custom-theme: mat.define-light-theme((
   color: (
-    primary: $custom-app-primary, // Paleta primária
-    accent: $custom-app-accent,   // Paleta de destaque
+    primary: $custom-app-primary,
+    accent: $custom-app-accent,   
   )
 ));
 
