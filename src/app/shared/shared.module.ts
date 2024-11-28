@@ -14,6 +14,7 @@ import { EstadoService } from './services/estado.service';
 import { MesorregiaoService } from './services/mesorregiao.service';
 import { TipoArquivoService } from './services/tipo-arquivo.service';
 import { DashboardService } from './services/dashboard.service';
+import { LoginService } from './services/login.service';
 
 
 
@@ -41,6 +42,6 @@ import { DashboardService } from './services/dashboard.service';
     SearchBarComponent,
     ButtonPrimaryComponent
   ],
-  providers: [ArquivoService, TipoArquivoService, MesorregiaoService, CidadeService, EstadoService, DashboardService]
+  providers: [ArquivoService, TipoArquivoService, MesorregiaoService, CidadeService, EstadoService, DashboardService, LoginService]
 })
 export class SharedModule { }
