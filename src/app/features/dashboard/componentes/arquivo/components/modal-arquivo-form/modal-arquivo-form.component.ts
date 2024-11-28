@@ -48,8 +48,6 @@ export class ModalArquivoFormComponent implements OnInit {
 
   downloadArquivo!:DownloadArquivo
 
-
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _ref: MatDialogRef<ModalArquivoFormComponent>,
