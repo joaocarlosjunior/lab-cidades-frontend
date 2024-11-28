@@ -5,9 +5,11 @@ import { HomeDashboardComponent } from "./componentes/home-dashboard/home-dashbo
 import { LocalidadeComponent } from "./componentes/localidade/localidade.component";
 import { TipoArquivoComponent } from "./componentes/tipo-arquivo/tipo-arquivo.component";
 import { DashboardComponent } from "./dashboard.component";
+import { authGuard } from "../../core/guards/auth.guard";
 
 const routes: Routes = [
     { path: '',  component:  DashboardComponent,
+      canActivate: [authGuard],
       children: [
         { path: '', component: HomeDashboardComponent },  // Rota padrão quando não há rota filha ativa
         { path: 'documento', component: ArquivoComponent },
