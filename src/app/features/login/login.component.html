@@ -6,11 +6,11 @@
     </div>
     <h1>Login</h1>
   </div>
-  <mat-card-content cl>
+  <mat-card-content>
     <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field class="wd" appearance="outline">
         <mat-label>Email</mat-label>
-        <input type="text" matInput formControlName="login" />
+        <input matInput formControlName="login" />
         <mat-error *ngIf="loginForm.get('login')?.hasError('required')">
           Insira email
         </mat-error>
@@ -23,11 +23,7 @@
           Insira senha
         </mat-error>
       </mat-form-field>
-
-      <p *ngIf="error" class="error">
-        {{ error }}
-      </p>
-
+      
       <div class="button">
         <button
           [disabled]="loginForm.invalid"

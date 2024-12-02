@@ -23,15 +23,18 @@ export class DetalhesArquivoComponent {
   ngOnInit(): void {
     this._route.paramMap.subscribe(params => {
       const id = params.get('id');
-      if (id) {
+      if (id && !isNaN(+id)) {
         this.buscarArquivoPorId(+id);
+      } else {
+        this._toastr.error('ID inválido', 'Erro');
       }
     });
   }
 
   buscarArquivoPorId(id: number): void {
     if (id) {
-      this._arquivoService.getArquivoByCode(id).subscribe({
+      this._arquivoService.getArquivoByCode(id)
+      .subscribe({
         next: (arquivo) => {
           this.arquivo = arquivo;
         },

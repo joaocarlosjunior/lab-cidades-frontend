@@ -2,7 +2,7 @@
   <div class="info-archive" *ngFor="let arquivo of arquivosList; let i = index">
     <h6>
       <span>{{ i + 1 }}</span>
-      <a class="titulo-busca" [routerLink]="['/buscador/detalhes-arquivo', arquivo.id]" rel="noopener" target="_blank" href="https://www.google.com/"> {{ arquivo.titulo }}</a>
+      <a class="titulo-busca" [routerLink]="['/buscador/detalhes-arquivo', arquivo.id]" rel="noopener" target="_blank"> {{ arquivo.titulo }}</a>
     </h6>
     <div class="autores">
       <h5>{{ arquivo.autores | nomeAutor }}</h5>

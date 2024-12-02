@@ -51,8 +51,12 @@ export class ArquivoService {
   }
 
   getArquivoByCode(id: number): Observable<Arquivo> {
-    return this.httpClient.get<Arquivo>(`${this.API}/${id}`).pipe(
-      map((response) => response)
+    return this.httpClient
+    .get<Arquivo>(`${this.API}/${id}`)
+    .pipe(
+      map((response) =>{
+        return response;
+      })
     );
   }
   
