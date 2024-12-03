@@ -13,15 +13,15 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let token = null;
-    if (typeof window !== 'undefined' && sessionStorage) {
-      token = sessionStorage.getItem('token');
-    }
-  
-    if (token) {
-      req = req.clone({
-        setHeaders: { Authorization: `Bearer ${token}` }
+    const authToken = typeof window !== 'undefined' ? sessionStorage.getItem('auth-token') : null;
+
+    if (authToken && authToken.trim()) {
+      const authReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${authToken}`,
+        },
       });
+      return next.handle(authReq);
     }
   
     return next.handle(req);
