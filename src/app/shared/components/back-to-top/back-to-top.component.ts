@@ -22,7 +22,6 @@ export class BackToTopComponent implements AfterViewInit {
       });
 
       aElement.addEventListener('click', () => {
-        console.log('Teste');
         window.scrollTo({
           top: 0,
           behavior: 'smooth',
