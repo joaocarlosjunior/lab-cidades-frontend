@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Arquivo } from '../../../../core/models/Arquivo';
 import { ArquivoService } from '../../../../shared/services/arquivo.service';
 import { ToastrService } from 'ngx-toastr';
-import { DownloadArquivo } from '../../../../shared/Class/DownloadArquivo';
+import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
 
 @Component({
   selector: 'app-detalhes-arquivo',

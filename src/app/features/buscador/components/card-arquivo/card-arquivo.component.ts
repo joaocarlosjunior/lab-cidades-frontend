@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Arquivo } from '../../../../core/models/Arquivo';
 import { ArquivoService } from '../../../../shared/services/arquivo.service';
-import { DownloadArquivo } from '../../../../shared/Class/DownloadArquivo';
+import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
 
 @Component({
   selector: 'app-card-arquivo',

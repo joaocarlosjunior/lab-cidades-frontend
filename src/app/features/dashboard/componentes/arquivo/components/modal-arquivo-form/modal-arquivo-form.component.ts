@@ -19,7 +19,7 @@ import { CidadeService } from '../../../../../../shared/services/cidade.service'
 import { EstadoService } from '../../../../../../shared/services/estado.service';
 import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
 import { cidadeValida } from '../../../../../../shared/validators/cidade-valida.validator';
-import { DownloadArquivo } from '../../../../../../shared/Class/DownloadArquivo';
+import { DownloadArquivo } from '../../../../../../shared/class/DownloadArquivo';
 
 @Component({
   selector: 'app-modal-arquivo-form',
