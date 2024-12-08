@@ -101,7 +101,11 @@
           >
             <mat-icon>edit</mat-icon>Editar
           </button>
-          <button mat-button color="warn" [disabled]="carregando">
+          <button 
+          mat-button 
+          color="warn" 
+          (click)="onClickDeletarArquivo(element.id)"
+          [disabled]="carregando">
             <mat-icon>delete</mat-icon>Deletar
           </button>
         </td>

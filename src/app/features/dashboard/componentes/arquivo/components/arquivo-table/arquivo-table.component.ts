@@ -110,11 +110,21 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
 
   buscarArquivosPeloId(event: Event) {
     const input = (event.target as HTMLInputElement).value;
-    console.log(input);
   }
 
   onClickEditarArquivo(id: number) {
     this.abrirArquivoModal(id, 'Editar Documento');
+  }
+
+  onClickDeletarArquivo(id: number){
+    if(id){
+      this._arquivoService.deletarArquivo(id).subscribe({
+        next: () => this._toastr.success('Deletado com sucesso'),
+        error: () => this._toastr.error('Erro ao deletar')
+      });
+    }else{
+      this._toastr.error('Documento inválido');
+    }
   }
 
   abrirArquivoModal(id: number, titulo: string) {
