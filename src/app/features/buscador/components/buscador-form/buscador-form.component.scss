@@ -8,6 +8,10 @@
     justify-content: end;
     padding: 10px;
 
+    button{
+        background: transparent;
+    }
+
     button:hover{
         cursor: pointer;
         text-decoration: underline;
