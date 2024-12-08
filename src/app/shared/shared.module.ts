@@ -15,6 +15,7 @@ import { MesorregiaoService } from './services/mesorregiao.service';
 import { TipoArquivoService } from './services/tipo-arquivo.service';
 import { DashboardService } from './services/dashboard.service';
 import { LoginService } from './services/login.service';
+import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
 
 
 
@@ -24,6 +25,7 @@ import { LoginService } from './services/login.service';
     SearchBarComponent,
     SearchOverlayComponent,
     ButtonPrimaryComponent,
+    BackToTopComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { LoginService } from './services/login.service';
     CoreModule,
     CardComponent,
     SearchBarComponent,
-    ButtonPrimaryComponent
+    ButtonPrimaryComponent,
+    BackToTopComponent
   ],
   providers: [ArquivoService, TipoArquivoService, MesorregiaoService, CidadeService, EstadoService, DashboardService, LoginService]
 })
