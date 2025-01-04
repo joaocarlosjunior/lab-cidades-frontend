@@ -1,16 +1,11 @@
 import {
-  ChangeDetectorRef,
   Component,
-  OnInit,
   ViewChild
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { Arquivo } from '../../../../core/models/Arquivo';
-import { ArquivoService } from '../../../../shared/services/arquivo.service';
-import { ModalArquivoFormComponent } from './components/modal-arquivo-form/modal-arquivo-form.component';
 import { ArquivoTableComponent } from './components/arquivo-table/arquivo-table.component';
+import { ModalArquivoFormComponent } from './components/modal-arquivo-form/modal-arquivo-form.component';
 
 @Component({
   selector: 'app-arquivo',
@@ -42,7 +37,7 @@ export class ArquivoComponent {
       },
     });
     _popup.afterClosed().subscribe((item) => {
-      //this.carregarArquivos();
+      this.onClickRecarregarTabela();
     });
   }
 
