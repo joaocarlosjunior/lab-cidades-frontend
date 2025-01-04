@@ -14,12 +14,12 @@ import { Autor } from '../../../../../../core/models/Autor';
 import { Cidade } from '../../../../../../core/models/Cidade';
 import { Estado } from '../../../../../../core/models/Estado';
 import { TipoArquivo } from '../../../../../../core/models/TipoArquivo';
+import { DownloadArquivo } from '../../../../../../shared/class/DownloadArquivo';
 import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
 import { CidadeService } from '../../../../../../shared/services/cidade.service';
 import { EstadoService } from '../../../../../../shared/services/estado.service';
 import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
 import { cidadeValida } from '../../../../../../shared/validators/cidade-valida.validator';
-import { DownloadArquivo } from '../../../../../../shared/class/DownloadArquivo';
 
 @Component({
   selector: 'app-modal-arquivo-form',
@@ -224,7 +224,6 @@ export class ModalArquivoFormComponent implements OnInit {
         this._arquivoService.criarArquivo(formData).subscribe({
           next: () => {
             this._toastr.success('', 'Arquivo salvo com sucesso');
-            this.closeModal();
             this.arquivoForm.reset();
             this.file = null;
           },
