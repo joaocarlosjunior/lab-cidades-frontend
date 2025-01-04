@@ -79,6 +79,10 @@ export class ArquivoService {
     return this.httpClient.put(`${this.API}/${id}`, formData)
   }
 
+  deletarArquivo(id: number){
+    return this.httpClient.delete(`${this.API}/${id}`);
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       console.error('An error occurred:', error.error);
