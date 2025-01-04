@@ -119,7 +119,10 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
   onClickDeletarArquivo(id: number){
     if(id){
       this._arquivoService.deletarArquivo(id).subscribe({
-        next: () => this._toastr.success('Deletado com sucesso'),
+        next: () => {
+          this._toastr.success('Deletado com sucesso');
+          this.recarregarTabela();
+        },
         error: () => this._toastr.error('Erro ao deletar')
       });
     }else{
@@ -137,6 +140,6 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
         tituloModal: titulo,
         id: id,
       },
-    });
+    }).afterClosed().subscribe(() => this.recarregarTabela())
   }
 }
