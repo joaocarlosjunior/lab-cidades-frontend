@@ -15,86 +15,7 @@ import { TipoArquivo } from '../../../../../../core/models/TipoArquivo';
   styleUrl: './tipo-arquivo-table.component.scss'
 })
 export class TipoArquivoTableComponent implements OnInit, AfterViewInit{
-  displayedColumns = ['id', 'tipoArquivo', 'criadoEm', 'atualizadoEm', 'acao'];
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  tiposArquivo$ = this._tipoArquivoService.tiposArquivo$; // Observa os dados
-  carregando$ = this._tipoArquivoService.loading$; // Observa o estado de carregamento
-
-  constructor(
-    private _tipoArquivoService: TipoArquivoService,
-    private _toastr: ToastrService,
-    private _dialog: MatDialog
-  ) {}
-
-  ngOnInit(): void {
-    this._tipoArquivoService.carregarTiposArquivo(); // Carrega os dados iniciais
-  }
-
-  ngAfterViewInit(): void {
-    this.carregarTodosTiposArquivo()
-  }
-
-  carregarTodosTiposArquivo(): void {
-    this._tipoArquivoService.counter$
-    .pipe(
-      tap((count) => {
-        console.log(count)
-        this.paginator.length = count;
-      })
-    )
-    .subscribe();
-
-    this.paginator.page.subscribe(() => this.carregarTiposArquivo()); // Recarrega ao paginar
-  }
-
-  carregarTiposArquivo(){
-    this._tipoArquivoService.carregarTiposArquivo(
-      this.paginator.pageIndex,
-      this.paginator.pageSize
-    )
-  }
-
-  onClickEditarTipoArquivo(id: number): void {
-    this.abrirArquivoModal(id, 'Editar Tipo Arquivo');
-  }
-
-  onDeletarTipoArquivo(id: number): void {
-    this._tipoArquivoService.deletarTipoArquivo(id).subscribe({
-      next: () => {
-        this._toastr.success('Tipo Arquivo deletado com sucesso', 'Sucesso');
-        this.carregarTiposArquivo()
-      },
-      error: () => {
-        this._toastr.error('Erro ao deletar Tipo Arquivo', 'Erro');
-      },
-    });
-  }
-
-  abrirArquivoModal(id: number, titulo: string): void {
-    this._dialog
-      .open(TipoArquivoModalComponent, {
-        width: 'auto',
-        height: 'auto',
-        enterAnimationDuration: '500ms',
-        exitAnimationDuration: '500ms',
-        data: {
-          tituloModal: titulo,
-          id: id,
-        },
-      })
-      .afterClosed()
-      .subscribe(() => this.carregarTiposArquivo());
-  }
-
-
-
-
-
-
-
-/*   displayedColumns = [
+  displayedColumns = [
     'id',
     'tipoArquivo',
     'criadoEm',
@@ -184,6 +105,6 @@ export class TipoArquivoTableComponent implements OnInit, AfterViewInit{
       },
     })
     .afterClosed().subscribe(() => {this.carregarTiposArquivo()})
-  } */
+  }
 
 }

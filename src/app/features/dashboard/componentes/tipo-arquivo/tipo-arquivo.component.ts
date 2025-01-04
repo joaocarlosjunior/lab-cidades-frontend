@@ -34,7 +34,9 @@ export class TipoArquivoComponent {
         tituloModal: titulo,
         id: id,
       },
-    });
+    }).afterClosed().subscribe(() => {
+      this.onClickRecarregarTipoArquivos();
+    })
   }
 
 }

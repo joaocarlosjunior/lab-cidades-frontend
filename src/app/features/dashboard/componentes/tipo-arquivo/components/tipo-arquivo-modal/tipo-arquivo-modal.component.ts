@@ -11,7 +11,7 @@ import { TipoArquivoTableComponent } from '../tipo-arquivo-table/tipo-arquivo-ta
   styleUrl: './tipo-arquivo-modal.component.scss',
 })
 export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
-  nomeTipoArquivoForm = new FormControl('', Validators.required);
+  tipoArquivoForm = new FormControl('', Validators.required);
 
   @ViewChild(TipoArquivoTableComponent) tipoArquivoTableComponent!: TipoArquivoTableComponent;
 
@@ -40,7 +40,7 @@ export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
   setModalData(id: number){
     this._tipoArquivoService.buscarTipoArquivoPeloId(id).subscribe({
       next: (tipoArquivo) => {
-        this.nomeTipoArquivoForm.setValue(tipoArquivo.nome_tipo_arquivo);
+        this.tipoArquivoForm.setValue(tipoArquivo.nome_tipo_arquivo);
       },
       error: (error) => {
         this._toastr.error('', 'Erro ao buscar Tipo Arquivo');
@@ -54,13 +54,13 @@ export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
   }
 
   onSubmit() {
-    let nomeTipoArquivo = this.nomeTipoArquivoForm.value as string;
+    let nomeTipoArquivo = this.tipoArquivoForm.value as string;
 
     if(this.data.id === 0){
       this._tipoArquivoService.criarTipoArquivo(nomeTipoArquivo).subscribe({
         next: () => {
           this._toastr.success('', 'Tipo Arquivo salvo com sucesso');
-          this.closeModal();
+          this.tipoArquivoForm.reset();
         },
         error: (error) => {
           switch(error?.error?.status){

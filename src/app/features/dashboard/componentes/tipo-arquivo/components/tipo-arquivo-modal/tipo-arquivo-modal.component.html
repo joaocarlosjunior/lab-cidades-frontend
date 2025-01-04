@@ -4,8 +4,8 @@
     <!-- Título -->
     <mat-form-field appearance="outline">
       <mat-label>Tipo Documento</mat-label>
-      <input matInput [formControl]="nomeTipoArquivoForm" />
-      <mat-error *ngIf="nomeTipoArquivoForm?.hasError('required')">
+      <input matInput [formControl]="tipoArquivoForm" />
+      <mat-error *ngIf="tipoArquivoForm?.hasError('required')">
         O nome do tipo de documento é obrigatório
       </mat-error>
     </mat-form-field>
@@ -24,7 +24,7 @@
     color="primary"
     type="button"
     (click)="onSubmit()"
-    [disabled]="nomeTipoArquivoForm.invalid"
+    [disabled]="tipoArquivoForm.invalid"
   >
     Enviar
   </button>

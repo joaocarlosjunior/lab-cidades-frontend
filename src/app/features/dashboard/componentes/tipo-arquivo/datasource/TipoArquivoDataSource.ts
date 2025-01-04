@@ -20,7 +20,7 @@ export class TipoArquivoDataSource implements DataSource<TipoArquivo>{
     ){}
 
     connect(collectionViewer: CollectionViewer): Observable<TipoArquivo[]> {
-        return this._tipoArquivoService.tiposArquivo$;
+        return this.tipoArquivoSubject.asObservable();
     }
     
     disconnect(collectionViewer: CollectionViewer): void {
