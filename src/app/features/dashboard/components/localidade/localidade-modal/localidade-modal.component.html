@@ -1,0 +1,74 @@
+<div class="modal">
+  <h1 style="padding: 20px">{{ tituloForm }}</h1>
+  <mat-card-content>
+    <form class="form-cidade" [formGroup]="cidadeForm" (ngSubmit)="onSubmit()">
+      <!-- Estado -->
+      <mat-form-field appearance="outline">
+        <mat-label>Estados</mat-label>
+        <mat-select formControlName="estado_id" (selectionChange)="estadoSelecionado($event)">
+          <mat-option *ngFor="let estado of estadosOptions" [value]="estado.id">
+            {{ estado.nome_estado }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="cidadeForm.get('estado_id')?.hasError('required')">
+          {{
+            cidadeForm.get("estado_id")?.hasError("required")
+              ? "Estado é obrigatório"
+              : errorMessage
+          }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Mesorregiao -->
+      <mat-form-field appearance="outline">
+        <mat-label>Mesorregião</mat-label>
+        <mat-select formControlName="mesorregiao_id" >
+          <mat-option
+            *ngFor="let mesorregiao of mesorregioesOptions"
+            [value]="mesorregiao.id"
+          >
+            {{ mesorregiao.nome_mesorregiao }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="cidadeForm.get('mesorregiao_id')?.hasError('required')">
+          {{
+            cidadeForm.get("mesorregiao_id")?.hasError("required")
+              ? "Mesorregião é obrigatório"
+              : errorMessage
+          }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Nome Cidade -->
+      <mat-form-field appearance="outline">
+        <mat-label>Nome Cidade</mat-label>
+        <input matInput formControlName="nome_cidade" />
+        <mat-error *ngIf="cidadeForm.get('nome_cidade')?.hasError('required')">
+          {{
+            cidadeForm.get("nome_cidade")?.hasError("required")
+              ? "O Nome da Cidade é obrigatório"
+              : errorMessage
+          }}
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="cidadeForm.invalid"
+      >
+        Enviar
+      </button>
+
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="closeModal()"
+      >
+        Cancelar
+      </button>
+    </form>
+  </mat-card-content>
+</div>

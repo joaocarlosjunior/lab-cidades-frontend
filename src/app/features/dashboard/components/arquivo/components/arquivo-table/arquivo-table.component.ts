@@ -1,19 +1,11 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
 import { tap } from 'rxjs';
 import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
 import { ArquivoDataSource } from '../../datasource/ArquivoDataSource';
-import { MatDialog } from '@angular/material/dialog';
 import { ModalArquivoFormComponent } from '../modal-arquivo-form/modal-arquivo-form.component';
 
 @Component({
@@ -106,6 +98,13 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
         this.paginator.pageSize
       );
     }
+
+    // Verifica se a tabela está vazia e reseta o paginator
+    this.arquivoDataSource.counter$.subscribe((count) => {
+      if (count === 0) {
+        this.paginator.pageIndex = 0; // Reseta o paginator para a primeira página
+      }
+    });
   }
 
   buscarArquivosPeloId(event: Event) {
@@ -116,30 +115,36 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
     this.abrirArquivoModal(id, 'Editar Documento');
   }
 
-  onClickDeletarArquivo(id: number){
-    if(id){
+  onClickDeletarArquivo(id: number) {
+    if (id) {
       this._arquivoService.deletarArquivo(id).subscribe({
         next: () => {
           this._toastr.success('Deletado com sucesso');
-          this.recarregarTabela();
+          this.arquivoDataSource.carregarArquivos(
+            this.paginator.pageIndex,
+            this.paginator.pageSize
+          );
         },
-        error: () => this._toastr.error('Erro ao deletar')
+        error: () => this._toastr.error('Erro ao deletar'),
       });
-    }else{
+    } else {
       this._toastr.error('Documento inválido');
     }
   }
 
   abrirArquivoModal(id: number, titulo: string) {
-    this._dialog.open(ModalArquivoFormComponent, {
-      width: 'auto',
-      height: '80vh',
-      enterAnimationDuration: '500ms',
-      exitAnimationDuration: '500ms',
-      data: {
-        tituloModal: titulo,
-        id: id,
-      },
-    }).afterClosed().subscribe(() => this.recarregarTabela())
+    this._dialog
+      .open(ModalArquivoFormComponent, {
+        width: 'auto',
+        height: '80vh',
+        enterAnimationDuration: '500ms',
+        exitAnimationDuration: '500ms',
+        data: {
+          tituloModal: titulo,
+          id: id,
+        },
+      })
+      .afterClosed()
+      .subscribe(() => this.recarregarTabela());
   }
 }

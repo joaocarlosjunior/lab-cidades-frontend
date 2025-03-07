@@ -1,0 +1,16 @@
+<div class="content">
+  <h2>Olá. <br>Essas são as informações da aplicação no momento:</h2>
+  <div class="cards" >
+
+    <app-card-info-dashboard
+    [tituloCard]="'Número de documentos cadastrados'"
+    [infoCard]="quantidadeArquivo"
+    />
+
+    <app-card-info-dashboard
+    [tituloCard]="'Número de tipos documento cadastrados'"
+    [infoCard]="quantidadeTipoArquivo"
+    />
+
+  </div>
+</div>

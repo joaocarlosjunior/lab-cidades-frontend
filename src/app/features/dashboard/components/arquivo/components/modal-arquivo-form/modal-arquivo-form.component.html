@@ -19,7 +19,12 @@
         <!-- Ano de Publicação -->
         <mat-form-field style="width: 224px" appearance="outline">
           <mat-label>Ano de Publicação</mat-label>
-          <input style="text-align: center;" matInput type="number" formControlName="ano_publicacao" />
+          <input
+            style="text-align: center"
+            matInput
+            type="number"
+            formControlName="ano_publicacao"
+          />
           <mat-error *ngIf="arquivoForm.get('ano_publicacao')?.hasError('min')">
             Ano inválido
           </mat-error>
@@ -100,42 +105,27 @@
             <!-- Estado -->
             <mat-form-field appearance="outline">
               <mat-label>Estados</mat-label>
-              <mat-select (selectionChange)="estadoSelecionado($event)">
+              <mat-select formControlName="estado_id" (selectionChange)="estadoSelecionado($event)">
                 <mat-option
                   *ngFor="let estado of estadosOptions"
                   [value]="estado.id"
                 >
-                  {{ estado.nome_estado }}
+                  {{ estado.nome_estado}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
 
+            <!-- Cidade -->
             <mat-form-field appearance="outline">
               <mat-label>Cidade</mat-label>
-              <input
-                type="text"
-                placeholder="Selecione uma"
-                aria-label="Cidade"
-                matInput
-                formControlName="cidade"
-                [matAutocomplete]="auto"
-              />
-              <mat-autocomplete
-                #auto="matAutocomplete"
-                [displayWith]="displayCidade"
-              >
+              <mat-select formControlName="cidade_id">
                 <mat-option
-                  *ngFor="let cidade of filteredCidadeOptions | async"
-                  [value]="cidade"
+                  *ngFor="let cidade of cidadeOptions"
+                  [value]="cidade.id"
                 >
                   {{ cidade.nome_cidade }}
                 </mat-option>
-              </mat-autocomplete>
-              <mat-error
-                *ngIf="arquivoForm.get('cidade')?.hasError('cidadeInvalida')"
-              >
-                Cidade inválida. Por favor, selecione uma cidade da lista.
-              </mat-error>
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -149,8 +139,17 @@
           >
             <mat-icon>add</mat-icon> Adicionar Autor
           </button>
-          <button type="button" mat-stroked-button color="primary">
+          <button type="button" mat-stroked-button color="primary" (click)="onClickCadastrarTipoArquivo()">
             <mat-icon>add</mat-icon> Cadastrar Tipo Documento
+          </button>
+
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onClickCadastrarCidade()"
+          >
+            <mat-icon>add</mat-icon> Cadastrar Cidade
           </button>
         </div>
       </div>
@@ -159,13 +158,18 @@
       <div class="upload-arquivo">
         <div class="arquivo-cadastrado" *ngIf="nomeArquivoCadastrado">
           <span>Arquivo cadastrado: {{ nomeArquivoCadastrado }}</span>
-          <button type="button" mat-stroked-button color="primary" (click)="onDownloadArquivo(idArquivo)">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onDownloadArquivo(idArquivo)"
+          >
             <mat-icon>download</mat-icon> Download Arquivo
           </button>
         </div>
         <label for="file" class="custom-file-button">Escolha Arquivo:</label>
         <div class="input-arquivo">
-          <input type="file" (change)="onFileSelected($event)" />
+          <input formControlName="file" type="file" (change)="onFileSelected($event)" />
           <button
             *ngIf="file"
             type="button"
@@ -181,7 +185,12 @@
       <!-- URL do Arquivo -->
       <mat-form-field appearance="outline" class="full-width m-top">
         <mat-label>URL do Arquivo</mat-label>
-        <input matInput type="url" formControlName="arquivo_url" />
+        <input matInput type="url" formControlName="arquivo_url" [errorStateMatcher]="matcher"/>
+        <mat-error
+        *ngIf="arquivoForm.hasError('validator')"
+      >
+        Deve ser anexado algum documento ou arquivo
+      </mat-error>
       </mat-form-field>
 
       <div class="box-3">

@@ -11,22 +11,17 @@
     </mat-form-field>
 
     <button
-    mat-raised-button
-    color="warn"
-    type="button"
-    (click)="closeModal()"
-  >
-    Cancelar
-  </button>
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="onSubmit()"
+      [disabled]="tipoArquivoForm.invalid"
+    >
+      Enviar
+    </button>
 
-    <button
-    mat-raised-button
-    color="primary"
-    type="button"
-    (click)="onSubmit()"
-    [disabled]="tipoArquivoForm.invalid"
-  >
-    Enviar
-  </button>
+    <button mat-raised-button color="warn" type="button" (click)="closeModal()">
+      Cancelar
+    </button>
   </mat-card-content>
 </div>

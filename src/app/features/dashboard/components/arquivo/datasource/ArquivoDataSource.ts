@@ -44,18 +44,20 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
     this._arquivoService
       .list(page, size)
       .pipe(
-        delay(3000), 
         catchError((error) => {
-          this._toastr.error('Erro ao carregar arquivos', 'Erro');
           return of(emptyResponse);
         }),
         finalize(() => this.loadingSubject.next(false))
       )
       .subscribe((result: ApiResponse<Arquivo>) => {
-        if (result && result.content && result.content.length > 0) {
-          this.arquivoSubject.next(result.content);
-          this.countSubject.next(result.page.totalElements);
-          this._toastr.success('Arquivos carregados com sucesso', 'Sucesso');
+        if (result && result.content) {
+          this.arquivoSubject.next(result.content); // Atualiza os dados
+          this.countSubject.next(result.page.totalElements); // Atualiza o total de elementos
+          if (result.content.length === 0) {
+            this._toastr.info('Nenhum arquivo encontrado', 'Info');
+          } else {
+            this._toastr.success('Arquivos carregados com sucesso', 'Sucesso');
+          }
         }
       });
   }
@@ -74,7 +76,6 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
     this._arquivoService
       .buscarArquivoPorTitulo(titulo, page, size)
       .pipe(
-        delay(3000),
         catchError((error) => {
           this._toastr.error(error.error.detail, 'Erro ao carregar arquivo');
           return of(emptyResponse);

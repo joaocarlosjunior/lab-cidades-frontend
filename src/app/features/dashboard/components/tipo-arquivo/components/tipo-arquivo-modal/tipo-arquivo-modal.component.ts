@@ -59,7 +59,7 @@ export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
     if(this.data.id === 0){
       this._tipoArquivoService.criarTipoArquivo(nomeTipoArquivo).subscribe({
         next: () => {
-          this._toastr.success('', 'Tipo Arquivo salvo com sucesso');
+          this._toastr.success('', 'Tipo Documento salvo com sucesso');
           this.tipoArquivoForm.reset();
         },
         error: (error) => {
@@ -67,18 +67,18 @@ export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
             case 409:
               this._toastr.error(
                 error?.error?.detail,
-                'Erro ao salvar o arquivo'
+                'Erro ao salvar o tipo documento'
               );
               break;
             default:
-              this._toastr.error('', 'Erro ao salvar o tipo arquivo');
+              this._toastr.error('', 'Erro ao salvar tipo documento');
           }
         }
       });
     }else{
       this._tipoArquivoService.editarTipoArquivo(this.data.id, nomeTipoArquivo).subscribe({
         next: () => {
-          this._toastr.success('', 'Tipo Arquivo editado com sucesso');
+          this._toastr.success('', 'Tipo Documento editado com sucesso');
           this.closeModal();
         },
         error: (error) => {
@@ -86,11 +86,11 @@ export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
             case 409:
               this._toastr.error(
                 error?.error?.detail,
-                'Erro ao salvar o arquivo'
+                'Erro ao salvar o tipo documento'
               );
               break;
             default:
-              this._toastr.error('', 'Erro ao editar tipo arquivo');
+              this._toastr.error('', 'Erro ao editar tipo documento');
           }
         }
       });
