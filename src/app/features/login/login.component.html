@@ -9,7 +9,7 @@
   <mat-card-content>
     <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field class="wd" appearance="outline">
-        <mat-label>Email</mat-label>
+        <mat-label>Email/Username</mat-label>
         <input matInput formControlName="login" />
         <mat-error *ngIf="loginForm.get('login')?.hasError('required')">
           Insira email
@@ -23,7 +23,7 @@
           Insira senha
         </mat-error>
       </mat-form-field>
-      
+
       <div class="button">
         <button
           [disabled]="loginForm.invalid"
