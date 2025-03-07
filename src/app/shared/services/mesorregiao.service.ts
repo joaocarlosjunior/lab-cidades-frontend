@@ -12,7 +12,11 @@ export class MesorregiaoService {
 
   constructor(private httpClient: HttpClient) { }
 
-  list(): Observable<Mesorregiao[]> { 
+  list(): Observable<Mesorregiao[]> {
     return this.httpClient.get<Mesorregiao[]>(this.API);
+  }
+
+  listarMesorregiaoPeloIdEstado(id: number): Observable<Mesorregiao[]> {
+    return this.httpClient.get<Mesorregiao[]>(`${this.API}/estado/${id}`)
   }
 }
