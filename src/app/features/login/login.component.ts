@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit{
   loginForm!: FormGroup;
   error!: string;
+  loading!: boolean;
 
   constructor(
     private _fb: FormBuilder,
@@ -27,16 +28,19 @@ export class LoginComponent implements OnInit{
     })
   }
 
-  onSubmit(){
+  async onSubmit(){
   if (this.loginForm.valid) {
+    this.loading = true;
     const { login, password } = this.loginForm.value;
 
     this._loginService.login(login, password).subscribe({
       next: () =>{
+        this.loading = false;
         this.toastService.success("Login efetuado com sucesso!");
         this._router.navigate(['/dashboard']);
       },
       error: (err) =>{
+        this.loading = false;
         switch(err.error.status){
           case 401:
             this.toastService.error(err.error.detail);

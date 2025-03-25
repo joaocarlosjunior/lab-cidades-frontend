@@ -12,7 +12,7 @@
         <mat-label>Email/Username</mat-label>
         <input matInput formControlName="login" />
         <mat-error *ngIf="loginForm.get('login')?.hasError('required')">
-          Insira email
+          Insira email/username
         </mat-error>
       </mat-form-field>
 
@@ -24,14 +24,19 @@
         </mat-error>
       </mat-form-field>
 
+      <p>*Campos obrigatórios</p>
+
       <div class="button">
         <button
-          [disabled]="loginForm.invalid"
+          [disabled]="loginForm.invalid || loading"
           mat-raised-button
           color="primary"
           type="submit"
         >
-          Entrar
+        <div style="display: flex; gap: 10px;">
+          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            Entrar
+        </div>
         </button>
       </div>
     </form>
