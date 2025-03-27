@@ -18,16 +18,42 @@
         </div>
 
         <app-buscador-form
-          (buscaIniciada)="onBuscaIniciada($event)"
-          (arquivosEncontradoEvent)="onArquivosEncontrado($event)"
           class="buscador-form"
+          (formEvent)="setBuscaAvancada($event)"
+          (isBuscaAvancada)="verificarBuscadaAvancada($event)"
         ></app-buscador-form>
 
         <app-card-arquivo
           *ngIf="!carregando && arquivosList.length > 0; else naoEncontrado"
           [arquivosList]="arquivosList"
+          [pageIndex]="pageIndex"
+          [pageSize]="pageSize"
           class="card-arquivo"
         ></app-card-arquivo>
+
+        <mat-paginator
+          *ngIf="length > pageSize && !isBuscaAvancada"
+          [showFirstLastButtons]="true"
+          [length]="length"
+          [pageSize]="pageSize"
+          [pageIndex]="pageIndex"
+          [pageSizeOptions]="[5, 10, 15]"
+          (page)="onPageChange($event)"
+          style="background-color: #fff"
+        >
+        </mat-paginator>
+
+        <mat-paginator
+        *ngIf="length > pageSize && isBuscaAvancada"
+        [showFirstLastButtons]="true"
+        [length]="length"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 15]"
+        (page)="onPageChangeAdvancedSearch($event)"
+        style="background-color: #F6F6F6"
+      >
+      </mat-paginator>
 
         <ng-template #naoEncontrado>
           <div *ngIf="carregando">
@@ -46,9 +72,7 @@
                 Certifique-se de que todas as palavras estão digitadas
                 corretamente.
               </li>
-              <li>
-                Tente usar um escopo de pesquisa diferente.
-              </li>
+              <li>Tente usar um escopo de pesquisa diferente.</li>
             </ul>
           </div>
         </ng-template>

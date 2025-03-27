@@ -11,6 +11,8 @@ import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
 })
 export class CardArquivoComponent {
   @Input({ required: true }) arquivosList: Arquivo[] = [];
+  @Input({required: true}) pageIndex!: number;
+  @Input({required: true}) pageSize!: number;
   downloadArquivo!:DownloadArquivo;
 
   constructor(

@@ -1,6 +1,15 @@
-import { Component } from '@angular/core';
-import { Event, NavigationEnd, Router } from '@angular/router';
+import { Component, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { Arquivo } from '../../core/models/Arquivo';
+import { PageEvent } from '@angular/material/paginator';
+import { BuscadorFormComponent } from './components/buscador-form/buscador-form.component';
+import { ApiResponse } from '../../core/interfaces/ApiResponse';
+import { ArquivoService } from '../../shared/services/arquivo.service';
+import { response } from 'express';
+import { ToastrService } from 'ngx-toastr';
+import { FormGroup } from '@angular/forms';
+import { take } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-buscador',
@@ -11,30 +20,170 @@ export class BuscadorComponent {
   arquivosList: Arquivo[] = [];
   buscaIniciada: boolean = false;
   arquivoNaoEncontrado = false;
-  textoDigitado!: string;
+  queryAtual!: string;
   carregando: boolean = false;
+  buscaAvancada: boolean = false;
 
-  constructor(private router: Router) {
+  formAtual!: FormGroup;
+  sourceAtual!: number;
+  queryBuscaAvancadaAtual!: string;
+
+  isBuscaAvancada: boolean = false;
+
+  @ViewChild(BuscadorFormComponent)
+  buscadorFormComponent!: BuscadorFormComponent;
+
+  length = 0;
+  pageSize = 5;
+  pageIndex = 0;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private _arquivoService: ArquivoService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
+      if (event instanceof NavigationEnd && isPlatformBrowser(this.platformId)) {
         window.scroll(0, 0);
       }
     });
   }
 
-  onBuscaIniciada(buscaIniciada: boolean) {
-    this.carregando = buscaIniciada; // Inicia o estado de carregamento
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      const query = params['q'];
+      if (query) {
+        this.setBuscaSimples(query, this.pageIndex, this.pageSize);
+      }
+    });
   }
 
-  onArquivosEncontrado(arquivos: Arquivo[]) {
-    this.carregando = false; // Conclui o carregamento
+  setBuscaSimples(query: string, pageIndex: number, pageSize: number) {
+    this.carregando = true;
 
-    if(arquivos.length > 0){
-      this.arquivosList = arquivos
-    }else{
-      this.arquivoNaoEncontrado = true;
-      this.arquivosList = [];
+    if (query !== this.queryAtual) {
+      pageIndex = 0;
+      pageSize = 5;
     }
-    
+
+    this.queryAtual = query;
+
+    this._arquivoService
+      .buscarAssunto(query.trim(), pageIndex, pageSize)
+      .subscribe({
+        next: (data) => {
+          this.carregando = false;
+          this.arquivosList = data.content;
+          this.length = data.page.totalElements;
+          this.pageSize = data.page.size;
+          this.pageIndex = data.page.number;
+        },
+        error: () => {
+          this.carregando = false;
+          this.arquivoNaoEncontrado = true;
+          this.arquivosList = [];
+          this.length = 0;
+        },
+      });
   }
+
+  setBuscaAvancada(form: FormGroup, pageIndex: number = 0, pageSize: number = 5) {
+
+    const query = this._gerarQuery(form);
+    const source = this._getTipoArquivo(form);
+
+    if((query !== this.queryBuscaAvancadaAtual) && (source !== this.sourceAtual)){
+      pageIndex = 0;
+      pageSize = 5;
+    }
+    this.formAtual = form;
+    this.queryBuscaAvancadaAtual = query;
+    this.sourceAtual = source;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { advanced: query, source: source },
+    });
+
+    this._arquivoService
+      .buscaAvancada(query, source, pageIndex, pageSize)
+      .pipe(take(1))
+      .subscribe({
+        next: (data) => {
+          this.carregando = false;
+          this.arquivosList = data.content;
+          this.length = data.page.totalElements;
+          this.pageSize = data.page.size;
+          this.pageIndex = data.page.number;
+        },
+        error: () => {
+          this.carregando = false;
+          this.arquivoNaoEncontrado = true;
+          this.arquivosList = [];
+          this.length = 0;
+        },
+      });
+  }
+
+  verificarBuscadaAvancada(event: boolean) {
+    this.isBuscaAvancada = event;
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.setBuscaSimples(this.queryAtual, this.pageIndex, this.pageSize);
+  }
+  onPageChangeAdvancedSearch(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.setBuscaAvancada(this.formAtual, this.pageIndex, this.pageSize);
+  }
+
+    private _gerarQuery(formGroup: FormGroup): string {
+      const filtros = formGroup.get('filtros')?.value;
+
+      if (!filtros || filtros.length === 0) {
+        return '';
+      }
+
+      const grupos: string[] = [];
+      let grupoAtual: string[] = [];
+      let operadorAnterior: string | null = null;
+
+      filtros.forEach((filter: any, index: number) => {
+        const { filtro, searchTerm, operador } = filter;
+        const filterExpression = `${filtro}:contains(${searchTerm})`;
+
+        if (index === 0) {
+          // O primeiro filtro inicia o primeiro grupo
+          grupoAtual.push(filterExpression);
+        } else if (operador === 'AND') {
+          // Filtros com 'AND' permanecem no mesmo grupo
+          grupoAtual.push(filterExpression);
+        } else if (operador === 'OR') {
+          // Se for 'OR', fecha o grupo atual e inicia um novo
+          if (grupoAtual.length > 0) {
+            grupos.push(`(${grupoAtual.join(' AND ')})`);
+          }
+          grupoAtual = [filterExpression];
+        }
+
+        operadorAnterior = operador;
+      });
+
+      // Adicionar o último grupo à query
+      if (grupoAtual.length > 0) {
+        grupos.push(`(${grupoAtual.join(' AND ')})`);
+      }
+
+      // Unir todos os grupos com OR
+      return grupos.join(' OR ');
+    }
+
+    private _getTipoArquivo(form: FormGroup) {
+      return form.get('tipoArquivo')?.value;
+    }
+
 }

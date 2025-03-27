@@ -8,8 +8,8 @@ import { NomeAutorPipe } from './components/card-arquivo/pipes/nome-autor.pipe';
 import { DetalhesArquivoComponent } from './components/detalhes-arquivo/detalhes-arquivo.component';
 import { FilterComponent } from './components/form-filtro/components/filter/filter.component';
 import { FormFiltroComponent } from './components/form-filtro/form-filtro.component';
-
-
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { getPortuguesePaginatorIntl } from '../../shared/functions/getPortuguesePaginatorIntl';
 
 @NgModule({
   declarations: [
@@ -19,14 +19,12 @@ import { FormFiltroComponent } from './components/form-filtro/form-filtro.compon
     FilterComponent,
     CardArquivoComponent,
     NomeAutorPipe,
-    DetalhesArquivoComponent
+    DetalhesArquivoComponent,
   ],
-  imports: [
-    SharedModule,
-    BuscadorRoutingModule
+  imports: [SharedModule, BuscadorRoutingModule, MatPaginatorModule],
+  exports: [BuscadorComponent],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: getPortuguesePaginatorIntl() },
   ],
-  exports:[
-    BuscadorComponent
-  ]
 })
-export class BuscadorModule { }
+export class BuscadorModule {}

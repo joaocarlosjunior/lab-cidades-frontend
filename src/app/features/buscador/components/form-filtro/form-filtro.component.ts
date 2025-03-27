@@ -79,20 +79,6 @@ export class FormFiltroComponent implements OnInit{
   }
 
   onSubmit(): void {
-    //const query = this.generateQuery();
     this.formEvent.emit(this.searchForm);
-    //this.filtros.valid ? this.queryEvent.emit(query) : (this.formValid = false);
-  }
-
-  private generateQuery(): string {
-    const filtros = this.filtros.value;
-
-    return filtros
-      .map((filtro, index) => {
-        const condition = `${filtro.filtro}:contains(${filtro.searchTerm})`;
-        const operador = index > 0 ? ` ${filtros[index].operador} ` : '';
-        return `${operador}${condition}`;
-      })
-      .join('');
   }
 }
