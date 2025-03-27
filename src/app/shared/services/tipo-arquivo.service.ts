@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, delay, finalize, Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../core/interfaces/ApiResponse';
 import { TipoArquivo } from '../../core/models/TipoArquivo';
@@ -20,7 +20,7 @@ export class TipoArquivoService {
       })
   }
 
-  listarPaginado(page: number = 0, size: number = 10): Observable<ApiResponse<TipoArquivo>> { 
+  listarPaginado(page: number = 0, size: number = 10): Observable<ApiResponse<TipoArquivo>> {
     return this.httpClient
     .get<ApiResponse<TipoArquivo>>(this.API + '/all', { params: { page, size} });
   }
