@@ -1,27 +1,31 @@
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output, Inject, PLATFORM_ID } from '@angular/core';
 import { SearchBarService } from '../../services/search-bar/search-bar.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrl: './search-bar.component.scss',
+  styleUrls: ['./search-bar.component.scss'],
 })
 export class SearchBarComponent {
-  @Output() assunto = new EventEmitter<string>();  // Mantemos a emissão do evento
+  @Output() assunto = new EventEmitter<string>();
 
   constructor(
     private searchService: SearchBarService,
     private router: Router,
-    private route: ActivatedRoute  // Para verificar a rota atual
+    private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   overlayOpen = this.searchService.overlayOpen;
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: Event) {
-    if (this.overlayOpen()) {
-      this.searchService.overlayOpen.set(false);  // Fecha o overlay ao rolar a página
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.overlayOpen()) {
+        this.searchService.overlayOpen.set(false);
+      }
     }
   }
 
@@ -29,11 +33,7 @@ export class SearchBarComponent {
     if (inputValue.trim()) {
       this.searchService.overlayOpen.set(false);
 
-      //this.assunto.emit(inputValue);
-
-      // Verifica se a rota atual é diferente de '/buscador' antes de redirecionar
       if (this.route.snapshot.routeConfig?.path !== 'buscador') {
-        // Redireciona para a página do buscador com o termo de busca como query param
         this.router.navigate(['/buscador'], { queryParams: { q: inputValue } });
       }
     }

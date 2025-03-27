@@ -1,14 +1,19 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-back-to-top',
   templateUrl: './back-to-top.component.html',
-  styleUrl: './back-to-top.component.scss',
+  styleUrls: ['./back-to-top.component.scss'],
 })
 export class BackToTopComponent implements AfterViewInit {
-  constructor(private readonly _elRef: ElementRef) {}
+  constructor(
+    private readonly _elRef: ElementRef,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
   ngAfterViewInit(): void {
-    if (typeof window !== 'undefined') {
+    if (isPlatformBrowser(this.platformId)) {
       const aElement = this._elRef.nativeElement.querySelector(
         '.btn-scroll-top'
       ) as HTMLAnchorElement;
