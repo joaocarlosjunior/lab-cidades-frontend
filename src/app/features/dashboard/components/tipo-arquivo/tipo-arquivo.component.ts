@@ -21,7 +21,7 @@ export class TipoArquivoComponent {
   }
 
   onClickRecarregarTipoArquivos(){
-    this.tipoArquivoTableComponent.carregarTiposArquivo();
+    this.tipoArquivoTableComponent.carregarTiposDocumento();
   }
 
   abrirTipoArquivoModal(id: number, titulo: string, component: any) {

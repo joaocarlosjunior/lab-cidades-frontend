@@ -6,7 +6,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
-  
+
       <!-- Tipo Arquivo -->
       <ng-container matColumnDef="tipoArquivo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Arquivo</th>
@@ -14,7 +14,7 @@
           {{ element.nome_tipo_arquivo }}
         </td>
       </ng-container>
-  
+
       <!-- Data Criação -->
       <ng-container matColumnDef="criadoEm">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Data Criação</th>
@@ -22,7 +22,7 @@
           {{ element.created_at }}
         </td>
       </ng-container>
-  
+
       <!-- Data Atualização -->
       <ng-container matColumnDef="atualizadoEm">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -32,7 +32,7 @@
           {{ element.updated_at }}
         </td>
       </ng-container>
-  
+
       <ng-container matColumnDef="acao">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Ação</th>
         <td *matCellDef="let element">
@@ -54,13 +54,12 @@
           </button>
         </td>
       </ng-container>
-  
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-  
+
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 15]"
       [pageSize]="10"
       aria-label="Selecione a página de tipos arquivo"
     ></mat-paginator>

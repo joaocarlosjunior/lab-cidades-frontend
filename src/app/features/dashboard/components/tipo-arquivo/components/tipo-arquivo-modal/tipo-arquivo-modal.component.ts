@@ -10,7 +10,7 @@ import { TipoArquivoTableComponent } from '../tipo-arquivo-table/tipo-arquivo-ta
   templateUrl: './tipo-arquivo-modal.component.html',
   styleUrl: './tipo-arquivo-modal.component.scss',
 })
-export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
+export class TipoArquivoModalComponent implements OnInit{
   tipoArquivoForm = new FormControl('', Validators.required);
 
   @ViewChild(TipoArquivoTableComponent) tipoArquivoTableComponent!: TipoArquivoTableComponent;
@@ -22,18 +22,9 @@ export class TipoArquivoModalComponent implements OnInit, AfterViewInit{
     private _toastr: ToastrService
   ) {}
 
-
   ngOnInit(): void {
     if(this.data.id !== 0){
       this.setModalData(this.data.id)
-    }
-  }
-
-  ngAfterViewInit(): void {
-    // Espera a inicialização completa do @ViewChild
-    if (this.tipoArquivoTableComponent) {
-      // Esse método só será chamado após o componente ser totalmente carregado
-      console.log('TipoArquivoTableComponent foi inicializado!');
     }
   }
 

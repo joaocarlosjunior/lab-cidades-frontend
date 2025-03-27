@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
 import { ToastrService } from 'ngx-toastr';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TipoArquivoModalComponent } from '../tipo-arquivo-modal/tipo-arquivo-modal.component';
 import { TipoArquivo } from '../../../../../../core/models/TipoArquivo';
@@ -42,18 +42,17 @@ export class TipoArquivoTableComponent implements OnInit, AfterViewInit{
       this._toastr
     );
 
-
-    this.tipoArquivoDataSource.carregarTiposArquivo();
+    this.tipoArquivoDataSource.carregarTiposDocumento();
     this.tipoArquivoDataSource.loading$.subscribe((loading) => {
       this.carregando = loading;
     });
   }
 
   ngAfterViewInit(): void {
-    this.carregarTodosTiposArquivo();
+    this.carregarTodosTiposDocumento();
   }
 
-  carregarTodosTiposArquivo() {
+  carregarTodosTiposDocumento() {
     this.tipoArquivoDataSource.counter$
       .pipe(
         tap((count) => {
@@ -62,33 +61,44 @@ export class TipoArquivoTableComponent implements OnInit, AfterViewInit{
       )
       .subscribe();
 
-    this.paginator.page.pipe(tap(() => this.carregarTiposArquivo())).subscribe();
+    this.paginator.page.pipe(tap(() => this.carregarTiposDocumento())).subscribe();
   }
 
-  carregarTiposArquivo(){
-    this.tipoArquivoDataSource
-    .carregarTiposArquivo( 
+  carregarTiposDocumento(){
+    this.tipoArquivoDataSource.carregarTiposDocumento(
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
+
+    // Atualiza o total de elementos no paginator
+    this.tipoArquivoDataSource.counter$.pipe(take(1)).subscribe((count) => {
+      this.paginator.length = count;
+    });
   }
 
   onClickEditarTipoArquivo(id: number){
-    this.abrirArquivoModal(id, 'Editar Tipo Arquivo');
+    this.abrirArquivoModal(id, 'Editar Tipo Documento');
   }
 
   onDeletarTipoArquivo(id: number){
-    console.log(id);
     this._tipoArquivoService
     .deletarTipoArquivo(id)
     .subscribe({
       next: () => {
-        this._toastr.success('', 'Tipo Arquivo Deletado');
-        this.carregarTiposArquivo();
+        this._toastr.success('', 'Tipo Documento Deletado');
+
+        this.tipoArquivoDataSource.counterTipoDocumentoPage$
+        .pipe(take(1))
+        .subscribe((count) => {
+          if((count - 1) === 0){
+            this.paginator.pageIndex = Math.max(this.paginator.pageIndex - 1, 0);
+            this.carregarTiposDocumento();
+          }else{
+            this.carregarTiposDocumento();
+          }
+        });
       },
-      error: () => {
-        this._toastr.error('', 'Erro ao deletar tipo arquivo');
-      }
+      error: () => this._toastr.error('Erro ao deletar tipo documento'),
     })
   }
 
@@ -104,7 +114,7 @@ export class TipoArquivoTableComponent implements OnInit, AfterViewInit{
         id: id,
       },
     })
-    .afterClosed().subscribe(() => {this.carregarTiposArquivo()})
+    .afterClosed().subscribe(() => {this.carregarTiposDocumento()})
   }
 
 }
