@@ -3,7 +3,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 export function getPortuguesePaginatorIntl() {
     const paginatorIntl = new MatPaginatorIntl();
 
-    paginatorIntl.itemsPerPageLabel = 'Itens por página';
+    paginatorIntl.itemsPerPageLabel = 'Itens por página: ';
     paginatorIntl.nextPageLabel = 'Próxima página';
     paginatorIntl.previousPageLabel = 'Página anterior';
     paginatorIntl.firstPageLabel = 'Primeira página';
