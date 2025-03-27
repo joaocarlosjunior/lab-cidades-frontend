@@ -1,10 +1,8 @@
 import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpParams,
+  HttpClient
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, throwError } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../core/interfaces/ApiResponse';
 import { Arquivo } from '../../core/models/Arquivo';
@@ -17,37 +15,17 @@ export class ArquivoService {
 
   constructor(private httpClient: HttpClient) {}
 
-  list(page: number = 0, size: number = 10): Observable<ApiResponse<Arquivo>> {
+  list(page: number, size: number ): Observable<ApiResponse<Arquivo>> {
       return this.httpClient.get<ApiResponse<Arquivo>>(this.API, { params: { page, size} });
   }
 
-  buscarAssunto(assunto: string) {
-    assunto = assunto.trim();
-
-    let params = new HttpParams()
-    .set('q', assunto);
-
-    return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/search', { params }).pipe(
-      map((response) => {
-        return response.content;
-      })
-    );
+  buscarAssunto(q: string, page: number, size: number): Observable<ApiResponse<Arquivo>> {
+    return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/search', { params: { q, page, size } });
   }
 
-  buscaAvancada(query: string, source: number) {
-    const options = query
-      ? {
-          params: new HttpParams().set('q', query).set('source', source), // Adiciona o segundo parâmetro 'source'
-        }
-      : {};
-
+  buscaAvancada(q: string, source: number, page: number, size: number): Observable<ApiResponse<Arquivo>> {
     return this.httpClient
-      .get<ApiResponse<Arquivo>>(this.API + '/search-advanced', options)
-      .pipe(
-        map((response) => {
-          return response.content;
-        })
-      );
+      .get<ApiResponse<Arquivo>>(this.API + '/search-advanced', { params: { q, source, page, size} });
   }
 
   getArquivoByCode(id: number): Observable<Arquivo> {
@@ -59,7 +37,7 @@ export class ArquivoService {
       })
     );
   }
-  
+
   criarArquivo(formData: FormData) {
     return this.httpClient.post<void>(this.API, formData);
   }
@@ -83,17 +61,7 @@ export class ArquivoService {
     return this.httpClient.delete(`${this.API}/${id}`);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      console.error('An error occurred:', error.error);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, body was: `,
-        error.error
-      );
-    }
-    return throwError(
-      () => new Error('Something bad happened; please try again later.')
-    );
+  removerArquivoPeloIdDocumento(id: number){
+    return this.httpClient.patch(`${this.API}/remove-arquivo/documento/${id}`, {});
   }
 }
