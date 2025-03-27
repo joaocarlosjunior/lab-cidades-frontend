@@ -32,9 +32,16 @@ import { LocalidadeModalComponent } from '../../../localidade/localidade-modal/l
 import { TipoArquivoModalComponent } from '../../../tipo-arquivo/components/tipo-arquivo-modal/tipo-arquivo-modal.component';
 
 class ArquivoNaoSelecionadoMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
 
@@ -60,6 +67,7 @@ export class ModalArquivoFormComponent implements OnInit {
   errorMessage: string = '';
 
   nomeArquivoCadastrado: string = '';
+  urlArquivoCadastrado: string = '';
 
   idArquivo!: number;
 
@@ -88,6 +96,7 @@ export class ModalArquivoFormComponent implements OnInit {
     this.carregarEstados();
     this.carregarTipoArquivos();
 
+    //data.id 0 é codigo para um novo arquivo
     if (this.data.id !== 0) {
       this.setModalData(this.data.id);
     }
@@ -101,11 +110,12 @@ export class ModalArquivoFormComponent implements OnInit {
           descricao: arquivo.descricao,
           ano_publicacao: arquivo.ano_publicacao,
           arquivo_url: arquivo.arquivo_url,
-          tipo_arquivo: arquivo.tipo_arquivo.id || null,
+          tipo_arquivo: arquivo.tipo_arquivo.id,
         });
 
-        this.nomeArquivoCadastrado = arquivo.nome_arquivo;
         this.idArquivo = id;
+        this.nomeArquivoCadastrado = arquivo.nome_arquivo || '';
+        this.urlArquivoCadastrado = arquivo.arquivo_url || '';
 
         // Configura os autores (FormArray)
         const autoresFormArray = this._fb.array([]);
@@ -139,6 +149,13 @@ export class ModalArquivoFormComponent implements OnInit {
   }
 
   inicializarForm() {
+    //verifica se é um novo arquivo ou edição
+    //se for novo arquivo, adiciona a validação de arquivo
+    const formValidators =
+      this.data.id === 0
+        ? { validators: arquivoValido('file', 'arquivo_url') }
+        : null;
+
     this.arquivoForm = this._fb.group(
       {
         titulo: ['', Validators.required],
@@ -151,7 +168,7 @@ export class ModalArquivoFormComponent implements OnInit {
         cidade_id: [null],
         estado_id: [null],
       },
-      { validators: arquivoValido('file', 'arquivo_url') }
+      formValidators
     );
   }
 
@@ -209,9 +226,12 @@ export class ModalArquivoFormComponent implements OnInit {
     if (this.arquivoForm.valid) {
       const formData = new FormData();
 
-      const hasFile = this.arquivoForm.get('file')?.value;
       if (this.file) {
         formData.append('file', this.file);
+      }
+
+      if (!this.arquivoForm.get('arquivo_url')?.value) {
+        this.arquivoForm.get('arquivo_url')?.setValue(null);
       }
 
       const metadata = {
@@ -224,12 +244,6 @@ export class ModalArquivoFormComponent implements OnInit {
         arquivo_url: this.arquivoForm.get('arquivo_url')?.value,
       };
 
-      const arquivoUrl = this.arquivoForm.get('arquivo_url')?.value;
-
-      if (arquivoUrl) {
-        metadata.arquivo_url = arquivoUrl;
-      }
-
       formData.append(
         'metadata',
         new Blob([JSON.stringify(metadata)], {
@@ -240,7 +254,7 @@ export class ModalArquivoFormComponent implements OnInit {
       if (this.data.id === 0) {
         this._arquivoService.criarArquivo(formData).subscribe({
           next: () => {
-            this._toastr.success('', 'Arquivo salvo com sucesso');
+            this._toastr.success('', 'Documento salvo com sucesso');
             this.arquivoForm.reset();
             this.file = null;
           },
@@ -262,7 +276,7 @@ export class ModalArquivoFormComponent implements OnInit {
       } else {
         this._arquivoService.editarArquivo(formData, this.data.id).subscribe({
           next: () => {
-            this._toastr.success('', 'Arquivo editado com sucesso');
+            this._toastr.success('', 'Documento editado com sucesso');
             this.arquivoForm.reset();
             this.closeModal();
             this.file = null;
@@ -274,13 +288,11 @@ export class ModalArquivoFormComponent implements OnInit {
                   error?.error?.detail,
                   'Erro ao editar o arquivo'
                 );
-                console.log(error);
                 this.errorMessage = error?.error?.detail as string;
                 this._cdr.detectChanges();
                 break;
               default:
                 this._toastr.error('', 'Erro ao editar o arquivo');
-                console.log(error);
             }
           },
         });
@@ -325,13 +337,12 @@ export class ModalArquivoFormComponent implements OnInit {
     this.arquivoForm.removeControl('cidade');
   }
 
-  removerArquivoSelecionado() {
+  onRemoverArquivoSelecionado() {
     this.file = null;
 
     this.arquivoForm.get('file')?.setValue(null);
-    this.arquivoForm.get('file')?.updateValueAndValidity(); // Dispara a validação
-    this.arquivoForm.get('file')?.markAsTouched(); // Marca o campo como "tocado"
-
+    this.arquivoForm.get('file')?.updateValueAndValidity();
+    this.arquivoForm.get('file')?.markAsTouched();
     const fileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
@@ -340,12 +351,12 @@ export class ModalArquivoFormComponent implements OnInit {
     }
   }
 
-  onClickCadastrarCidade() {
+  onCadastrarCidade() {
     this.abrirModal(0, 'Cadastrar Cidade', LocalidadeModalComponent);
   }
 
-  onClickCadastrarTipoArquivo(){
-    this.abrirModal(0, 'Cadastrar Tipo Arquivo', TipoArquivoModalComponent)
+  onClickCadastrarTipoArquivo() {
+    this.abrirModal(0, 'Cadastrar Tipo Arquivo', TipoArquivoModalComponent);
   }
 
   abrirModal(id: number, titulo: string, component: any) {
@@ -363,5 +374,22 @@ export class ModalArquivoFormComponent implements OnInit {
       this.carregarTipoArquivos();
       this.carregarCidades(this.idEstadoSelecionado);
     });
+  }
+
+  onRemoverArquivoAdicionado(id: number) {
+    this._arquivoService.removerArquivoPeloIdDocumento(id).subscribe({
+      next: () => {
+        this.nomeArquivoCadastrado = '';
+        this.arquivoForm.get('file')?.setValue(null);
+        this.arquivoForm.setValidators(arquivoValido('file', 'arquivo_url'));
+        this.arquivoForm.get('file')?.updateValueAndValidity();
+        this.arquivoForm.get('file')?.markAsTouched();
+        this._toastr.success('', 'Arquivo removido com sucesso');
+      },
+      error: () => {
+        this._toastr.error('', 'Erro ao remover arquivo');
+      },
+    });
+
   }
 }

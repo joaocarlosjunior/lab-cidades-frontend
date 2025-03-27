@@ -105,12 +105,15 @@
             <!-- Estado -->
             <mat-form-field appearance="outline">
               <mat-label>Estados</mat-label>
-              <mat-select formControlName="estado_id" (selectionChange)="estadoSelecionado($event)">
+              <mat-select
+                formControlName="estado_id"
+                (selectionChange)="estadoSelecionado($event)"
+              >
                 <mat-option
                   *ngFor="let estado of estadosOptions"
                   [value]="estado.id"
                 >
-                  {{ estado.nome_estado}}
+                  {{ estado.nome_estado }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -139,7 +142,12 @@
           >
             <mat-icon>add</mat-icon> Adicionar Autor
           </button>
-          <button type="button" mat-stroked-button color="primary" (click)="onClickCadastrarTipoArquivo()">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onClickCadastrarTipoArquivo()"
+          >
             <mat-icon>add</mat-icon> Cadastrar Tipo Documento
           </button>
 
@@ -147,7 +155,7 @@
             type="button"
             mat-stroked-button
             color="primary"
-            (click)="onClickCadastrarCidade()"
+            (click)="onCadastrarCidade()"
           >
             <mat-icon>add</mat-icon> Cadastrar Cidade
           </button>
@@ -166,16 +174,29 @@
           >
             <mat-icon>download</mat-icon> Download Arquivo
           </button>
+          <button
+            *ngIf="nomeArquivoCadastrado"
+            type="button"
+            mat-stroked-button
+            color="warn"
+            (click)="onRemoverArquivoAdicionado(idArquivo)"
+          >
+            <mat-icon>close</mat-icon> Remover Arquivo
+          </button>
         </div>
         <label for="file" class="custom-file-button">Escolha Arquivo:</label>
         <div class="input-arquivo">
-          <input formControlName="file" type="file" (change)="onFileSelected($event)" />
+          <input
+            formControlName="file"
+            type="file"
+            (change)="onFileSelected($event)"
+          />
           <button
             *ngIf="file"
             type="button"
             mat-stroked-button
             color="warn"
-            (click)="removerArquivoSelecionado()"
+            (click)="onRemoverArquivoSelecionado()"
           >
             <mat-icon>close</mat-icon> Remover Documento
           </button>
@@ -185,13 +206,17 @@
       <!-- URL do Arquivo -->
       <mat-form-field appearance="outline" class="full-width m-top">
         <mat-label>URL do Arquivo</mat-label>
-        <input matInput type="url" formControlName="arquivo_url" [errorStateMatcher]="matcher"/>
-        <mat-error
-        *ngIf="arquivoForm.hasError('validator')"
-      >
-        Deve ser anexado algum documento ou arquivo
-      </mat-error>
+        <input
+          matInput
+          type="url"
+          formControlName="arquivo_url"
+          [errorStateMatcher]="matcher"
+        />
       </mat-form-field>
+
+      <mat-error *ngIf="arquivoForm.hasError('validator')">
+        Deve ser adicionado algum arquivo ou url do arquivo!!
+      </mat-error>
 
       <div class="box-3">
         <button
@@ -202,6 +227,7 @@
         >
           Cancelar
         </button>
+
         <button
           mat-raised-button
           color="primary"

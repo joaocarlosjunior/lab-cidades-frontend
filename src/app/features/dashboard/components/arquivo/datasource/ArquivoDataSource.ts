@@ -1,18 +1,20 @@
+import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/table';
-import { BehaviorSubject, catchError, delay, finalize, Observable, of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, catchError, finalize, Observable, of } from 'rxjs';
 import { ApiResponse } from '../../../../../core/interfaces/ApiResponse';
 import { Arquivo } from '../../../../../core/models/Arquivo';
 import { ArquivoService } from '../../../../../shared/services/arquivo.service';
-import { CollectionViewer } from '@angular/cdk/collections';
-import { ToastrService } from 'ngx-toastr';
 
 export class ArquivoDataSource implements DataSource<Arquivo> {
   private arquivoSubject = new BehaviorSubject<Arquivo[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private countSubject = new BehaviorSubject<number>(0);
+  private numeroDocumentoPorPaginaSubject = new BehaviorSubject<number>(0);
 
   public counter$ = this.countSubject.asObservable();
   public loading$ = this.loadingSubject.asObservable();
+  public counterNumeroDocumentoPorPagina$ = this.numeroDocumentoPorPaginaSubject.asObservable();
 
   constructor(
     private _arquivoService: ArquivoService,
@@ -27,67 +29,70 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
     this.arquivoSubject.complete();
     this.loadingSubject.complete();
     this.countSubject.complete();
+    this.numeroDocumentoPorPaginaSubject.complete();
   }
 
-  carregarArquivos(page = 0, size = 10) {
-    const emptyResponse: ApiResponse<Arquivo> = {
-      content: [],
-      page: {
-        totalElements: 0,
-        totalPages: 0,
-        size: 0,
-        number: 0,
-      },
-    };
-
+  carregarArquivos(page: number = 0, size: number = 10) {
     this.loadingSubject.next(true);
     this._arquivoService
       .list(page, size)
-      .pipe(
-        catchError((error) => {
-          return of(emptyResponse);
-        }),
-        finalize(() => this.loadingSubject.next(false))
-      )
-      .subscribe((result: ApiResponse<Arquivo>) => {
-        if (result && result.content) {
-          this.arquivoSubject.next(result.content); // Atualiza os dados
-          this.countSubject.next(result.page.totalElements); // Atualiza o total de elementos
-          if (result.content.length === 0) {
-            this._toastr.info('Nenhum arquivo encontrado', 'Info');
-          } else {
-            this._toastr.success('Arquivos carregados com sucesso', 'Sucesso');
+      .subscribe({
+        next: (result: ApiResponse<Arquivo>) => {
+            this.arquivoSubject.next(result.content);
+            this.countSubject.next(result.page.totalElements);
+            this.loadingSubject.next(false);
+            this.numeroDocumentoPorPaginaSubject.next(result.content.length);
+        },
+        error: (error) => {
+          switch(error.status) {
+            case 401:
+              this._toastr.error('Não autorizado', 'Erro');
+              break;
+            case 404:
+              this._toastr.error('Nenhum arquivo encontrado', 'Erro');
+              break;
+            default:
+              this._toastr.error('Erro ao carregar documentos', 'Erro');
+              break;
           }
-        }
-      });
+          this.arquivoSubject.next([]);
+          this.countSubject.next(0);
+          this.loadingSubject.next(false);
+          this.numeroDocumentoPorPaginaSubject.next(0);
+        },
+      }
+    );
   }
 
   carregarArquivosPorTitulo(titulo: string, page = 0, size = 10) {
-    const emptyResponse: ApiResponse<Arquivo> = {
-      content: [],
-      page: {
-        totalElements: 0,
-        totalPages: 0,
-        size: 0,
-        number: 0,
-      },
-    };
     this.loadingSubject.next(true);
     this._arquivoService
       .buscarArquivoPorTitulo(titulo, page, size)
-      .pipe(
-        catchError((error) => {
-          this._toastr.error(error.error.detail, 'Erro ao carregar arquivo');
-          return of(emptyResponse);
-        }),
-        finalize(() => this.loadingSubject.next(false))
-      )
-      .subscribe((result: ApiResponse<Arquivo>) => {
-        if (result && result.content && result.content.length > 0) {
-          this.arquivoSubject.next(result.content);
-          this.countSubject.next(result.page.totalElements);
-          this._toastr.success('Arquivos carregados com sucesso', 'Sucesso');
-        }
-      });
+      .subscribe({
+        next: (result: ApiResponse<Arquivo>) => {
+            this.arquivoSubject.next(result.content);
+            this.countSubject.next(result.page.totalElements);
+            this.loadingSubject.next(false);
+            this.numeroDocumentoPorPaginaSubject.next(result.content.length);
+        },
+        error: (error) => {
+          switch(error.status) {
+            case 401:
+              this._toastr.error('Não autorizado', 'Erro');
+              break;
+            case 404:
+              this._toastr.error('Nenhum arquivo encontrado', 'Erro');
+              break;
+            default:
+              this._toastr.error('Erro ao carregar documentos', 'Erro');
+              break;
+          }
+          this.arquivoSubject.next([]);
+          this.countSubject.next(0);
+          this.loadingSubject.next(false);
+          this.numeroDocumentoPorPaginaSubject.next(0);
+        },
+      }
+    );
   }
 }

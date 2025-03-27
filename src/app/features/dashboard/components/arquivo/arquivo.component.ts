@@ -16,13 +16,13 @@ export class ArquivoComponent {
   arquivoList: Arquivo[] = [];
 
   @ViewChild(ArquivoTableComponent) arquivoTableComponent!: ArquivoTableComponent;
-  
+
   constructor(
     private _dialog: MatDialog
   ) {}
 
   onClickAdicionarArquivo() {
-    this.abrirArquivoModal(0, 'Adicionar Documento', ModalArquivoFormComponent);
+    this.abrirArquivoModal(0, 'Cadastrar Documento', ModalArquivoFormComponent);
   }
 
   abrirArquivoModal(id: number, titulo: string, component: any) {

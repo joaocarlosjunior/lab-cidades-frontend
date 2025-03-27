@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
 import { ArquivoDataSource } from '../../datasource/ArquivoDataSource';
 import { ModalArquivoFormComponent } from '../modal-arquivo-form/modal-arquivo-form.component';
@@ -99,11 +99,9 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
       );
     }
 
-    // Verifica se a tabela está vazia e reseta o paginator
+    // Atualiza o total de elementos no paginator
     this.arquivoDataSource.counter$.subscribe((count) => {
-      if (count === 0) {
-        this.paginator.pageIndex = 0; // Reseta o paginator para a primeira página
-      }
+      this.paginator.length = count;
     });
   }
 
@@ -117,13 +115,25 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
 
   onClickDeletarArquivo(id: number) {
     if (id) {
-      this._arquivoService.deletarArquivo(id).subscribe({
+      this._arquivoService
+      .deletarArquivo(id)
+      .subscribe({
         next: () => {
-          this._toastr.success('Deletado com sucesso');
-          this.arquivoDataSource.carregarArquivos(
-            this.paginator.pageIndex,
-            this.paginator.pageSize
-          );
+          this._toastr.success('Documento Deletado com sucesso');
+
+          this.arquivoDataSource.counterNumeroDocumentoPorPagina$
+            .pipe(take(1))
+            .subscribe((count) => {
+              if (count - 1 === 0) {
+                this.paginator.pageIndex = Math.max(
+                  this.paginator.pageIndex - 1,
+                  0
+                );
+                this.carregarArquivos();
+              } else {
+                this.carregarArquivos();
+              }
+            });
         },
         error: () => this._toastr.error('Erro ao deletar'),
       });
