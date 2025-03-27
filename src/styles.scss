@@ -2,13 +2,13 @@
 
 @include mat.core();
 
-$custom-app-primary: mat.define-palette(mat.$blue-palette, 800); 
-$custom-app-accent: mat.define-palette(mat.$blue-gray-palette, 600);    
+$custom-app-primary: mat.define-palette(mat.$blue-palette, 800);
+$custom-app-accent: mat.define-palette(mat.$blue-gray-palette, 600);
 
 $custom-theme: mat.define-light-theme((
   color: (
     primary: $custom-app-primary,
-    accent: $custom-app-accent,   
+    accent: $custom-app-accent
   )
 ));
 
