@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
 import { take, tap } from 'rxjs';
-import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
+import { DocumentoService } from '../../../../../../shared/services/documento.service';
 import { ArquivoDataSource } from '../../datasource/ArquivoDataSource';
 import { ModalArquivoFormComponent } from '../modal-arquivo-form/modal-arquivo-form.component';
 
@@ -36,14 +36,14 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
   carregando!: boolean;
 
   constructor(
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     private _dialog: MatDialog,
     private _toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.arquivoDataSource = new ArquivoDataSource(
-      this._arquivoService,
+      this._documentoService,
       this._toastr
     );
 
@@ -115,7 +115,7 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
 
   onClickDeletarArquivo(id: number) {
     if (id) {
-      this._arquivoService
+      this._documentoService
       .deletarArquivo(id)
       .subscribe({
         next: () => {

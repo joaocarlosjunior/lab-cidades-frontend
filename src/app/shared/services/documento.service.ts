@@ -10,8 +10,8 @@ import { Arquivo } from '../../core/models/Arquivo';
 @Injectable({
   providedIn: 'root',
 })
-export class ArquivoService {
-  private readonly API = `${environment.apiUrl}/arquivos`;
+export class DocumentoService {
+  private readonly API = `${environment.apiUrl}/documentos`;
 
   constructor(private httpClient: HttpClient) {}
 

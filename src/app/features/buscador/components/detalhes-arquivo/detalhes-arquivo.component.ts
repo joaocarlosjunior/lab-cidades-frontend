@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Arquivo } from '../../../../core/models/Arquivo';
-import { ArquivoService } from '../../../../shared/services/arquivo.service';
 import { ToastrService } from 'ngx-toastr';
+import { Arquivo } from '../../../../core/models/Arquivo';
 import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
+import { DocumentoService } from '../../../../shared/services/documento.service';
 
 @Component({
   selector: 'app-detalhes-arquivo',
@@ -16,7 +16,7 @@ export class DetalhesArquivoComponent {
 
   constructor(
     private _route: ActivatedRoute,
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     private _toastr: ToastrService
   ) { }
 
@@ -33,7 +33,7 @@ export class DetalhesArquivoComponent {
 
   buscarArquivoPorId(id: number): void {
     if (id) {
-      this._arquivoService.getArquivoByCode(id)
+      this._documentoService.getArquivoByCode(id)
       .subscribe({
         next: (arquivo) => {
           this.arquivo = arquivo;
@@ -46,7 +46,7 @@ export class DetalhesArquivoComponent {
   }
 
   onDownloadArquivo(arquivoId: number){
-    this.downloadArquivo = new DownloadArquivo(this._arquivoService, this._toastr);
+    this.downloadArquivo = new DownloadArquivo(this._documentoService, this._toastr);
     this.downloadArquivo.downloadArquivo(arquivoId);
   }
 }

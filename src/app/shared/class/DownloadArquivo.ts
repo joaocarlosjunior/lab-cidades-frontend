@@ -1,15 +1,15 @@
 import { ToastrService } from "ngx-toastr";
-import { ArquivoService } from "../services/arquivo.service";
+import { DocumentoService } from "../services/documento.service";
 
 export class DownloadArquivo {
   constructor(
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     private _toastr: ToastrService,
   ) {}
 
   downloadArquivo(arquivoId: number) {
     if (arquivoId !== null) {
-      this._arquivoService.downloadArquivo(arquivoId).subscribe({
+      this._documentoService.downloadArquivo(arquivoId).subscribe({
         next: (response: any) => {
             const mimeType = response.body?.type || 'application/octet-stream';
             const file = new Blob([response.body!], {

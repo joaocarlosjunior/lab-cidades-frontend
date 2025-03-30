@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Arquivo } from '../../../../core/models/Arquivo';
-import { ArquivoService } from '../../../../shared/services/arquivo.service';
 import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
+import { DocumentoService } from '../../../../shared/services/documento.service';
 
 @Component({
   selector: 'app-card-arquivo',
@@ -16,12 +16,12 @@ export class CardArquivoComponent {
   downloadArquivo!:DownloadArquivo;
 
   constructor(
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     private _toastr: ToastrService
   ) {}
 
   onDownloadArquivo(arquivoId: number){
-    this.downloadArquivo = new DownloadArquivo(this._arquivoService, this._toastr);
+    this.downloadArquivo = new DownloadArquivo(this._documentoService, this._toastr);
     this.downloadArquivo.downloadArquivo(arquivoId);
   }
 

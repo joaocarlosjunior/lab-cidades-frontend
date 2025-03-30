@@ -1,15 +1,12 @@
-import { Component, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
-import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
-import { Arquivo } from '../../core/models/Arquivo';
-import { PageEvent } from '@angular/material/paginator';
-import { BuscadorFormComponent } from './components/buscador-form/buscador-form.component';
-import { ApiResponse } from '../../core/interfaces/ApiResponse';
-import { ArquivoService } from '../../shared/services/arquivo.service';
-import { response } from 'express';
-import { ToastrService } from 'ngx-toastr';
-import { FormGroup } from '@angular/forms';
-import { take } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+import { take } from 'rxjs';
+import { Arquivo } from '../../core/models/Arquivo';
+import { DocumentoService } from '../../shared/services/documento.service';
+import { BuscadorFormComponent } from './components/buscador-form/buscador-form.component';
 
 @Component({
   selector: 'app-buscador',
@@ -40,7 +37,7 @@ export class BuscadorComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.router.events.subscribe((event: Event) => {
@@ -69,7 +66,7 @@ export class BuscadorComponent {
 
     this.queryAtual = query;
 
-    this._arquivoService
+    this._documentoService
       .buscarAssunto(query.trim(), pageIndex, pageSize)
       .subscribe({
         next: (data) => {
@@ -106,7 +103,7 @@ export class BuscadorComponent {
       queryParams: { advanced: query, source: source },
     });
 
-    this._arquivoService
+    this._documentoService
       .buscaAvancada(query, source, pageIndex, pageSize)
       .pipe(take(1))
       .subscribe({

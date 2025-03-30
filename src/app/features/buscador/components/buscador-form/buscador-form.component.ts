@@ -1,12 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { Observable, take } from 'rxjs';
-import { ApiResponse } from '../../../../core/interfaces/ApiResponse';
-import { Arquivo } from '../../../../core/models/Arquivo';
-import { ArquivoService } from '../../../../shared/services/arquivo.service';
 
 @Component({
   selector: 'app-buscador-form',

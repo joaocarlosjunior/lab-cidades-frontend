@@ -23,8 +23,8 @@ import { Cidade } from '../../../../../../core/models/Cidade';
 import { Estado } from '../../../../../../core/models/Estado';
 import { TipoArquivo } from '../../../../../../core/models/TipoArquivo';
 import { DownloadArquivo } from '../../../../../../shared/class/DownloadArquivo';
-import { ArquivoService } from '../../../../../../shared/services/arquivo.service';
 import { CidadeService } from '../../../../../../shared/services/cidade.service';
+import { DocumentoService } from '../../../../../../shared/services/documento.service';
 import { EstadoService } from '../../../../../../shared/services/estado.service';
 import { TipoArquivoService } from '../../../../../../shared/services/tipo-arquivo.service';
 import { arquivoValido } from '../../../../../../shared/validators/arquivo-valido.validator';
@@ -81,7 +81,7 @@ export class ModalArquivoFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _ref: MatDialogRef<ModalArquivoFormComponent>,
     private _fb: FormBuilder,
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     private _tipoArquivoService: TipoArquivoService,
     private _cidadeService: CidadeService,
     private _estadoService: EstadoService,
@@ -103,7 +103,7 @@ export class ModalArquivoFormComponent implements OnInit {
   }
 
   setModalData(id: number) {
-    this._arquivoService.getArquivoByCode(id).subscribe({
+    this._documentoService.getArquivoByCode(id).subscribe({
       next: (arquivo) => {
         this.arquivoForm.patchValue({
           titulo: arquivo.titulo,
@@ -116,6 +116,10 @@ export class ModalArquivoFormComponent implements OnInit {
         this.idArquivo = id;
         this.nomeArquivoCadastrado = arquivo.nome_arquivo || '';
         this.urlArquivoCadastrado = arquivo.arquivo_url || '';
+
+        if(!this.nomeArquivoCadastrado){
+          this.arquivoForm.setValidators(arquivoValido('file', 'arquivo_url'));
+        }
 
         // Configura os autores (FormArray)
         const autoresFormArray = this._fb.array([]);
@@ -252,7 +256,7 @@ export class ModalArquivoFormComponent implements OnInit {
       );
 
       if (this.data.id === 0) {
-        this._arquivoService.criarArquivo(formData).subscribe({
+        this._documentoService.criarArquivo(formData).subscribe({
           next: () => {
             this._toastr.success('', 'Documento salvo com sucesso');
             this.arquivoForm.reset();
@@ -274,7 +278,7 @@ export class ModalArquivoFormComponent implements OnInit {
           },
         });
       } else {
-        this._arquivoService.editarArquivo(formData, this.data.id).subscribe({
+        this._documentoService.editarArquivo(formData, this.data.id).subscribe({
           next: () => {
             this._toastr.success('', 'Documento editado com sucesso');
             this.arquivoForm.reset();
@@ -302,7 +306,7 @@ export class ModalArquivoFormComponent implements OnInit {
 
   onDownloadArquivo(arquivoId: number) {
     this.downloadArquivo = new DownloadArquivo(
-      this._arquivoService,
+      this._documentoService,
       this._toastr
     );
     this.downloadArquivo.downloadArquivo(arquivoId);
@@ -377,7 +381,7 @@ export class ModalArquivoFormComponent implements OnInit {
   }
 
   onRemoverArquivoAdicionado(id: number) {
-    this._arquivoService.removerArquivoPeloIdDocumento(id).subscribe({
+    this._documentoService.removerArquivoPeloIdDocumento(id).subscribe({
       next: () => {
         this.nomeArquivoCadastrado = '';
         this.arquivoForm.get('file')?.setValue(null);

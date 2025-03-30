@@ -1,10 +1,10 @@
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from '@angular/cdk/table';
 import { ToastrService } from 'ngx-toastr';
-import { BehaviorSubject, catchError, finalize, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiResponse } from '../../../../../core/interfaces/ApiResponse';
 import { Arquivo } from '../../../../../core/models/Arquivo';
-import { ArquivoService } from '../../../../../shared/services/arquivo.service';
+import { DocumentoService } from '../../../../../shared/services/documento.service';
 
 export class ArquivoDataSource implements DataSource<Arquivo> {
   private arquivoSubject = new BehaviorSubject<Arquivo[]>([]);
@@ -17,7 +17,7 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
   public counterNumeroDocumentoPorPagina$ = this.numeroDocumentoPorPaginaSubject.asObservable();
 
   constructor(
-    private _arquivoService: ArquivoService,
+    private _documentoService: DocumentoService,
     private _toastr: ToastrService
   ) {}
 
@@ -34,7 +34,7 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
 
   carregarArquivos(page: number = 0, size: number = 10) {
     this.loadingSubject.next(true);
-    this._arquivoService
+    this._documentoService
       .list(page, size)
       .subscribe({
         next: (result: ApiResponse<Arquivo>) => {
@@ -66,7 +66,7 @@ export class ArquivoDataSource implements DataSource<Arquivo> {
 
   carregarArquivosPorTitulo(titulo: string, page = 0, size = 10) {
     this.loadingSubject.next(true);
-    this._arquivoService
+    this._documentoService
       .buscarArquivoPorTitulo(titulo, page, size)
       .subscribe({
         next: (result: ApiResponse<Arquivo>) => {
