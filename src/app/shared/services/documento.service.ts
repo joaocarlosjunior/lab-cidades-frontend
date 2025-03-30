@@ -62,6 +62,6 @@ export class DocumentoService {
   }
 
   removerArquivoPeloIdDocumento(id: number){
-    return this.httpClient.patch(`${this.API}/remove-arquivo/documento/${id}`, {});
+    return this.httpClient.patch(`${this.API}/remover-arquivo/documento/${id}`, {});
   }
 }
