@@ -1,0 +1,242 @@
+<div class="modal">
+  <h1 style="padding: 20px">{{ tituloForm }}</h1>
+  <mat-card-content>
+    <form [formGroup]="documentoForm" (ngSubmit)="onSubmit()">
+      <div class="box-1">
+        <!-- Título -->
+        <mat-form-field appearance="outline">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="titulo" />
+          <mat-error *ngIf="documentoForm.get('titulo')?.hasError('required')">
+            {{
+              documentoForm.get("titulo")?.hasError("required")
+                ? "O título é obrigatório"
+                : errorMessage
+            }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Ano de Publicação -->
+        <mat-form-field style="width: 224px" appearance="outline">
+          <mat-label>Ano de Publicação</mat-label>
+          <input
+            style="text-align: center"
+            matInput
+            type="number"
+            formControlName="ano_publicacao"
+          />
+          <mat-error *ngIf="documentoForm.get('ano_publicacao')?.hasError('min')">
+            Ano inválido
+          </mat-error>
+          <mat-error
+            *ngIf="documentoForm.get('ano_publicacao')?.hasError('required')"
+          >
+            O ano de publicação é obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Descrição -->
+      <mat-form-field appearance="outline" class="full-width m-top">
+        <mat-label>Descrição</mat-label>
+        <textarea matInput formControlName="descricao"></textarea>
+      </mat-form-field>
+
+      <div class="box-2">
+        <!-- Autores -->
+        <label>Autores:</label>
+        <div class="content">
+          <div
+            formArrayName="autores"
+            style="display: flex; flex-direction: column"
+          >
+            <div
+              *ngFor="let autor of autores.controls; let i = index"
+              class="input-group"
+            >
+              <div class="flex-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Autor {{ i + 1 }}</mat-label>
+                  <input
+                    matInput
+                    [formControlName]="i"
+                    placeholder="Nome do Autor"
+                  />
+                  <mat-error
+                    *ngIf="documentoForm.get('autores')?.hasError('required')"
+                  >
+                    O autor é obrigatório
+                  </mat-error>
+                </mat-form-field>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="autores.removeAt(i)"
+                  *ngIf="autores.length > 1"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tipo Documento -->
+          <div class="tipo-arquivo">
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo Documento</mat-label>
+              <mat-error
+                *ngIf="documentoForm.get('tipo_documento')?.hasError('required')"
+              >
+                O tipo do documento é obrigatório
+              </mat-error>
+              <mat-select formControlName="tipo_documento">
+                <mat-option
+                  *ngFor="let tipoDocumento of tiposDocumentoOptions"
+                  [value]="tipoDocumento.id"
+                >
+                  {{ tipoDocumento.nome_tipo_documento }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Cidade e Estado -->
+          <div class="cidade-estado">
+            <!-- Estado -->
+            <mat-form-field appearance="outline">
+              <mat-label>Estados</mat-label>
+              <mat-select
+                formControlName="estado_id"
+                (selectionChange)="estadoSelecionado($event)"
+              >
+                <mat-option
+                  *ngFor="let estado of estadosOptions"
+                  [value]="estado.id"
+                >
+                  {{ estado.nome_estado }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Cidade -->
+            <mat-form-field appearance="outline">
+              <mat-label>Cidade</mat-label>
+              <mat-select formControlName="cidade_id">
+                <mat-option
+                  *ngFor="let cidade of cidadeOptions"
+                  [value]="cidade.id"
+                >
+                  {{ cidade.nome_cidade }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="addAutor()"
+          >
+            <mat-icon>add</mat-icon> Adicionar Autor
+          </button>
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onClickCadastrarTipoDocumento()"
+          >
+            <mat-icon>add</mat-icon> Cadastrar Tipo Documento
+          </button>
+
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onCadastrarCidade()"
+          >
+            <mat-icon>add</mat-icon> Cadastrar Cidade
+          </button>
+        </div>
+      </div>
+
+      <!-- Upload do Arquivo -->
+      <div class="upload-arquivo">
+        <div class="arquivo-cadastrado" *ngIf="nomeArquivoCadastrado">
+          <span>Arquivo cadastrado: {{ nomeArquivoCadastrado }}</span>
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onDownloadArquivo(idDocumento)"
+          >
+            <mat-icon>download</mat-icon> Download Arquivo
+          </button>
+          <button
+            *ngIf="nomeArquivoCadastrado"
+            type="button"
+            mat-stroked-button
+            color="warn"
+            (click)="onRemoverArquivoAdicionado(idDocumento)"
+          >
+            <mat-icon>close</mat-icon> Remover Arquivo
+          </button>
+        </div>
+        <label for="file" class="custom-file-button">Escolha Arquivo:</label>
+        <div class="input-arquivo">
+          <input
+            formControlName="file"
+            type="file"
+            (change)="onFileSelected($event)"
+          />
+          <button
+            *ngIf="file"
+            type="button"
+            mat-stroked-button
+            color="warn"
+            (click)="onRemoverArquivoSelecionado()"
+          >
+            <mat-icon>close</mat-icon> Remover Documento
+          </button>
+        </div>
+      </div>
+
+      <!-- URL do Arquivo -->
+      <mat-form-field appearance="outline" class="full-width m-top">
+        <mat-label>URL do Arquivo</mat-label>
+        <input
+          matInput
+          type="url"
+          formControlName="arquivo_url"
+          [errorStateMatcher]="matcher"
+        />
+      </mat-form-field>
+
+      <mat-error *ngIf="documentoForm.hasError('validator')">
+        Deve ser adicionado algum arquivo ou url do arquivo!!
+      </mat-error>
+
+      <div class="box-3">
+        <button
+          type="button"
+          mat-raised-button
+          color="warn"
+          (click)="closeModal()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="documentoForm.invalid"
+        >
+          Enviar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</div>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Arquivo } from '../../../../core/models/Arquivo';
+import { Documento } from '../../../../core/models/Documento';
 import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
 import { DocumentoService } from '../../../../shared/services/documento.service';
 
@@ -11,7 +11,7 @@ import { DocumentoService } from '../../../../shared/services/documento.service'
   styleUrl: './detalhes-arquivo.component.scss'
 })
 export class DetalhesArquivoComponent {
-  arquivo: Arquivo = {} as Arquivo;
+  documento: Documento = {} as Documento;
   downloadArquivo!: DownloadArquivo;
 
   constructor(
@@ -24,29 +24,29 @@ export class DetalhesArquivoComponent {
     this._route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id && !isNaN(+id)) {
-        this.buscarArquivoPorId(+id);
+        this.buscarDocumentoPeloId(+id);
       } else {
         this._toastr.error('ID inválido', 'Erro');
       }
     });
   }
 
-  buscarArquivoPorId(id: number): void {
+  buscarDocumentoPeloId(id: number): void {
     if (id) {
-      this._documentoService.getArquivoByCode(id)
+      this._documentoService.getDocumentoByCode(id)
       .subscribe({
-        next: (arquivo) => {
-          this.arquivo = arquivo;
+        next: (documento) => {
+          this.documento = documento;
         },
         error: (err) => {
-          this._toastr.error('','Erro ao retornar arquivo')
+          this._toastr.error('','Erro ao retornar documento')
         }
       })
     }
   }
 
-  onDownloadArquivo(arquivoId: number){
+  onDownloadArquivo(documentoId: number){
     this.downloadArquivo = new DownloadArquivo(this._documentoService, this._toastr);
-    this.downloadArquivo.downloadArquivo(arquivoId);
+    this.downloadArquivo.downloadArquivo(documentoId);
   }
 }

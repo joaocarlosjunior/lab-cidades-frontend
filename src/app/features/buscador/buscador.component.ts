@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { take } from 'rxjs';
-import { Arquivo } from '../../core/models/Arquivo';
+import { Documento } from '../../core/models/Documento';
 import { DocumentoService } from '../../shared/services/documento.service';
 import { BuscadorFormComponent } from './components/buscador-form/buscador-form.component';
 
@@ -14,9 +14,9 @@ import { BuscadorFormComponent } from './components/buscador-form/buscador-form.
   styleUrls: ['./buscador.component.scss'],
 })
 export class BuscadorComponent {
-  arquivosList: Arquivo[] = [];
+  documentosList: Documento[] = [];
   buscaIniciada: boolean = false;
-  arquivoNaoEncontrado = false;
+  documentoNaoEncontrado = false;
   queryAtual!: string;
   carregando: boolean = false;
   buscaAvancada: boolean = false;
@@ -71,15 +71,15 @@ export class BuscadorComponent {
       .subscribe({
         next: (data) => {
           this.carregando = false;
-          this.arquivosList = data.content;
+          this.documentosList = data.content;
           this.length = data.page.totalElements;
           this.pageSize = data.page.size;
           this.pageIndex = data.page.number;
         },
         error: () => {
           this.carregando = false;
-          this.arquivoNaoEncontrado = true;
-          this.arquivosList = [];
+          this.documentoNaoEncontrado = true;
+          this.documentosList = [];
           this.length = 0;
         },
       });
@@ -109,15 +109,15 @@ export class BuscadorComponent {
       .subscribe({
         next: (data) => {
           this.carregando = false;
-          this.arquivosList = data.content;
+          this.documentosList = data.content;
           this.length = data.page.totalElements;
           this.pageSize = data.page.size;
           this.pageIndex = data.page.number;
         },
         error: () => {
           this.carregando = false;
-          this.arquivoNaoEncontrado = true;
-          this.arquivosList = [];
+          this.documentoNaoEncontrado = true;
+          this.documentosList = [];
           this.length = 0;
         },
       });

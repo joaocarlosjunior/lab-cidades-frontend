@@ -1,19 +1,19 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { ArquivoComponent } from "./components/arquivo/arquivo.component";
+import { authGuard } from "../../core/guards/auth.guard";
+import { DocumentoComponent } from "./components/documento/documento.component";
 import { HomeDashboardComponent } from "./components/home-dashboard/home-dashboard.component";
 import { LocalidadeComponent } from "./components/localidade/localidade.component";
-import { TipoArquivoComponent } from "./components/tipo-arquivo/tipo-arquivo.component";
+import { TipoDocumentoComponent } from "./components/tipo-documento/tipo-documento.component";
 import { DashboardComponent } from "./dashboard.component";
-import { authGuard } from "../../core/guards/auth.guard";
 
 const routes: Routes = [
     { path: '',  component:  DashboardComponent,
       canActivate: [authGuard],
       children: [
         { path: '', component: HomeDashboardComponent },  // Rota padrão quando não há rota filha ativa
-        { path: 'documento', component: ArquivoComponent },
-        { path: 'tipo-documento', component: TipoArquivoComponent },
+        { path: 'documento', component: DocumentoComponent },
+        { path: 'tipo-documento', component: TipoDocumentoComponent },
         { path: 'localidade', component: LocalidadeComponent },
       ]
     }

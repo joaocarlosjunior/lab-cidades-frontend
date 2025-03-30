@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../core/interfaces/ApiResponse';
-import { Arquivo } from '../../core/models/Arquivo';
+import { Documento } from '../../core/models/Documento';
 
 @Injectable({
   providedIn: 'root',
@@ -15,22 +15,22 @@ export class DocumentoService {
 
   constructor(private httpClient: HttpClient) {}
 
-  list(page: number, size: number ): Observable<ApiResponse<Arquivo>> {
-      return this.httpClient.get<ApiResponse<Arquivo>>(this.API, { params: { page, size} });
+  list(page: number, size: number ): Observable<ApiResponse<Documento>> {
+      return this.httpClient.get<ApiResponse<Documento>>(this.API, { params: { page, size} });
   }
 
-  buscarAssunto(q: string, page: number, size: number): Observable<ApiResponse<Arquivo>> {
-    return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/search', { params: { q, page, size } });
+  buscarAssunto(q: string, page: number, size: number): Observable<ApiResponse<Documento>> {
+    return this.httpClient.get<ApiResponse<Documento>>(this.API + '/search', { params: { q, page, size } });
   }
 
-  buscaAvancada(q: string, source: number, page: number, size: number): Observable<ApiResponse<Arquivo>> {
+  buscaAvancada(q: string, source: number, page: number, size: number): Observable<ApiResponse<Documento>> {
     return this.httpClient
-      .get<ApiResponse<Arquivo>>(this.API + '/search-advanced', { params: { q, source, page, size} });
+      .get<ApiResponse<Documento>>(this.API + '/search-advanced', { params: { q, source, page, size} });
   }
 
-  getArquivoByCode(id: number): Observable<Arquivo> {
+  getDocumentoByCode(id: number): Observable<Documento> {
     return this.httpClient
-    .get<Arquivo>(`${this.API}/${id}`)
+    .get<Documento>(`${this.API}/${id}`)
     .pipe(
       map((response) =>{
         return response;
@@ -38,26 +38,26 @@ export class DocumentoService {
     );
   }
 
-  criarArquivo(formData: FormData) {
+  criarDocumento(formData: FormData) {
     return this.httpClient.post<void>(this.API, formData);
   }
 
-  downloadArquivo(arquivoId: number) {
-    return this.httpClient.get(`${this.API}/arquivo/${arquivoId}`, {
+  downloadArquivo(DocumentoId: number) {
+    return this.httpClient.get(`${this.API}/arquivo/${DocumentoId}`, {
       responseType: 'blob',
       observe: 'response',
     });
   }
 
-  buscarArquivoPorTitulo(q: string, page: number = 0, size: number = 10){
-    return this.httpClient.get<ApiResponse<Arquivo>>(this.API + '/titulo', { params: { q, page, size} });
+  buscarDocumentoPorTitulo(q: string, page: number = 0, size: number = 10){
+    return this.httpClient.get<ApiResponse<Documento>>(this.API + '/titulo', { params: { q, page, size} });
   }
 
-  editarArquivo(formData: FormData, id: number){
+  editarDocumento(formData: FormData, id: number){
     return this.httpClient.put(`${this.API}/${id}`, formData)
   }
 
-  deletarArquivo(id: number){
+  deletarDocumento(id: number){
     return this.httpClient.delete(`${this.API}/${id}`);
   }
 

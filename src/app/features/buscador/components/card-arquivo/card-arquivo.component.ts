@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Arquivo } from '../../../../core/models/Arquivo';
+import { Documento } from '../../../../core/models/Documento';
 import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
 import { DocumentoService } from '../../../../shared/services/documento.service';
 
@@ -10,7 +10,7 @@ import { DocumentoService } from '../../../../shared/services/documento.service'
   styleUrl: './card-arquivo.component.scss',
 })
 export class CardArquivoComponent {
-  @Input({ required: true }) arquivosList: Arquivo[] = [];
+  @Input({ required: true }) documentosList: Documento[] = [];
   @Input({required: true}) pageIndex!: number;
   @Input({required: true}) pageSize!: number;
   downloadArquivo!:DownloadArquivo;

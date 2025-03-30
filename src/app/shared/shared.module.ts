@@ -15,7 +15,7 @@ import { DocumentoService } from './services/documento.service';
 import { EstadoService } from './services/estado.service';
 import { LoginService } from './services/login.service';
 import { MesorregiaoService } from './services/mesorregiao.service';
-import { TipoArquivoService } from './services/tipo-arquivo.service';
+import { TipoDocumentoService } from './services/tipo-documento.service';
 
 
 
@@ -45,6 +45,6 @@ import { TipoArquivoService } from './services/tipo-arquivo.service';
     ButtonPrimaryComponent,
     BackToTopComponent
   ],
-  providers: [ DocumentoService, TipoArquivoService, MesorregiaoService, CidadeService, EstadoService, DashboardService, LoginService]
+  providers: [ DocumentoService, TipoDocumentoService, MesorregiaoService, CidadeService, EstadoService, DashboardService, LoginService]
 })
 export class SharedModule { }

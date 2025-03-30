@@ -1,29 +1,29 @@
-<div class="card-arquivo">
-  <div class="info-archive" *ngFor="let arquivo of arquivosList; let i = index">
+<div class="card-documento">
+  <div class="info-archive" *ngFor="let documento of documentosList; let i = index">
     <h6>
       <span>{{ pageIndex * pageSize + i + 1 }}</span>
-      <a class="titulo-busca" [routerLink]="['/buscador/detalhes-arquivo', arquivo.id]" rel="noopener" target="_blank"> {{ arquivo.titulo }}</a>
+      <a class="titulo-busca" [routerLink]="['/buscador/detalhes-documento', documento.id]" rel="noopener" target="_blank"> {{ documento.titulo }}</a>
     </h6>
     <div class="autores">
-      <h5>{{ arquivo.autores | nomeAutor }}</h5>
+      <h5>{{ documento.autores | nomeAutor }}</h5>
     </div>
 
     <div class="descricao">
-      <p class="txt-descricao">{{ arquivo.descricao }}</p>
+      <p class="txt-descricao">{{ documento.descricao }}</p>
     </div>
 
-    <div class="cidade" *ngIf="arquivo.cidade">
-      <h5>Cidade: {{ arquivo.cidade.nome_cidade }} | Estado: {{ arquivo.cidade.estado.nome_estado }} | Mesorregião: {{ arquivo.cidade.mesorregiao.nome_mesorregiao }}</h5>
+    <div class="cidade" *ngIf="documento.cidade">
+      <h5>Cidade: {{ documento.cidade.nome_cidade }} | Estado: {{ documento.cidade.estado.nome_estado }} | Mesorregião: {{ documento.cidade.mesorregiao.nome_mesorregiao }}</h5>
     </div>
-    <span> {{ arquivo.ano_publicacao }}</span>
+    <span> {{ documento.ano_publicacao }}</span>
     <div style="display: flex; gap: 10px;">
       <div>
-        <a class="btnArchive" *ngIf="arquivo.arquivo_url" rel="noopener" target="_blank" [href]="arquivo.arquivo_url">
+        <a class="btnArchive" *ngIf="documento.arquivo_url" rel="noopener" target="_blank" [href]="documento.arquivo_url">
           <mat-icon>login</mat-icon>Acessar</a
         >
       </div>
       <div>
-        <a class="btnArchive" *ngIf="arquivo.nome_arquivo" (click)="onDownloadArquivo(arquivo.id)">
+        <a class="btnArchive" *ngIf="documento.nome_arquivo" (click)="onDownloadArquivo(documento.id)">
           <mat-icon>login</mat-icon>Baixar</a
         >
       </div>

@@ -1,17 +1,20 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Arquivo } from '../../../../core/models/Arquivo';
-import { TipoArquivo } from '../../../../core/models/TipoArquivo';
-import { TipoArquivoService } from '../../../../shared/services/tipo-arquivo.service';
+import { ToastrService } from 'ngx-toastr';
+import { Documento } from '../../../../core/models/Documento';
+import {
+  TipoDocumento
+} from '../../../../core/models/TipoDocumento';
+import { TipoDocumentoService } from '../../../../shared/services/tipo-documento.service';
 
 @Component({
   selector: 'app-form-filtro',
   templateUrl: './form-filtro.component.html',
   styleUrl: './form-filtro.component.scss',
 })
-export class FormFiltroComponent implements OnInit{
+export class FormFiltroComponent implements OnInit {
   searchForm!: FormGroup;
-  @Output() arquivosEncontradoEvent = new EventEmitter<Arquivo[]>();
+  @Output() arquivosEncontradoEvent = new EventEmitter<Documento[]>();
   @Output() queryEvent = new EventEmitter<string>();
   @Output() formEvent = new EventEmitter<FormGroup>();
 
@@ -19,29 +22,43 @@ export class FormFiltroComponent implements OnInit{
   isDisabled: boolean = false;
   private MAX_FILTROS: number = 7;
 
-  tipoArquivoOptions!: TipoArquivo[];
+  tiposDocumentoOptions!: TipoDocumento[];
 
   constructor(
     private fb: FormBuilder,
-    private tipoArquivoService: TipoArquivoService
+    private _tipoDocumentoService: TipoDocumentoService,
+    private _toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
-      tipoArquivo: [0, Validators.required],
+      tipoDocumento: [0, Validators.required],
       filtros: this.fb.array([this.createFiltroGroup()]), // Inicia com um filtro
     });
 
-    this.carregaTipoArquivos();
+    this.carregaTiposDocumento();
   }
 
-  carregaTipoArquivos(): void {
-    this.tipoArquivoService.list().subscribe({
-      next: (tiposArquivo: TipoArquivo[]) => {
-        this.tipoArquivoOptions = [{ id: 0, nome_tipo_arquivo: 'Todos os tipos', created_at: '', updated_at: '' }, ...tiposArquivo];
+  carregaTiposDocumento(): void {
+    this._tipoDocumentoService
+    .list()
+    .subscribe({
+      next: (tiposDocumento: TipoDocumento[]) => {
+        console.log(tiposDocumento)
+        this.tiposDocumentoOptions = [
+          {
+            id: 0,
+            nome_tipo_documento: 'Todos os tipos',
+            created_at: '',
+            updated_at: '',
+          },
+          ...tiposDocumento,
+        ];
+        console.log(this.tiposDocumentoOptions)
       },
       error: (err) => {
         console.error(err);
+        this._toastr.error('Por favor recarregue a página', 'Erro ao carregar os tipos de documento');
       },
     });
   }
@@ -53,7 +70,7 @@ export class FormFiltroComponent implements OnInit{
   createFiltroGroup(): FormGroup {
     return this.fb.group({
       filtro: ['all'],
-      searchTerm: ['', Validators.required]
+      searchTerm: ['', Validators.required],
     });
   }
 

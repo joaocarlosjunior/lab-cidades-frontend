@@ -1,0 +1,21 @@
+<div class="content">
+    <div class="content-top" >
+      <button
+      mat-raised-button
+      color="primary"
+      (click)="onClickCadastrarTipoArquivo()"
+    >
+      Cadastrar Tipo Documento
+    </button>
+      <button
+      mat-raised-button
+      color="primary"
+      (click)="onClickRecarregarTipoArquivos()"
+    >
+      Recarregar Tipos Documento
+    </button>
+    </div>
+
+    <app-tabela-tipo-documento ngSkipHydration/>
+
+  </div>

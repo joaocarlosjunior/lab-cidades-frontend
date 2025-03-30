@@ -24,8 +24,8 @@
         ></app-buscador-form>
 
         <app-card-arquivo
-          *ngIf="!carregando && arquivosList.length > 0; else naoEncontrado"
-          [arquivosList]="arquivosList"
+          *ngIf="!carregando && documentosList.length > 0; else naoEncontrado"
+          [documentosList]="documentosList"
           [pageIndex]="pageIndex"
           [pageSize]="pageSize"
           class="card-arquivo"
@@ -60,8 +60,8 @@
             <mat-spinner></mat-spinner>
           </div>
           <div
-            *ngIf="!carregando && arquivoNaoEncontrado"
-            class="arquivoNaoEncontrado"
+            *ngIf="!carregando && documentoNaoEncontrado"
+            class="documentoNaoEncontrado"
           >
             <div class="header">
               <h3>Nenhum arquivo encontrado</h3>

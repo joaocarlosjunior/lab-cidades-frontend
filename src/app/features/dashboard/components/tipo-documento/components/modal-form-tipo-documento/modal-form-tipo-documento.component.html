@@ -1,0 +1,27 @@
+<div class="modal">
+  <h1 style="padding: 20px">Tipo Documento</h1>
+  <mat-card-content class="content">
+    <!-- Título -->
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo Documento</mat-label>
+      <input matInput [formControl]="tipoDocumentoForm" />
+      <mat-error *ngIf="tipoDocumentoForm?.hasError('required')">
+        O nome do tipo de documento é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="onSubmit()"
+      [disabled]="tipoDocumentoForm.invalid"
+    >
+      Enviar
+    </button>
+
+    <button mat-raised-button color="warn" type="button" (click)="closeModal()">
+      Cancelar
+    </button>
+  </mat-card-content>
+</div>
