@@ -30,9 +30,9 @@ export class BuscadorComponent {
   @ViewChild(BuscadorFormComponent)
   buscadorFormComponent!: BuscadorFormComponent;
 
-  length = 0;
-  pageSize = 5;
-  pageIndex = 0;
+  length: number = 0;
+  pageSize: number = 10;
+  pageIndex: number = 0;
 
   constructor(
     private router: Router,
@@ -60,8 +60,8 @@ export class BuscadorComponent {
     this.carregando = true;
 
     if (query !== this.queryAtual) {
-      pageIndex = 0;
-      pageSize = 5;
+      pageIndex = this.pageIndex;
+      pageSize = this.pageSize;
     }
 
     this.queryAtual = query;
@@ -85,14 +85,14 @@ export class BuscadorComponent {
       });
   }
 
-  setBuscaAvancada(form: FormGroup, pageIndex: number = 0, pageSize: number = 5) {
+  setBuscaAvancada(form: FormGroup, pageIndex: number = 0, pageSize: number = 10) {
 
     const query = this._gerarQuery(form);
-    const source = this._getTipoArquivo(form);
+    const source = this._getTipoDocumento(form);
 
     if((query !== this.queryBuscaAvancadaAtual) && (source !== this.sourceAtual)){
-      pageIndex = 0;
-      pageSize = 5;
+      pageIndex = this.pageIndex;
+      pageSize = this.pageSize;
     }
     this.formAtual = form;
     this.queryBuscaAvancadaAtual = query;
@@ -179,8 +179,8 @@ export class BuscadorComponent {
       return grupos.join(' OR ');
     }
 
-    private _getTipoArquivo(form: FormGroup) {
-      return form.get('tipoArquivo')?.value;
+    private _getTipoDocumento(form: FormGroup) {
+      return form.get('tipoDocumento')?.value;
     }
 
 }
