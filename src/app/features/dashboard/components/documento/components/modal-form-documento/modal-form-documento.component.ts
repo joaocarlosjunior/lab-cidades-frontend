@@ -243,7 +243,7 @@ export class ModalFormDocumentoComponent implements OnInit {
         titulo: this.documentoForm.get('titulo')?.value,
         descricao: this.documentoForm.get('descricao')?.value,
         ano_publicacao: this.documentoForm.get('ano_publicacao')?.value,
-        tipo_arquivo_id: this.documentoForm.get('tipo_arquivo')?.value,
+        tipo_documento_id: this.documentoForm.get('tipo_documento')?.value,
         autores: this.documentoForm.get('autores')?.value,
         cidade_id: this.documentoForm.get('cidade_id')?.value,
         arquivo_url: this.documentoForm.get('arquivo_url')?.value,
@@ -259,7 +259,7 @@ export class ModalFormDocumentoComponent implements OnInit {
       if (this.data.id === 0) {
         this._documentoService.criarDocumento(formData).subscribe({
           next: () => {
-            this._toastr.success('', 'Documento salvo com sucesso');
+            this._toastr.success('', 'Documento adicionado com sucesso');
             this.documentoForm.reset();
             this.file = null;
           },
@@ -268,13 +268,13 @@ export class ModalFormDocumentoComponent implements OnInit {
               case 409:
                 this._toastr.error(
                   error?.error?.detail,
-                  'Erro ao salvar o documento'
+                  'Erro ao adicionar o documento'
                 );
                 this.errorMessage = error?.error?.detail as string;
                 this._cdr.detectChanges();
                 break;
               default:
-                this._toastr.error('', 'Erro ao salvar o documento');
+                this._toastr.error('', 'Erro ao adicionar o documento');
             }
           },
         });
@@ -291,13 +291,13 @@ export class ModalFormDocumentoComponent implements OnInit {
               case 409:
                 this._toastr.error(
                   error?.error?.detail,
-                  'Erro ao editar documento'
+                  'Erro ao salvar documento'
                 );
                 this.errorMessage = error?.error?.detail as string;
                 this._cdr.detectChanges();
                 break;
               default:
-                this._toastr.error('', 'Erro ao editar documento');
+                this._toastr.error('Tente novamente', 'Erro ao salvar documento');
             }
           },
         });
@@ -305,12 +305,12 @@ export class ModalFormDocumentoComponent implements OnInit {
     }
   }
 
-  onDownloadArquivo(arquivoId: number) {
+  onDownloadArquivo(documentoId: number) {
     this.downloadArquivo = new DownloadArquivo(
       this._documentoService,
       this._toastr
     );
-    this.downloadArquivo.downloadArquivo(arquivoId);
+    this.downloadArquivo.downloadArquivo(documentoId);
   }
 
   get autores(): FormArray {

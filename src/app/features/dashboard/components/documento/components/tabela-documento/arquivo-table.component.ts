@@ -7,6 +7,7 @@ import { take, tap } from 'rxjs';
 import { DocumentoService } from '../../../../../../shared/services/documento.service';
 import { ModalFormDocumentoComponent } from '../modal-form-documento/modal-form-documento.component';
 import { DocumentoDataSource } from '../../datasource/DocumentoDataSource';
+import { ModalDetalharDocumentoComponent } from '../modal-detalhar-documento/modal-detalhar-documento.component';
 
 @Component({
   selector: 'app-arquivo-table',
@@ -21,7 +22,7 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
     'cidade',
     'estado',
     'mesorregiao',
-    'tipoArquivo',
+    'tipoDocumento',
     'criadoEm',
     'atualizadoEm',
     'acao',
@@ -140,6 +141,19 @@ export class ArquivoTableComponent implements OnInit, AfterViewInit {
     } else {
       this._toastr.error('Documento inválido');
     }
+  }
+
+  onClickVerDocumento(idDocumento: number){
+    this._dialog
+    .open(ModalDetalharDocumentoComponent, {
+      width: '80vh',
+      height: 'auto',
+      enterAnimationDuration: '500ms',
+      exitAnimationDuration: '500ms',
+      data: {
+        id: idDocumento,
+      },
+    })
   }
 
   abrirDocumentoModal(id: number, titulo: string) {
