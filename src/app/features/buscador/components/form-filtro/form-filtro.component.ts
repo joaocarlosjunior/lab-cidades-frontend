@@ -44,7 +44,6 @@ export class FormFiltroComponent implements OnInit {
     .list()
     .subscribe({
       next: (tiposDocumento: TipoDocumento[]) => {
-        console.log(tiposDocumento)
         this.tiposDocumentoOptions = [
           {
             id: 0,
@@ -54,10 +53,8 @@ export class FormFiltroComponent implements OnInit {
           },
           ...tiposDocumento,
         ];
-        console.log(this.tiposDocumentoOptions)
       },
       error: (err) => {
-        console.error(err);
         this._toastr.error('Por favor recarregue a página', 'Erro ao carregar os tipos de documento');
       },
     });
