@@ -9,6 +9,7 @@ import { ButtonPrimaryComponent } from './components/button-primary/button-prima
 import { CardComponent } from './components/card/card.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { SearchOverlayComponent } from './components/search-overlay/search-overlay.component';
+import { AutoresPipe } from './pipes/autores.pipe';
 import { CidadeService } from './services/cidade.service';
 import { DashboardService } from './services/dashboard.service';
 import { DocumentoService } from './services/documento.service';
@@ -26,6 +27,7 @@ import { TipoDocumentoService } from './services/tipo-documento.service';
     SearchOverlayComponent,
     ButtonPrimaryComponent,
     BackToTopComponent,
+    AutoresPipe,
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,8 @@ import { TipoDocumentoService } from './services/tipo-documento.service';
     CardComponent,
     SearchBarComponent,
     ButtonPrimaryComponent,
-    BackToTopComponent
+    BackToTopComponent,
+    AutoresPipe
   ],
   providers: [ DocumentoService, TipoDocumentoService, MesorregiaoService, CidadeService, EstadoService, DashboardService, LoginService]
 })
