@@ -14,7 +14,7 @@
 
                 <div class="d-flex-fd-colmun">
                     <strong class="m-b">Autores</strong>
-                    <p> {{ documento.autores | nomeAutor }} </p>
+                    <p> {{ documento.autores | autores }} </p>
                 </div>
 
                 <div *ngIf="documento.cidade" class="d-flex-fd-colmun">
@@ -29,8 +29,8 @@
                 </div>
             </div>
             <div class="arquivo-links">
-                <a *ngIf="documento.arquivo_url" class="btn" [href]="documento.arquivo_url" rel="noopener" target="_blank"> <mat-icon>login</mat-icon> Acessar</a>
-                <a *ngIf="documento.nome_arquivo" class="btn" (click)="onDownloadArquivo(documento.id)"> <mat-icon>download</mat-icon> Baixar</a>
+                <a *ngIf="documento.arquivo_url" class="btn" [href]="documento.arquivo_url" rel="noopener noreferrer" target="_blank"> <mat-icon>login</mat-icon> Acessar</a>
+                <a *ngIf="documento.nome_arquivo" class="btn" rel="noopener noreferrer" (click)="onDownloadArquivo(documento.id)"> <mat-icon>download</mat-icon> Baixar</a>
             </div>
         </div>
       </div>
