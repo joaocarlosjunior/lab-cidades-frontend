@@ -5,7 +5,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Documento } from '../../../../core/models/Documento';
 import { ModalFormDocumentoComponent } from './components/modal-form-documento/modal-form-documento.component';
-import { ArquivoTableComponent } from './components/tabela-documento/arquivo-table.component';
+import { TabelaDocumentoComponent } from './components/tabela-documento/tabela-documento.component';
 
 @Component({
   selector: 'app-documento',
@@ -15,7 +15,7 @@ import { ArquivoTableComponent } from './components/tabela-documento/arquivo-tab
 export class DocumentoComponent {
   documentoList: Documento[] = [];
 
-  @ViewChild(ArquivoTableComponent) arquivoTableComponent!: ArquivoTableComponent;
+  @ViewChild(TabelaDocumentoComponent) arquivoTableComponent!: TabelaDocumentoComponent;
 
   constructor(
     private _dialog: MatDialog

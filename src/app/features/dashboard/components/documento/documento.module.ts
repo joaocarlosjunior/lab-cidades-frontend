@@ -4,7 +4,7 @@ import { getPortuguesePaginatorIntl } from '../../../../shared/functions/getPort
 import { SharedModule } from '../../../../shared/shared.module';
 import { ModalDetalharDocumentoComponent } from './components/modal-detalhar-documento/modal-detalhar-documento.component';
 import { ModalFormDocumentoComponent } from './components/modal-form-documento/modal-form-documento.component';
-import { ArquivoTableComponent } from './components/tabela-documento/arquivo-table.component';
+import { TabelaDocumentoComponent } from './components/tabela-documento/tabela-documento.component';
 import { DocumentoComponent } from './documento.component';
 
 
@@ -12,7 +12,7 @@ import { DocumentoComponent } from './documento.component';
 @NgModule({
   declarations: [
     DocumentoComponent,
-    ArquivoTableComponent,
+    TabelaDocumentoComponent,
     ModalFormDocumentoComponent,
     ModalDetalharDocumentoComponent
   ],
