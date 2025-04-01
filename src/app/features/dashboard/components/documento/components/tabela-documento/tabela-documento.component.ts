@@ -10,11 +10,11 @@ import { DocumentoDataSource } from '../../datasource/DocumentoDataSource';
 import { ModalDetalharDocumentoComponent } from '../modal-detalhar-documento/modal-detalhar-documento.component';
 
 @Component({
-  selector: 'app-arquivo-table',
-  templateUrl: './arquivo-table.component.html',
-  styleUrl: './arquivo-table.component.scss',
+  selector: 'app-tabela-documento',
+  templateUrl: './tabela-documento.component.html',
+  styleUrl: './tabela-documento.component.scss',
 })
-export class ArquivoTableComponent implements OnInit, AfterViewInit {
+export class TabelaDocumentoComponent implements OnInit, AfterViewInit {
   displayedColumns = [
     'id',
     'titulo',

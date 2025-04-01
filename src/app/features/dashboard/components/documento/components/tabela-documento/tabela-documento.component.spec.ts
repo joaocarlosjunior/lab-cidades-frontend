@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ArquivoTableComponent } from './arquivo-table.component';
+import { ArquivoTableComponent } from './tabela-documento.component';
 
 describe('ArquivoTableComponent', () => {
   let component: ArquivoTableComponent;
@@ -11,7 +11,7 @@ describe('ArquivoTableComponent', () => {
       declarations: [ArquivoTableComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(ArquivoTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
