@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DocumentoService } from '../../../../../../shared/services/documento.service';
 import { ToastrService } from 'ngx-toastr';
 import { Documento } from '../../../../../../core/models/Documento';
+import { BehaviorSubject, delay } from 'rxjs';
 
 @Component({
   selector: 'app-modal-detalhar-documento',
@@ -14,8 +15,9 @@ export class ModalDetalharDocumentoComponent implements OnInit{
   documento!: Documento;
   nomeArquivoCadastrado: string = '';
   urlArquivoCadastrado: string = '';
-
   downloadArquivo!: DownloadArquivo;
+
+  carregando: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -29,14 +31,17 @@ export class ModalDetalharDocumentoComponent implements OnInit{
   }
 
   setModalData(idDocumento: number){
+    this.carregando = true;
     this._documentoService
     .getDocumentoByCode(idDocumento)
     .subscribe({
       next: (documento: Documento) => {
+        this.carregando = false;
         this.documento = documento;
       },
       error: (error) => {
-        this._toastr.error('Tente novamente', 'Erro ao buscar documento')
+        this.carregando = false;
+        this._toastr.error('Tente novamente', 'Erro ao buscar documento');
       }
     })
   }
