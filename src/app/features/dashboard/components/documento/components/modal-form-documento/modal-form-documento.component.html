@@ -1,7 +1,7 @@
 <div class="modal">
   <h1 style="padding: 20px">{{ tituloForm }}</h1>
-  <mat-card-content>
-    <form [formGroup]="documentoForm" (ngSubmit)="onSubmit()">
+  <mat-card-content class="content">
+    <form *ngIf="!carregando; else spinner" [formGroup]="documentoForm" (ngSubmit)="onSubmit()">
       <div class="box-1">
         <!-- Título -->
         <mat-form-field appearance="outline">
@@ -25,7 +25,9 @@
             type="number"
             formControlName="ano_publicacao"
           />
-          <mat-error *ngIf="documentoForm.get('ano_publicacao')?.hasError('min')">
+          <mat-error
+            *ngIf="documentoForm.get('ano_publicacao')?.hasError('min')"
+          >
             Ano inválido
           </mat-error>
           <mat-error
@@ -85,7 +87,9 @@
             <mat-form-field appearance="outline">
               <mat-label>Tipo Documento</mat-label>
               <mat-error
-                *ngIf="documentoForm.get('tipo_documento')?.hasError('required')"
+                *ngIf="
+                  documentoForm.get('tipo_documento')?.hasError('required')
+                "
               >
                 O tipo do documento é obrigatório
               </mat-error>
@@ -179,7 +183,7 @@
             type="button"
             mat-stroked-button
             color="warn"
-            (click)="onRemoverArquivoAdicionado(idDocumento)"
+            (click)="onRemoverArquivoCadastrado(idDocumento)"
           >
             <mat-icon>close</mat-icon> Remover Arquivo
           </button>
@@ -238,5 +242,12 @@
         </button>
       </div>
     </form>
+
+    <ng-template #spinner>
+      <div style="height: 100%;display: flex; justify-content: center; align-items: center;">
+        <mat-spinner></mat-spinner>
+      </div>
+    </ng-template>
+
   </mat-card-content>
 </div>

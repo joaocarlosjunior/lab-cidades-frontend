@@ -6,6 +6,11 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
+  height: 100%;
+
+  .content{
+    height: 100%;
+  }
 }
 
 form{
@@ -13,48 +18,48 @@ form{
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .full-width {
     width: 100%;
     margin-bottom: 16px;
   }
-  
+
   .box-1 {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
-  
+
   .box-2 {
     display: flex;
     flex-direction: column;
     gap: 10px;
-  
+
     .content {
       margin-top: 8px;
       display: flex;
       align-items: start;
       gap: 20px;
-  
+
       .tipo-arquivo {
         display: flex;
         flex-direction: column;
         justify-content: center;
       }
-  
+
       .cidade-estado{
         display: flex;
         gap: 10px;
       }
     }
-  
+
     .buttons{
       display: flex;
       gap: 15px;
       margin-top: 10px;
     }
   }
-  
+
   .box-3 {
     display: flex;
     justify-content: end;
@@ -62,7 +67,7 @@ form{
   }
 
 
-  
+
   input[type="file"]::file-selector-button {
     border-radius: 4px;
     padding: 0 16px;
@@ -74,16 +79,16 @@ form{
     margin-right: 16px;
     transition: background-color 200ms;
   }
-  
+
   input[type="file"]::file-selector-button:hover {
     background-color: #f3f4f6;
   }
-  
+
   input[type="file"]::file-selector-button:active {
     background-color: #e5e7eb;
   }
-  
-  
+
+
   .upload-arquivo {
     display: flex;
     flex-direction: column;
@@ -96,9 +101,8 @@ form{
       align-items: center;
     }
   }
-  
-  
+
+
   .m-top {
     margin-top: 20px;
   }
-  

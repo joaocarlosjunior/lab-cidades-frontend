@@ -16,7 +16,7 @@ import {
 } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { delay, Observable } from 'rxjs';
 import { DadosSimplesCidade } from '../../../../../../core/interfaces/DadosSimplesCidade';
 import { Autor } from '../../../../../../core/models/Autor';
 import { Cidade } from '../../../../../../core/models/Cidade';
@@ -56,7 +56,7 @@ export class ModalFormDocumentoComponent implements OnInit {
   tiposDocumentoOptions!: TipoDocumento[];
   cidadeOptions: DadosSimplesCidade[] = [];
   estadosOptions: Estado[] = [];
-
+  carregando: boolean = false;
   filteredCidadeOptions!: Observable<Cidade[]>;
 
   adicionarCidade: boolean = false;
@@ -74,6 +74,8 @@ export class ModalFormDocumentoComponent implements OnInit {
   downloadArquivo!: DownloadArquivo;
 
   private idEstadoSelecionado!: number;
+
+  private idArquivoDeletado!: number;
 
   matcher = new ArquivoNaoSelecionadoMatcher();
 
@@ -103,6 +105,7 @@ export class ModalFormDocumentoComponent implements OnInit {
   }
 
   setModalData(id: number) {
+    this.carregando = true;
     this._documentoService.getDocumentoByCode(id).subscribe({
       next: (documento) => {
         this.documentoForm.patchValue({
@@ -117,8 +120,10 @@ export class ModalFormDocumentoComponent implements OnInit {
         this.nomeArquivoCadastrado = documento.nome_arquivo || '';
         this.urlArquivoCadastrado = documento.arquivo_url || '';
 
-        if(!this.nomeArquivoCadastrado){
-          this.documentoForm.setValidators(arquivoValido('file', 'arquivo_url'));
+        if (!this.nomeArquivoCadastrado) {
+          this.documentoForm.setValidators(
+            arquivoValido('file', 'arquivo_url')
+          );
         }
 
         // Configura os autores (FormArray)
@@ -144,8 +149,10 @@ export class ModalFormDocumentoComponent implements OnInit {
             cidade_id: documento.cidade.id,
           });
         }
+        this.carregando = false;
       },
       error: (error) => {
+        this.carregando = false;
         this._toastr.error('', 'Erro ao buscar arquivo');
         this.closeModal();
       },
@@ -227,7 +234,7 @@ export class ModalFormDocumentoComponent implements OnInit {
     this._ref.close();
   }
 
-  onSubmit() {
+/*   onSubmit() {
     if (this.documentoForm.valid) {
       const formData = new FormData();
 
@@ -279,29 +286,139 @@ export class ModalFormDocumentoComponent implements OnInit {
           },
         });
       } else {
-        this._documentoService.editarDocumento(formData, this.data.id).subscribe({
-          next: () => {
-            this._toastr.success('', 'Documento editado com sucesso');
-            this.documentoForm.reset();
-            this.closeModal();
-            this.file = null;
-          },
-          error: (error) => {
-            switch (error?.error?.status) {
-              case 409:
-                this._toastr.error(
-                  error?.error?.detail,
-                  'Erro ao salvar documento'
-                );
-                this.errorMessage = error?.error?.detail as string;
-                this._cdr.detectChanges();
-                break;
-              default:
-                this._toastr.error('Tente novamente', 'Erro ao salvar documento');
+        if(this.idArquivoDeletado){
+          this._documentoService
+          .removerArquivoPeloIdDocumento(this.idArquivoDeletado)
+          .subscribe({
+            next: () => this.removerArquivoCadastrado(),
+            error: () => {
+              this._toastr.error('', 'Erro ao editar arquivo');
+              return;
             }
-          },
-        });
+          })
+        }
+
+        this._documentoService
+          .editarDocumento(formData, this.data.id)
+          .subscribe({
+            next: () => {
+              this._toastr.success('', 'Documento editado com sucesso');
+              this.documentoForm.reset();
+              this.closeModal();
+              this.file = null;
+            },
+            error: (error) => {
+              switch (error?.error?.status) {
+                case 409:
+                  this._toastr.error(
+                    error?.error?.detail,
+                    'Erro ao salvar documento'
+                  );
+                  this.errorMessage = error?.error?.detail as string;
+                  this._cdr.detectChanges();
+                  break;
+                default:
+                  this._toastr.error(
+                    'Tente novamente',
+                    'Erro ao salvar documento'
+                  );
+              }
+            },
+          });
       }
+    }
+  } */
+
+  onSubmit(){
+    const formData = this.prepareFormData();
+
+    if (this.data.id === 0) {
+      this.createDocument(formData);
+    } else {
+      this.updateDocument(formData);
+    }
+  }
+
+  private prepareFormData(): FormData {
+    const formData = new FormData();
+
+    // Adiciona arquivo se existir
+    if (this.file) {
+      formData.append('file', this.file);
+    }
+
+    // Garante null se URL vazia
+    if (!this.documentoForm.get('arquivo_url')?.value) {
+      this.documentoForm.get('arquivo_url')?.setValue(null);
+    }
+
+    // Prepara metadados
+    const metadata = this.getMetadata();
+    formData.append('metadata', new Blob([JSON.stringify(metadata)], {
+      type: 'application/json'
+    }));
+
+    return formData;
+  }
+
+  private getMetadata() {
+    return {
+      titulo: this.documentoForm.get('titulo')?.value,
+      descricao: this.documentoForm.get('descricao')?.value,
+      ano_publicacao: this.documentoForm.get('ano_publicacao')?.value,
+      tipo_documento_id: this.documentoForm.get('tipo_documento')?.value,
+      autores: this.documentoForm.get('autores')?.value,
+      cidade_id: this.documentoForm.get('cidade_id')?.value,
+      arquivo_url: this.documentoForm.get('arquivo_url')?.value
+    };
+  }
+
+  private createDocument(formData: FormData) {
+    this._documentoService.criarDocumento(formData).subscribe({
+      next: () => this.handleSuccess('Documento adicionado com sucesso'),
+      error: (error) => this.handleError(error, 'adicionar')
+    });
+  }
+
+  private updateDocument(formData: FormData) {
+    if (this.idArquivoDeletado) {
+      this.deleteOldFileBeforeUpdate(formData);
+    } else {
+      this.performDocumentUpdate(formData);
+    }
+  }
+
+  private deleteOldFileBeforeUpdate(formData: FormData) {
+    this._documentoService.removerArquivoPeloIdDocumento(this.idArquivoDeletado).subscribe({
+      next: () => this.performDocumentUpdate(formData),
+      error: () => this._toastr.error('', 'Erro ao editar arquivo')
+    });
+  }
+
+  private performDocumentUpdate(formData: FormData) {
+    this._documentoService.editarDocumento(formData, this.data.id).subscribe({
+      next: () => this.handleSuccess('Documento editado com sucesso'),
+      error: (error) => this.handleError(error, 'salvar')
+    });
+  }
+
+  private handleSuccess(message: string) {
+    this._toastr.success('', message);
+    this.documentoForm.reset();
+    this.file = null;
+    if (this.data.id !== 0) {
+      this.closeModal();
+    }
+  }
+
+  private handleError(error: any, action: string) {
+    if (error?.error?.status === 409) {
+      this._toastr.error(error?.error?.detail, `Erro ao ${action} documento`);
+      this.errorMessage = error?.error?.detail as string;
+      this._cdr.detectChanges();
+    } else {
+      const message = action === 'salvar' ? 'Tente novamente' : '';
+      this._toastr.error(message, `Erro ao ${action} documento`);
     }
   }
 
@@ -361,7 +478,11 @@ export class ModalFormDocumentoComponent implements OnInit {
   }
 
   onClickCadastrarTipoDocumento() {
-    this.abrirModal(0, 'Cadastrar Tipo Arquivo', ModalFormTipoDocumentoComponent);
+    this.abrirModal(
+      0,
+      'Cadastrar Tipo Arquivo',
+      ModalFormTipoDocumentoComponent
+    );
   }
 
   abrirModal(id: number, titulo: string, component: any) {
@@ -381,20 +502,12 @@ export class ModalFormDocumentoComponent implements OnInit {
     });
   }
 
-  onRemoverArquivoAdicionado(id: number) {
-    this._documentoService.removerArquivoPeloIdDocumento(id).subscribe({
-      next: () => {
-        this.nomeArquivoCadastrado = '';
-        this.documentoForm.get('file')?.setValue(null);
-        this.documentoForm.setValidators(arquivoValido('file', 'arquivo_url'));
-        this.documentoForm.get('file')?.updateValueAndValidity();
-        this.documentoForm.get('file')?.markAsTouched();
-        this._toastr.success('', 'Arquivo removido com sucesso');
-      },
-      error: () => {
-        this._toastr.error('', 'Erro ao remover arquivo');
-      },
-    });
-
+  onRemoverArquivoCadastrado(id: number) {
+    this.idArquivoDeletado = id;
+    this.nomeArquivoCadastrado = '';
+    this.documentoForm.get('file')?.setValue(null);
+    this.documentoForm.setValidators(arquivoValido('file', 'arquivo_url'));
+    this.documentoForm.get('file')?.updateValueAndValidity();
+    this.documentoForm.get('file')?.markAsTouched();
   }
 }
