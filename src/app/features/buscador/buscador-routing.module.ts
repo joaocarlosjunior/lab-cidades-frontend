@@ -1,15 +1,15 @@
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BuscadorComponent } from './buscador.component';
-import { NgModule } from '@angular/core';
-import { DetalhesArquivoComponent } from './components/detalhes-arquivo/detalhes-arquivo.component';
+import { DetalhesDocumentoComponent } from './components/detalhes-documento/detalhes-documento.component';
 
 const routes: Routes = [
-  { path: '', 
+  { path: '',
     component: BuscadorComponent
   },
   {
-    path: 'detalhes-arquivo/:id', // Rota para detalhes do arquivo
-    component: DetalhesArquivoComponent,
+    path: 'detalhes-documento/:id', // Rota para detalhes do arquivo
+    component: DetalhesDocumentoComponent,
   }
 ];
 

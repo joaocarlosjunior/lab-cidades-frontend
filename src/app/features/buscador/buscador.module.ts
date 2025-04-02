@@ -6,7 +6,7 @@ import { BuscadorRoutingModule } from './buscador-routing.module';
 import { BuscadorComponent } from './buscador.component';
 import { BuscadorFormComponent } from './components/buscador-form/buscador-form.component';
 import { CardArquivoComponent } from './components/card-arquivo/card-arquivo.component';
-import { DetalhesArquivoComponent } from './components/detalhes-arquivo/detalhes-arquivo.component';
+import { DetalhesDocumentoComponent } from './components/detalhes-documento/detalhes-documento.component';
 import { FilterComponent } from './components/form-filtro/components/filter/filter.component';
 import { FormFiltroComponent } from './components/form-filtro/form-filtro.component';
 
@@ -17,7 +17,7 @@ import { FormFiltroComponent } from './components/form-filtro/form-filtro.compon
     FormFiltroComponent,
     FilterComponent,
     CardArquivoComponent,
-    DetalhesArquivoComponent,
+    DetalhesDocumentoComponent,
   ],
   imports: [SharedModule, BuscadorRoutingModule, MatPaginatorModule],
   exports: [BuscadorComponent],

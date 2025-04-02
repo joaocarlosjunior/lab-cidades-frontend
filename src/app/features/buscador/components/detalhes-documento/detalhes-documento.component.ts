@@ -6,11 +6,11 @@ import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
 import { DocumentoService } from '../../../../shared/services/documento.service';
 
 @Component({
-  selector: 'app-detalhes-arquivo',
-  templateUrl: './detalhes-arquivo.component.html',
-  styleUrl: './detalhes-arquivo.component.scss'
+  selector: 'app-detalhes-documento',
+  templateUrl: './detalhes-documento.component.html',
+  styleUrl: './detalhes-documento.component.scss'
 })
-export class DetalhesArquivoComponent {
+export class DetalhesDocumentoComponent {
   documento: Documento = {} as Documento;
   downloadArquivo!: DownloadArquivo;
 
