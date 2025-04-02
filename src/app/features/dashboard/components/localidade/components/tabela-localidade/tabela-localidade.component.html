@@ -1,79 +1,43 @@
 <div class="filtros">
   <mat-form-field appearance="outline">
-    <mat-label>Buscar por titulo</mat-label>
+    <mat-label>Buscar Cidade</mat-label>
     <input
       matInput
-      (keyup.enter)="buscarDocumentosPorTitulo($event)"
-      placeholder="Buscar por titulo"
+      (keyup.enter)="buscarPorNome($event)"
+      placeholder="Digite Nome Cidade"
       #input
     />
   </mat-form-field>
-
-<!--   <mat-form-field appearance="outline">
-    <mat-label>Buscar pelo ID</mat-label>
-    <input
-      matInput
-      (keyup.enter)="buscarDocumentoPeloId($event)"
-      placeholder="Buscar pelo ID"
-      #input
-    />
-  </mat-form-field> -->
 </div>
 
 <div class="table-wrapper">
   <div class="mat-elevation-z8 margin">
-    <table mat-table [dataSource]="documentoDataSource" matSort>
+    <table mat-table [dataSource]="localidadeDataSource" matSort>
       <!-- ID -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
-      <!-- Titulo -->
-      <ng-container matColumnDef="titulo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
-        <td mat-cell *matCellDef="let element">{{ element.titulo }}</td>
-      </ng-container>
-
-      <!-- Ano Publicação -->
-      <ng-container matColumnDef="anoPublicacao">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Ano Publicação
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element.ano_publicacao }}</td>
-      </ng-container>
-
       <!-- Nome Cidade -->
-      <ng-container matColumnDef="cidade">
+      <ng-container matColumnDef="nomeCidade">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome Cidade</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.cidade?.nome_cidade }}
-        </td>
+        <td mat-cell *matCellDef="let element">{{ element.nome_cidade }}</td>
       </ng-container>
 
       <!-- Estado -->
       <ng-container matColumnDef="estado">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.cidade?.estado?.nome_estado }}
-        </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Estado
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.estado.nome_estado }}</td>
       </ng-container>
 
       <!-- Mesorregiao -->
       <ng-container matColumnDef="mesorregiao">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Mesorregião</th>
         <td mat-cell *matCellDef="let element">
-          {{ element?.cidade?.mesorregiao?.nome_mesorregiao }}
-        </td>
-      </ng-container>
-
-      <!-- Tipo Documento -->
-      <ng-container matColumnDef="tipoDocumento">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Tipo Documento
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.tipo_documento.nome_tipo_documento }}
+          {{ element.mesorregiao.nome_mesorregiao }}
         </td>
       </ng-container>
 
@@ -98,15 +62,7 @@
           <button
             mat-button
             color="primary"
-            (click)="onClickVisualizarDocumento(element.id)"
-            [disabled]="carregando"
-          >
-            <mat-icon>visibility</mat-icon>Ver
-          </button>
-          <button
-            mat-button
-            color="primary"
-            (click)="onClickEditarDocumento(element.id)"
+            (click)="onClickEditarLocalidade(element.id)"
             [disabled]="carregando"
           >
             <mat-icon>edit</mat-icon>Editar
@@ -114,7 +70,7 @@
           <button
             mat-button
             color="warn"
-            (click)="onClickDeletarDocumento(element.id)"
+            (click)="onClickDeletarLocalidade(element.id)"
             [disabled]="carregando"
           >
             <mat-icon>delete</mat-icon>Deletar
@@ -136,5 +92,4 @@
   <div *ngIf="carregando" class="spinner-wrapper margin">
     <mat-spinner></mat-spinner>
   </div>
-
 </div>

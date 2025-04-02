@@ -1,3 +1,21 @@
 <div class="content">
-  <span>LOCALIDADE</span>
+  <div class="content-top" >
+    <button
+    mat-raised-button
+    color="primary"
+    (click)="onClickCadastrarCidade()"
+  >
+    Cadastrar Cidade
+  </button>
+    <button
+    mat-raised-button
+    color="primary"
+    (click)="onClickRecarregarTabela()"
+  >
+    Recarregar Cidades
+  </button>
+  </div>
+
+<app-tabela-localidade ngSkipHydration />
+
 </div>

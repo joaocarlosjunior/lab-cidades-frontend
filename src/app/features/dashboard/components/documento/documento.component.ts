@@ -15,13 +15,13 @@ import { TabelaDocumentoComponent } from './components/tabela-documento/tabela-d
 export class DocumentoComponent {
   documentoList: Documento[] = [];
 
-  @ViewChild(TabelaDocumentoComponent) arquivoTableComponent!: TabelaDocumentoComponent;
+  @ViewChild(TabelaDocumentoComponent) tabelaDocumentoComponent!: TabelaDocumentoComponent;
 
   constructor(
     private _dialog: MatDialog
   ) {}
 
-  onClickAdicionarArquivo() {
+  onClickCadastrarDocumento() {
     this.abrirArquivoModal(0, 'Cadastrar Documento', ModalFormDocumentoComponent);
   }
 
@@ -42,6 +42,6 @@ export class DocumentoComponent {
   }
 
   onClickRecarregarTabela(){
-    this.arquivoTableComponent.recarregarTabela();
+    this.tabelaDocumentoComponent.recarregarTabela();
   }
 }

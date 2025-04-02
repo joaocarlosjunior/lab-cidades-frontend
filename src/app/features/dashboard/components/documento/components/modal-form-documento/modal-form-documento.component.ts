@@ -28,7 +28,7 @@ import { DocumentoService } from '../../../../../../shared/services/documento.se
 import { EstadoService } from '../../../../../../shared/services/estado.service';
 import { TipoDocumentoService } from '../../../../../../shared/services/tipo-documento.service';
 import { arquivoValido } from '../../../../../../shared/validators/arquivo-valido.validator';
-import { LocalidadeModalComponent } from '../../../localidade/localidade-modal/localidade-modal.component';
+import { ModalFormLocalidadeComponent } from '../../../localidade/components/modal-form-localidade/modal-form-localidade.component';
 import { ModalFormTipoDocumentoComponent } from '../../../tipo-documento/components/modal-form-tipo-documento/modal-form-tipo-documento.component';
 
 class ArquivoNaoSelecionadoMatcher implements ErrorStateMatcher {
@@ -98,7 +98,7 @@ export class ModalFormDocumentoComponent implements OnInit {
     this.carregarEstados();
     this.carregarTiposDocumento();
 
-    //data.id 0 é codigo para um novo arquivo
+    //data.id 0 é codigo para um novo documento
     if (this.data.id !== 0) {
       this.setModalData(this.data.id);
     }
@@ -189,12 +189,12 @@ export class ModalFormDocumentoComponent implements OnInit {
       next: (estados: Estado[]) => {
         this.estadosOptions = estados;
       },
-      error: (err) => console.error(err),
+      error: (err) => this._toastr.error('Por favor recarregue a página!','Erro ao carregar estados'),
     });
   }
 
-  carregarCidades(estadoId: number) {
-    this._cidadeService.listaCidadesPeloIdEstado(estadoId).subscribe({
+  carregarCidades(idEstado: number) {
+    this._cidadeService.listaCidadesPeloIdEstado(idEstado).subscribe({
       next: (cidades: DadosSimplesCidade[]) => {
         this.cidadeOptions = cidades;
       },
@@ -204,7 +204,7 @@ export class ModalFormDocumentoComponent implements OnInit {
             this._toastr.info(err.error.detail);
             break;
           default:
-            this._toastr.error('Erro ao buscar cidade');
+            this._toastr.error('Por favor recarregue a página!','Erro ao buscar cidade');
         }
       },
     });
@@ -220,7 +220,7 @@ export class ModalFormDocumentoComponent implements OnInit {
       error: (err) => {
         this._toastr.error(
           'Por favor recarregue a página!',
-          'Erro ao carregar tipo arquivo'
+          'Erro ao carregar tipo documento'
         );
       },
     });
@@ -233,101 +233,6 @@ export class ModalFormDocumentoComponent implements OnInit {
   closeModal() {
     this._ref.close();
   }
-
-/*   onSubmit() {
-    if (this.documentoForm.valid) {
-      const formData = new FormData();
-
-      if (this.file) {
-        formData.append('file', this.file);
-      }
-
-      if (!this.documentoForm.get('arquivo_url')?.value) {
-        this.documentoForm.get('arquivo_url')?.setValue(null);
-      }
-
-      const metadata = {
-        titulo: this.documentoForm.get('titulo')?.value,
-        descricao: this.documentoForm.get('descricao')?.value,
-        ano_publicacao: this.documentoForm.get('ano_publicacao')?.value,
-        tipo_documento_id: this.documentoForm.get('tipo_documento')?.value,
-        autores: this.documentoForm.get('autores')?.value,
-        cidade_id: this.documentoForm.get('cidade_id')?.value,
-        arquivo_url: this.documentoForm.get('arquivo_url')?.value,
-      };
-
-      formData.append(
-        'metadata',
-        new Blob([JSON.stringify(metadata)], {
-          type: 'application/json',
-        })
-      );
-
-      if (this.data.id === 0) {
-        this._documentoService.criarDocumento(formData).subscribe({
-          next: () => {
-            this._toastr.success('', 'Documento adicionado com sucesso');
-            this.documentoForm.reset();
-            this.file = null;
-          },
-          error: (error) => {
-            switch (error?.error?.status) {
-              case 409:
-                this._toastr.error(
-                  error?.error?.detail,
-                  'Erro ao adicionar o documento'
-                );
-                this.errorMessage = error?.error?.detail as string;
-                this._cdr.detectChanges();
-                break;
-              default:
-                this._toastr.error('', 'Erro ao adicionar o documento');
-            }
-          },
-        });
-      } else {
-        if(this.idArquivoDeletado){
-          this._documentoService
-          .removerArquivoPeloIdDocumento(this.idArquivoDeletado)
-          .subscribe({
-            next: () => this.removerArquivoCadastrado(),
-            error: () => {
-              this._toastr.error('', 'Erro ao editar arquivo');
-              return;
-            }
-          })
-        }
-
-        this._documentoService
-          .editarDocumento(formData, this.data.id)
-          .subscribe({
-            next: () => {
-              this._toastr.success('', 'Documento editado com sucesso');
-              this.documentoForm.reset();
-              this.closeModal();
-              this.file = null;
-            },
-            error: (error) => {
-              switch (error?.error?.status) {
-                case 409:
-                  this._toastr.error(
-                    error?.error?.detail,
-                    'Erro ao salvar documento'
-                  );
-                  this.errorMessage = error?.error?.detail as string;
-                  this._cdr.detectChanges();
-                  break;
-                default:
-                  this._toastr.error(
-                    'Tente novamente',
-                    'Erro ao salvar documento'
-                  );
-              }
-            },
-          });
-      }
-    }
-  } */
 
   onSubmit(){
     const formData = this.prepareFormData();
@@ -474,7 +379,7 @@ export class ModalFormDocumentoComponent implements OnInit {
   }
 
   onCadastrarCidade() {
-    this.abrirModal(0, 'Cadastrar Cidade', LocalidadeModalComponent);
+    this.abrirModal(0, 'Cadastrar Cidade', ModalFormLocalidadeComponent);
   }
 
   onClickCadastrarTipoDocumento() {
@@ -498,6 +403,7 @@ export class ModalFormDocumentoComponent implements OnInit {
     });
     _popup.afterClosed().subscribe(() => {
       this.carregarTiposDocumento();
+      this.idEstadoSelecionado = this.documentoForm.get('estado_id')?.value as number;
       this.carregarCidades(this.idEstadoSelecionado);
     });
   }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LocalidadeModalComponent } from './localidade-modal.component';
+import { ModalFormLocalidadeComponent } from './modal-form-localidade.component';
 
 describe('LocalidadeModalComponent', () => {
-  let component: LocalidadeModalComponent;
-  let fixture: ComponentFixture<LocalidadeModalComponent>;
+  let component: ModalFormLocalidadeComponent;
+  let fixture: ComponentFixture<ModalFormLocalidadeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LocalidadeModalComponent]
+      declarations: [ModalFormLocalidadeComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(LocalidadeModalComponent);
+
+    fixture = TestBed.createComponent(ModalFormLocalidadeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

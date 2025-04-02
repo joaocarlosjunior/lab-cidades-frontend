@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 import { TipoDocumentoService } from '../../../../../../shared/services/tipo-documento.service';
 import { TabelaTipoDocumentoComponent } from '../tabela-tipo-documento/tabela-tipo-documento.component';
 
@@ -10,10 +11,12 @@ import { TabelaTipoDocumentoComponent } from '../tabela-tipo-documento/tabela-ti
   templateUrl: './modal-form-tipo-documento.component.html',
   styleUrl: './modal-form-tipo-documento.component.scss',
 })
-export class ModalFormTipoDocumentoComponent implements OnInit{
+export class ModalFormTipoDocumentoComponent implements OnInit, OnDestroy{
   tipoDocumentoForm = new FormControl('', Validators.required);
 
   @ViewChild(TabelaTipoDocumentoComponent) tipoArquivoTableComponent!: TabelaTipoDocumentoComponent;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -26,6 +29,11 @@ export class ModalFormTipoDocumentoComponent implements OnInit{
     if(this.data.id !== 0){
       this.setModalData(this.data.id)
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   setModalData(id: number){
@@ -86,5 +94,19 @@ export class ModalFormTipoDocumentoComponent implements OnInit{
         }
       });
     }
+  }
+
+  private tratarErro(error: any): void {
+
+    if (error?.error?.status === 409) {
+      this._toastr.error(error.error.detail, 'Conflito ao salvar');
+      return;
+    }
+
+    const mensagem = this.data.id === 0
+      ? 'Erro ao criar tipo de documento'
+      : 'Erro ao atualizar tipo de documento';
+
+    this._toastr.error(mensagem);
   }
 }
