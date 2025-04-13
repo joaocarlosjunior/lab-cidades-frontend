@@ -11,7 +11,7 @@ import { ApiResponse } from '../../core/interfaces/ApiResponse';
   providedIn: 'root'
 })
 export class CidadeService {
-  private readonly API = `${environment.apiUrl}/cidade`;
+  private readonly API = `${environment.apiUrl}/cidades`;
 
   constructor(private httpClient: HttpClient) { }
 

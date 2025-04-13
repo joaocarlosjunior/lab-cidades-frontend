@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MesorregiaoService {
-  private readonly API = `${environment.apiUrl}/mesorregiao`;
+  private readonly API = `${environment.apiUrl}/mesorregioes`;
 
   constructor(private httpClient: HttpClient) { }
 
