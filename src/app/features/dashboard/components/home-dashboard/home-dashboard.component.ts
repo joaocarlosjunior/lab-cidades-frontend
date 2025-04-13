@@ -7,40 +7,40 @@ import { DashboardService } from '../../../../shared/services/dashboard.service'
   styleUrl: './home-dashboard.component.scss'
 })
 export class HomeDashboardComponent implements OnInit{
-  quantidadeArquivo!: number | string;
-  quantidadeTipoArquivo!: number | string;
+  quantidadeDocumento!: number | string;
+  quantidadeTipoDocumento!: number | string;
 
   constructor(
     private _dashboardService: DashboardService
   ){}
 
   ngOnInit(): void {
-    this.quantidadeArquivoCadastrado();
-    this.quantidadeTipoArquivoCadastrado();
+    this.quantidadeDocumentoCadastrado();
+    this.quantidadeTipoDocumentoCadastrado();
   }
 
-  quantidadeArquivoCadastrado(){
+  quantidadeDocumentoCadastrado(){
     this._dashboardService
-    .getQuantidadeArquivoCadastrado()
+    .getQuantidadeDocumentoCadastrado()
     .subscribe({
-      next: (qtdArquivo) => {
-        this.quantidadeArquivo = qtdArquivo;
+      next: (qtdDocumento) => {
+        this.quantidadeDocumento = qtdDocumento;
       },
       error: (err) => {
-        this.quantidadeArquivo = 'Erro';
+        this.quantidadeDocumento = 'Erro';
       }
     })
   }
 
-  quantidadeTipoArquivoCadastrado(){
+  quantidadeTipoDocumentoCadastrado(){
     this._dashboardService
-    .getQuantidadeTipoArquivoCadastrado()
+    .getQuantidadeTipoDocumentoCadastrado()
     .subscribe({
-      next: (qtdTipoArquivo) => {
-        this.quantidadeTipoArquivo = qtdTipoArquivo;
+      next: (qtdTipoDocumento) => {
+        this.quantidadeTipoDocumento = qtdTipoDocumento;
       },
       error: (err) => {
-        this.quantidadeTipoArquivo = 'Erro';
+        this.quantidadeTipoDocumento = 'Erro';
       }
     })
   }
