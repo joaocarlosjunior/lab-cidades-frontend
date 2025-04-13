@@ -12,11 +12,10 @@ export class LoginService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  login(email: string, password: string){
-    return this._httpClient.post<LoginResponse>(this.API + "/login", { email, password }).pipe(
+  login(login: string, password: string){
+    return this._httpClient.post<LoginResponse>(this.API + "/login", { login, password }).pipe(
       tap((value) => {
-        sessionStorage.setItem("auth-token", value.token)
-        sessionStorage.setItem("username", value.name)
+        sessionStorage.setItem("auth-token", value.token);
       })
     )
   }
