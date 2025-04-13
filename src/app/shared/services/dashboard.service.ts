@@ -10,11 +10,11 @@ export class DashboardService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getQuantidadeArquivoCadastrado(){
-    return this.httpClient.get<number>(this.API + '/count-arquivo');
+  getQuantidadeDocumentoCadastrado(){
+    return this.httpClient.get<number>(this.API + '/count-documentos');
   }
 
-  getQuantidadeTipoArquivoCadastrado(){
-    return this.httpClient.get<number>(this.API + '/count-tipo-arquivo');
+  getQuantidadeTipoDocumentoCadastrado(){
+    return this.httpClient.get<number>(this.API + '/count-tipo-documentos');
   }
 }
