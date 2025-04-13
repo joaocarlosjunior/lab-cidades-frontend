@@ -1,8 +1,8 @@
 <mat-card class="mat-card">
   <div class="header">
     <div class="logo">
-        <img width="70" height="70" src="assets/icons/city-icon.svg" alt="">
-        <span>LAB CIDADES</span>
+      <img width="70" height="70" src="assets/icons/city-icon.svg" alt="" />
+      <span>LAB CIDADES</span>
     </div>
     <h1>Login</h1>
   </div>
@@ -18,7 +18,23 @@
 
       <mat-form-field class="wd" appearance="outline">
         <mat-label>Senha</mat-label>
-        <input type="password" matInput formControlName="password" />
+        <input
+          [type]="hidePassword ? 'password' : 'text'"
+          matInput
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Esconder senha'"
+          [attr.aria-pressed]="hidePassword"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
         <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
           Insira senha
         </mat-error>
@@ -33,10 +49,10 @@
           color="primary"
           type="submit"
         >
-        <div style="display: flex; gap: 10px;">
-          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+          <div style="display: flex; gap: 10px">
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
             Entrar
-        </div>
+          </div>
         </button>
       </div>
     </form>

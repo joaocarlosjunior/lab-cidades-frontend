@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit{
   loginForm!: FormGroup;
   error!: string;
   loading!: boolean;
+  hidePassword: boolean = true;
 
   constructor(
     private _fb: FormBuilder,
