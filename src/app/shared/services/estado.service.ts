@@ -8,11 +8,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EstadoService {
-  private readonly API = `${environment.apiUrl}/estado`;
+  private readonly API = `${environment.apiUrl}/estados`;
 
   constructor(private httpClient: HttpClient) { }
 
-  list(): Observable<Estado[]> { 
+  list(): Observable<Estado[]> {
     return this.httpClient.get<Estado[]>(this.API);
   }
 }
