@@ -1,15 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { ToastrService } from 'ngx-toastr';
-import { RequestCidadeDTO } from '../../../../../../core/dtos/RequestCidadeDTO';
-import { Estado } from '../../../../../../core/models/Estado';
+import { RequestCityDTO } from '../../../../../../core/dtos/RequestCityDTO';
+import { City } from '../../../../../../core/models/City';
 import { Mesorregiao } from '../../../../../../core/models/Mesorregiao';
-import { CidadeService } from '../../../../../../shared/services/cidade.service';
-import { EstadoService } from '../../../../../../shared/services/estado.service';
+import { State } from '../../../../../../core/models/State';
+import { CityService } from '../../../../../../shared/services/city.service';
 import { MesorregiaoService } from '../../../../../../shared/services/mesorregiao.service';
-import { Cidade } from '../../../../../../core/models/Cidade';
+import { StateService } from '../../../../../../shared/services/state.service';
 
 @Component({
   selector: 'app-modal-form-localidade',
@@ -17,29 +18,28 @@ import { Cidade } from '../../../../../../core/models/Cidade';
   styleUrl: './modal-form-localidade.component.scss',
 })
 export class ModalFormLocalidadeComponent implements OnInit {
-  cidadeForm!: FormGroup;
-  tituloForm!: string;
-  estadosOptions: Estado[] = [];
+  cityForm!: FormGroup;
+  titleForm!: string;
+  statesOptions: State[] = [];
   mesorregioesOptions: Mesorregiao[] = [];
-
   errorMessage: string = '';
-
-  carregando: boolean = false;
+  loading: boolean = false;
+  private destroyRef = inject(DestroyRef);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _ref: MatDialogRef<ModalFormLocalidadeComponent>,
     private _fb: FormBuilder,
-    private _cidadeService: CidadeService,
-    private _estadoService: EstadoService,
+    private _cityService: CityService,
+    private _stateService: StateService,
     private _mesorregiaoService: MesorregiaoService,
     private _toastr: ToastrService
   ) {}
 
   ngOnInit() {
-    this.inicializarForm();
-    this.tituloForm = this.data.tituloModal;
-    this.carregarEstados();
+    this.initForm();
+    this.titleForm = this.data.titleModal;
+    this.loadStates();
 
     //data.id 0 é codigo para um nova localidade
     if (this.data.id !== 0) {
@@ -47,46 +47,55 @@ export class ModalFormLocalidadeComponent implements OnInit {
     }
   }
 
-  setModalData(idCidade: number) {
-    this.carregando = true;
+  private setModalData(idCidade: number) {
+    this.loading = true;
 
-    this._cidadeService.getCidadePeloId(idCidade).subscribe({
-      next: (cidade: Cidade) => {
-        this.cidadeForm.patchValue({
-          nome_cidade: cidade.nome_cidade,
-          estado_id: cidade.estado.id,
-          mesorregiao_id: cidade.mesorregiao.id,
+    this._cityService
+    .getCityById(idCidade)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: (city: City) => {
+        this.cityForm.patchValue({
+          nome_cidade: city.nome_cidade,
+          estado_id: city.estado.id,
+          mesorregiao_id: city.mesorregiao.id,
         });
 
-        this.buscarMesorregioesPeloIdEstado(cidade.estado.id);
+        this.searchMesorregioesByIdState(city.estado.id);
       },
       error: () => {
-        this.carregando = false;
+        this.loading = false;
         this._toastr.error('', 'Erro ao buscar arquivo');
         this.closeModal();
       },
     });
   }
 
-  inicializarForm() {
-    this.cidadeForm = this._fb.group({
+  private initForm() {
+    this.cityForm = this._fb.group({
       nome_cidade: ['', Validators.required],
       estado_id: [null, Validators.required],
       mesorregiao_id: [null, Validators.required],
     });
   }
 
-  carregarEstados() {
-    this._estadoService.list().subscribe({
-      next: (estados: Estado[]) => {
-        this.estadosOptions = estados;
+  private loadStates() {
+    this._stateService
+    .list()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: (estados: State[]) => {
+        this.statesOptions = estados;
       },
       error: (err) => console.error(err),
     });
   }
 
-  carregarMesorregiao() {
-    this._mesorregiaoService.list().subscribe({
+  private loadMesorregiao() {
+    this._mesorregiaoService
+    .list()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: (mesorregioes: Mesorregiao[]) => {
         this.mesorregioesOptions = mesorregioes;
       },
@@ -94,13 +103,16 @@ export class ModalFormLocalidadeComponent implements OnInit {
     });
   }
 
-  estadoSelecionado(event: MatSelectChange) {
-    const idEstadoSelecionado = event.value as number;
-    this.buscarMesorregioesPeloIdEstado(idEstadoSelecionado);
+  stateSelected(event: MatSelectChange) {
+    const idStateSelected = event.value as number;
+    this.searchMesorregioesByIdState(idStateSelected);
   }
 
-  buscarMesorregioesPeloIdEstado(idEstado: number) {
-    this._mesorregiaoService.listarMesorregiaoPeloIdEstado(idEstado).subscribe({
+  private searchMesorregioesByIdState(idState: number) {
+    this._mesorregiaoService
+    .listarMesorregiaoPeloIdEstado(idState)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: (mesorregioes: Mesorregiao[]) => {
         this.mesorregioesOptions = mesorregioes;
       },
@@ -112,14 +124,17 @@ export class ModalFormLocalidadeComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.cidadeForm.valid) {
-      const dadosCidade = this.cidadeForm.value as RequestCidadeDTO;
+    if (this.cityForm.valid) {
+      const cityData = this.cityForm.value as RequestCityDTO;
 
       if (this.data.id === 0) {
-        this._cidadeService.cadastrarCidade(dadosCidade).subscribe({
+        this._cityService
+        .registrerCity(cityData)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
           next: () => {
             this._toastr.success('', 'Cidade cadastrada com sucesso');
-            this.cidadeForm.reset();
+            this.cityForm.reset();
           },
           error: (error) => {
             switch (error?.error?.status) {
@@ -135,7 +150,9 @@ export class ModalFormLocalidadeComponent implements OnInit {
           },
         });
       } else {
-        this._cidadeService.editarCidade(this.data.id, dadosCidade)
+        this._cityService
+        .editCityById(this.data.id, cityData)
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this._toastr.success('', 'Cidade editada com sucesso');

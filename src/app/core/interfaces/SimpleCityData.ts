@@ -1,4 +1,4 @@
-export interface DadosSimplesCidade{
+export interface SimpleCityData{
   id: number;
   nome_cidade: string;
 }

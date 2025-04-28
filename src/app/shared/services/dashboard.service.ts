@@ -1,6 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,11 @@ export class DashboardService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getQuantidadeDocumentoCadastrado(){
+  getNumberRegisteredDocuments(){
     return this.httpClient.get<number>(this.API + '/count-documentos');
   }
 
-  getQuantidadeTipoDocumentoCadastrado(){
+  getNumberDocumentTypesRegistered(){
     return this.httpClient.get<number>(this.API + '/count-tipo-documentos');
   }
 }

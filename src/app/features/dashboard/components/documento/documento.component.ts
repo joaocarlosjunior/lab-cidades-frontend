@@ -1,9 +1,6 @@
-import {
-  Component,
-  ViewChild
-} from '@angular/core';
+import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { Documento } from '../../../../core/models/Documento';
 import { ModalFormDocumentoComponent } from './components/modal-form-documento/modal-form-documento.component';
 import { TabelaDocumentoComponent } from './components/tabela-documento/tabela-documento.component';
 
@@ -13,35 +10,39 @@ import { TabelaDocumentoComponent } from './components/tabela-documento/tabela-d
   styleUrl: './documento.component.scss',
 })
 export class DocumentoComponent {
-  documentoList: Documento[] = [];
+  @ViewChild(TabelaDocumentoComponent)
+  documentTableComponent!: TabelaDocumentoComponent;
+  private destroyRef = inject(DestroyRef);
 
-  @ViewChild(TabelaDocumentoComponent) tabelaDocumentoComponent!: TabelaDocumentoComponent;
+  constructor(private _dialog: MatDialog) {}
 
-  constructor(
-    private _dialog: MatDialog
-  ) {}
-
-  onClickCadastrarDocumento() {
-    this.abrirArquivoModal(0, 'Cadastrar Documento', ModalFormDocumentoComponent);
+  onClickRegistredDocument() {
+    this.openModalDocument(
+      0,
+      'Cadastrar Documento',
+      ModalFormDocumentoComponent
+    );
   }
 
-  abrirArquivoModal(id: number, titulo: string, component: any) {
+  private openModalDocument(id: number, title: string, component: any) {
     var _popup = this._dialog.open(component, {
       width: 'auto',
       height: '80vh',
       enterAnimationDuration: '500ms',
       exitAnimationDuration: '500ms',
       data: {
-        tituloModal: titulo,
+        modalTitle: title,
         id: id,
       },
     });
-    _popup.afterClosed().subscribe((item) => {
-      this.onClickRecarregarTabela();
+    _popup.afterClosed()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe(() => {
+      this.onClickReloadTable();
     });
   }
 
-  onClickRecarregarTabela(){
-    this.tabelaDocumentoComponent.recarregarTabela();
+  onClickReloadTable() {
+    this.documentTableComponent.reloadTable();
   }
 }

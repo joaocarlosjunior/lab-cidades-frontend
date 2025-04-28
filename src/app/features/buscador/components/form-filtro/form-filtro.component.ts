@@ -1,11 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Documento } from '../../../../core/models/Documento';
-import {
-  TipoDocumento
-} from '../../../../core/models/TipoDocumento';
-import { TipoDocumentoService } from '../../../../shared/services/tipo-documento.service';
+import { DocumentType } from '../../../../core/models/DocumentType';
+import { DocumentTypeService } from '../../../../shared/services/document-type.service';
 
 @Component({
   selector: 'app-form-filtro',
@@ -14,44 +12,43 @@ import { TipoDocumentoService } from '../../../../shared/services/tipo-documento
 })
 export class FormFiltroComponent implements OnInit {
   searchForm!: FormGroup;
-  @Output() arquivosEncontradoEvent = new EventEmitter<Documento[]>();
-  @Output() queryEvent = new EventEmitter<string>();
-  @Output() formEvent = new EventEmitter<FormGroup>();
-
   formValid: boolean = false;
   isDisabled: boolean = false;
+  @Output() formEvent = new EventEmitter<FormGroup>();
   private MAX_FILTROS: number = 7;
+  private destroyRef = inject(DestroyRef)
 
-  tiposDocumentoOptions!: TipoDocumento[];
+  documentTypesOptions!: DocumentType[];
 
   constructor(
     private fb: FormBuilder,
-    private _tipoDocumentoService: TipoDocumentoService,
+    private _documentTypeService: DocumentTypeService,
     private _toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
-      tipoDocumento: [0, Validators.required],
-      filtros: this.fb.array([this.createFiltroGroup()]), // Inicia com um filtro
+      documentType: [0, Validators.required],
+      filters: this.fb.array([this.createFilterGroup()]), // Inicia com um filtro
     });
 
-    this.carregaTiposDocumento();
+    this.listAllDocumentTypes();
   }
 
-  carregaTiposDocumento(): void {
-    this._tipoDocumentoService
-    .list()
+  private listAllDocumentTypes(): void {
+    this._documentTypeService
+    .listAllDocumentTypes()
+    .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe({
-      next: (tiposDocumento: TipoDocumento[]) => {
-        this.tiposDocumentoOptions = [
+      next: (documentTypes: DocumentType[]) => {
+        this.documentTypesOptions = [
           {
             id: 0,
             nome_tipo_documento: 'Todos os tipos',
             created_at: '',
             updated_at: '',
           },
-          ...tiposDocumento,
+          ...documentTypes,
         ];
       },
       error: (err) => {
@@ -60,36 +57,36 @@ export class FormFiltroComponent implements OnInit {
     });
   }
 
-  get filtros(): FormArray<FormGroup> {
-    return this.searchForm.get('filtros') as FormArray;
+  get filters(): FormArray<FormGroup> {
+    return this.searchForm.get('filters') as FormArray;
   }
 
-  createFiltroGroup(): FormGroup {
+  private createFilterGroup(): FormGroup {
     return this.fb.group({
-      filtro: ['all'],
+      filter: ['all'],
       searchTerm: ['', Validators.required],
     });
   }
 
-  createFiltroGroupWithOperator(): FormGroup {
+  private createFilterGroupWithOperator(): FormGroup {
     return this.fb.group({
-      filtro: ['all'],
+      filter: ['all'],
       searchTerm: ['', Validators.required],
-      operador: ['AND'],
+      operator: ['AND'],
     });
   }
 
-  addFiltro(): void {
-    this.filtros.push(this.createFiltroGroupWithOperator());
+  addFilter(): void {
+    this.filters.push(this.createFilterGroupWithOperator());
   }
 
-  removeFiltro(index: number): void {
-    this.filtros.removeAt(index);
+  removeFilter(index: number): void {
+    this.filters.removeAt(index);
   }
 
   // Verifica se o botão de adicionar filtro deve ser desativado
-  get isAddFiltroDisabled(): boolean {
-    return this.filtros.length >= this.MAX_FILTROS;
+  get isAddFilterDisabled(): boolean {
+    return this.filters.length >= this.MAX_FILTROS;
   }
 
   onSubmit(): void {

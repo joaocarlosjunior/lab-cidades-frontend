@@ -1,0 +1,32 @@
+<div class="card-documento">
+  <div class="info-archive" *ngFor="let document of documentList; let i = index">
+    <h6>
+      <span>{{ pageIndex * pageSize + i + 1 }}</span>
+      <a class="titulo-busca" [routerLink]="['/buscador/detalhes-documento', document.id]" rel="noopener" target="_blank"> {{ document.titulo }}</a>
+    </h6>
+    <div class="autores">
+      <h5>{{ document.autores | autores }}</h5>
+    </div>
+
+    <div class="descricao">
+      <p class="txt-descricao">{{ document.descricao }}</p>
+    </div>
+
+    <div class="cidade" *ngIf="document.cidade">
+      <h5>Cidade: {{ document.cidade.nome_cidade }} | Estado: {{ document.cidade.estado.nome_estado }} | Mesorregião: {{ document.cidade.mesorregiao.nome_mesorregiao }}</h5>
+    </div>
+    <span> {{ document.ano_publicacao }}</span>
+    <div style="display: flex; gap: 10px;">
+      <div>
+        <a class="btnArchive" *ngIf="document.arquivo_url" rel="noopener noreferrer" target="_blank" [href]="document.arquivo_url">
+          <mat-icon>login</mat-icon>Acessar</a
+        >
+      </div>
+      <div>
+        <a class="btnArchive" *ngIf="document.nome_arquivo" rel="noopener noreferrer" (click)="onClickDownloadFile(document.id)">
+          <mat-icon>login</mat-icon>Baixar</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,15 +1,15 @@
 <div [formGroup]="group" class="filtro-container">
-  <div *ngIf="exibirOperador">
-    <select formControlName="operador">
-      <option *ngFor="let operador of operadores" [value]="operador.value">
-        {{ operador.viewValue }}
+  <div *ngIf="showOperator">
+    <select formControlName="operator">
+      <option *ngFor="let operator of operators" [value]="operator.value">
+        {{ operator.viewValue }}
       </option>
     </select>
   </div>
 
-  <select formControlName="filtro">
-    <option *ngFor="let filtro of filtros" [value]="filtro.value">
-      {{ filtro.viewValue }}
+  <select formControlName="filter">
+    <option *ngFor="let filter of filters" [value]="filter.value">
+      {{ filter.viewValue }}
     </option>
   </select>
 
@@ -24,8 +24,8 @@
   <button
     mat-icon-button
     color="warn"
-    (click)="removeFiltro.emit()"
-    *ngIf="exibirBotaoRemover"
+    (click)="removeFilter.emit()"
+    *ngIf="showRemoveButton"
   >
     <mat-icon>close</mat-icon>
   </button>

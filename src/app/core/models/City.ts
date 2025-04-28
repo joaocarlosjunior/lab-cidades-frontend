@@ -1,11 +1,11 @@
-import { Estado } from "./Estado";
 import { Mesorregiao } from "./Mesorregiao";
+import { State } from "./State";
 
-export interface Cidade{
+export interface City{
     id: number;
     nome_cidade: string;
     mesorregiao: Mesorregiao;
-    estado: Estado;
+    estado: State;
     created_at: string;
     updated_at: string;
 }

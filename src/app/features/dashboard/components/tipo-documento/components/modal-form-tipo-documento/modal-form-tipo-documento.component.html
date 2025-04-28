@@ -4,8 +4,8 @@
     <!-- Título -->
     <mat-form-field appearance="outline">
       <mat-label>Tipo Documento</mat-label>
-      <input matInput [formControl]="tipoDocumentoForm" />
-      <mat-error *ngIf="tipoDocumentoForm?.hasError('required')">
+      <input matInput [formControl]="documentTypeForm" />
+      <mat-error *ngIf="documentTypeForm?.hasError('required')">
         O nome do tipo de documento é obrigatório
       </mat-error>
     </mat-form-field>
@@ -15,7 +15,7 @@
       color="primary"
       type="button"
       (click)="onSubmit()"
-      [disabled]="tipoDocumentoForm.invalid"
+      [disabled]="documentTypeForm.invalid"
     >
       Enviar
     </button>

@@ -1,27 +1,14 @@
-<div
-  class="search-bar-container"
-  cdkOverlayOrigin
-  #overlayPosition="cdkOverlayOrigin"
-  [ngClass]="{'opened mat-elevation-z2': overlayOpen()}"
->
-  <button mat-icon-button
-  (click)="setAssunto(searchInput.value)"
-  [ariaLabel]="'Botão de pesquisar'"
+<div class="search-bar-container">
+  <button
+    mat-icon-button
+    (click)="setSubjectSearch(searchInput.value)"
+    [ariaLabel]="'Botão de pesquisar'"
   >
     <mat-icon>search</mat-icon>
   </button>
-  <input 
-  #searchInput
-  placeholder="O que você está procurando?" 
-  (keyup.enter)="setAssunto(searchInput.value)"
+  <input
+    #searchInput
+    placeholder="O que você está procurando?"
+    (keyup.enter)="setSubjectSearch(searchInput.value)"
   />
 </div>
-
-<ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="overlayPosition"
-  [cdkConnectedOverlayOpen]="overlayOpen()"
-  (overlayOutsideClick)="overlayOpen.set(false)"
->
-<app-search-overlay/>
-</ng-template>

@@ -1,6 +1,6 @@
 <div class="table-wrapper">
   <div class="mat-elevation-z8 margin">
-    <table mat-table [dataSource]="tipoDocumentoDataSource" matSort>
+    <table mat-table [dataSource]="documentTypeDataSource" matSort>
       <!-- ID -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
@@ -38,7 +38,7 @@
         <td *matCellDef="let element">
           <button
             type="button"
-            (click)="onClickEditarTipoDocumento(element.id)"
+            (click)="onClickEditDocumentTypeByIdDocumentType(element.id)"
             mat-button
             color="primary"
           >
@@ -46,7 +46,7 @@
           </button>
           <button
             type="button"
-            (click)="onClickDeletarTipoDocumento(element.id)"
+            (click)="onClickDeleteDocumentTypeByIdDocumentType(element.id)"
             mat-button
             color="warn"
           >
@@ -65,7 +65,7 @@
     ></mat-paginator>
   </div>
 
-  <div *ngIf="carregando" class="spinner-wrapper margin">
+  <div *ngIf="loading" class="spinner-wrapper margin">
     <mat-spinner></mat-spinner>
   </div>
 

@@ -1,4 +1,4 @@
-export interface Autor{
+export interface Author{
     id: number;
     nome_autor: string;
 }

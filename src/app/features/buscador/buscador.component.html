@@ -19,20 +19,20 @@
 
         <app-buscador-form
           class="buscador-form"
-          (formEvent)="setBuscaAvancada($event)"
-          (isBuscaAvancada)="verificarBuscadaAvancada($event)"
+          (formEvent)="setAdvancedSearch($event)"
+          (isAdvancedSearch)="checkAdvancedSearch($event)"
         ></app-buscador-form>
 
-        <app-card-arquivo
-          *ngIf="!carregando && documentosList.length > 0; else naoEncontrado"
-          [documentosList]="documentosList"
+        <app-card-document
+          *ngIf="!loading && documentList.length > 0; else notFound"
+          [documentList]="documentList"
           [pageIndex]="pageIndex"
           [pageSize]="pageSize"
           class="card-arquivo"
-        ></app-card-arquivo>
+        ></app-card-document>
 
         <mat-paginator
-          *ngIf="length > pageSize && !isBuscaAvancada"
+          *ngIf="length > pageSize && !isAdvancedSearch"
           [showFirstLastButtons]="true"
           [length]="length"
           [pageSize]="pageSize"
@@ -44,7 +44,7 @@
         </mat-paginator>
 
         <mat-paginator
-        *ngIf="length > pageSize && isBuscaAvancada"
+        *ngIf="length > pageSize && isAdvancedSearch"
         [showFirstLastButtons]="true"
         [length]="length"
         [pageSize]="pageSize"
@@ -55,12 +55,12 @@
       >
       </mat-paginator>
 
-        <ng-template #naoEncontrado>
-          <div *ngIf="carregando">
+        <ng-template #notFound>
+          <div *ngIf="loading">
             <mat-spinner></mat-spinner>
           </div>
           <div
-            *ngIf="!carregando && documentoNaoEncontrado"
+            *ngIf="!loading && documentNotFound"
             class="documentoNaoEncontrado"
           >
             <div class="header">

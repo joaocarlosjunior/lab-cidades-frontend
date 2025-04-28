@@ -1,48 +1,49 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DashboardService } from '../../../../shared/services/dashboard.service';
 
 @Component({
   selector: 'app-home-dashboard',
   templateUrl: './home-dashboard.component.html',
-  styleUrl: './home-dashboard.component.scss'
+  styleUrl: './home-dashboard.component.scss',
 })
-export class HomeDashboardComponent implements OnInit{
-  quantidadeDocumento!: number | string;
-  quantidadeTipoDocumento!: number | string;
+export class HomeDashboardComponent implements OnInit {
+  quantityRegisteredDocument!: number | string;
+  quantityRegisteredDocumentType!: number | string;
+  private destroyRef = inject(DestroyRef);
 
-  constructor(
-    private _dashboardService: DashboardService
-  ){}
+  constructor(private _dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    this.quantidadeDocumentoCadastrado();
-    this.quantidadeTipoDocumentoCadastrado();
+    this.searchQuantityDocumentRegistered();
+    this.searchQuantityDocumentTypeRegistered();
   }
 
-  quantidadeDocumentoCadastrado(){
+  private searchQuantityDocumentRegistered() {
     this._dashboardService
-    .getQuantidadeDocumentoCadastrado()
+    .getNumberRegisteredDocuments()
+    .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe({
-      next: (qtdDocumento) => {
-        this.quantidadeDocumento = qtdDocumento;
+      next: (quantityDocumentRegistred) => {
+        this.quantityRegisteredDocument = quantityDocumentRegistred;
+      },
+      error: () => {
+        this.quantityRegisteredDocument = 'Erro';
+      },
+    });
+  }
+
+  private searchQuantityDocumentTypeRegistered() {
+    this._dashboardService
+    .getNumberDocumentTypesRegistered()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: (quantityRegisteredDocumentType) => {
+        this.quantityRegisteredDocumentType = quantityRegisteredDocumentType;
       },
       error: (err) => {
-        this.quantidadeDocumento = 'Erro';
-      }
-    })
-  }
-
-  quantidadeTipoDocumentoCadastrado(){
-    this._dashboardService
-    .getQuantidadeTipoDocumentoCadastrado()
-    .subscribe({
-      next: (qtdTipoDocumento) => {
-        this.quantidadeTipoDocumento = qtdTipoDocumento;
+        this.quantityRegisteredDocumentType = 'Erro';
       },
-      error: (err) => {
-        this.quantidadeTipoDocumento = 'Erro';
-      }
-    })
+    });
   }
-
 }

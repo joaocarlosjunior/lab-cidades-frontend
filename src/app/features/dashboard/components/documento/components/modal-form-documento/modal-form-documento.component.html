@@ -1,15 +1,15 @@
 <div class="modal">
-  <h1 style="padding: 20px">{{ tituloForm }}</h1>
+  <h1 style="padding: 20px">{{ titleForm }}</h1>
   <mat-card-content class="content">
-    <form *ngIf="!carregando; else spinner" [formGroup]="documentoForm" (ngSubmit)="onSubmit()">
+    <form *ngIf="!loading; else spinner" [formGroup]="documentForm" (ngSubmit)="onSubmit()">
       <div class="box-1">
         <!-- Título -->
         <mat-form-field appearance="outline">
           <mat-label>Título</mat-label>
           <input matInput formControlName="titulo" />
-          <mat-error *ngIf="documentoForm.get('titulo')?.hasError('required')">
+          <mat-error *ngIf="documentForm.get('titulo')?.hasError('required')">
             {{
-              documentoForm.get("titulo")?.hasError("required")
+              documentForm.get("titulo")?.hasError("required")
                 ? "O título é obrigatório"
                 : errorMessage
             }}
@@ -26,12 +26,12 @@
             formControlName="ano_publicacao"
           />
           <mat-error
-            *ngIf="documentoForm.get('ano_publicacao')?.hasError('min')"
+            *ngIf="documentForm.get('ano_publicacao')?.hasError('min')"
           >
             Ano inválido
           </mat-error>
           <mat-error
-            *ngIf="documentoForm.get('ano_publicacao')?.hasError('required')"
+            *ngIf="documentForm.get('ano_publicacao')?.hasError('required')"
           >
             O ano de publicação é obrigatório
           </mat-error>
@@ -65,7 +65,7 @@
                     placeholder="Nome do Autor"
                   />
                   <mat-error
-                    *ngIf="documentoForm.get('autores')?.hasError('required')"
+                    *ngIf="documentForm.get('autores')?.hasError('required')"
                   >
                     O autor é obrigatório
                   </mat-error>
@@ -88,17 +88,17 @@
               <mat-label>Tipo Documento</mat-label>
               <mat-error
                 *ngIf="
-                  documentoForm.get('tipo_documento')?.hasError('required')
+                  documentForm.get('tipo_documento')?.hasError('required')
                 "
               >
                 O tipo do documento é obrigatório
               </mat-error>
               <mat-select formControlName="tipo_documento">
                 <mat-option
-                  *ngFor="let tipoDocumento of tiposDocumentoOptions"
-                  [value]="tipoDocumento.id"
+                  *ngFor="let documentType of documentTypesOptions"
+                  [value]="documentType.id"
                 >
-                  {{ tipoDocumento.nome_tipo_documento }}
+                  {{ documentType.nome_tipo_documento }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -111,13 +111,13 @@
               <mat-label>Estados</mat-label>
               <mat-select
                 formControlName="estado_id"
-                (selectionChange)="estadoSelecionado($event)"
+                (selectionChange)="stateSelected($event)"
               >
                 <mat-option
-                  *ngFor="let estado of estadosOptions"
-                  [value]="estado.id"
+                  *ngFor="let state of stateOptions"
+                  [value]="state.id"
                 >
-                  {{ estado.nome_estado }}
+                  {{ state.nome_estado }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -127,10 +127,10 @@
               <mat-label>Cidade</mat-label>
               <mat-select formControlName="cidade_id">
                 <mat-option
-                  *ngFor="let cidade of cidadeOptions"
-                  [value]="cidade.id"
+                  *ngFor="let city of cityOptions"
+                  [value]="city.id"
                 >
-                  {{ cidade.nome_cidade }}
+                  {{ city.nome_cidade }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -150,7 +150,7 @@
             type="button"
             mat-stroked-button
             color="primary"
-            (click)="onClickCadastrarTipoDocumento()"
+            (click)="onClickRegistredDocumentType()"
           >
             <mat-icon>add</mat-icon> Cadastrar Tipo Documento
           </button>
@@ -159,7 +159,7 @@
             type="button"
             mat-stroked-button
             color="primary"
-            (click)="onCadastrarCidade()"
+            (click)="onClickRegistredCity()"
           >
             <mat-icon>add</mat-icon> Cadastrar Cidade
           </button>
@@ -168,22 +168,22 @@
 
       <!-- Upload do Arquivo -->
       <div class="upload-arquivo">
-        <div class="arquivo-cadastrado" *ngIf="nomeArquivoCadastrado">
-          <span>Arquivo cadastrado: {{ nomeArquivoCadastrado }}</span>
+        <div class="arquivo-cadastrado" *ngIf="filenameRegistred">
+          <span>Arquivo cadastrado: {{ filenameRegistred }}</span>
           <button
             type="button"
             mat-stroked-button
             color="primary"
-            (click)="onDownloadArquivo(idDocumento)"
+            (click)="onClickDownloadFile(idDocument)"
           >
             <mat-icon>download</mat-icon> Download Arquivo
           </button>
           <button
-            *ngIf="nomeArquivoCadastrado"
+            *ngIf="filenameRegistred"
             type="button"
             mat-stroked-button
             color="warn"
-            (click)="onRemoverArquivoCadastrado(idDocumento)"
+            (click)="onClickRemoveFileRegistred(idDocument)"
           >
             <mat-icon>close</mat-icon> Remover Arquivo
           </button>
@@ -200,7 +200,7 @@
             type="button"
             mat-stroked-button
             color="warn"
-            (click)="onRemoverArquivoSelecionado()"
+            (click)="onClickRemoveFileSelected()"
           >
             <mat-icon>close</mat-icon> Remover Documento
           </button>
@@ -218,7 +218,7 @@
         />
       </mat-form-field>
 
-      <mat-error *ngIf="documentoForm.hasError('validator')">
+      <mat-error *ngIf="documentForm.hasError('validator')">
         Deve ser adicionado algum arquivo ou url do arquivo!!
       </mat-error>
 
@@ -238,7 +238,7 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="documentoForm.invalid"
+          [disabled]="documentForm.invalid"
         >
           Enviar
         </button>

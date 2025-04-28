@@ -1,20 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Autor } from '../../core/models/Autor';
+import { Author } from '../../core/models/Author';
 
 @Pipe({
   name: 'autores'
 })
 export class AutoresPipe implements PipeTransform {
 
-  transform(autores: Autor[]): string {
-    if (!autores || autores.length === 0) {
+  transform(authors: Author[]): string {
+    if (!authors || authors.length === 0) {
       return '';
     }
-    if (autores.length === 1) {
-      return autores[0].nome_autor;
+    if (authors.length === 1) {
+      return authors[0].nome_autor;
     }
 
-    return autores.map(autor => autor.nome_autor).join(', ');
+    return authors.map(autor => autor.nome_autor).join(', ');
   }
 
 }

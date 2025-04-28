@@ -1,18 +1,18 @@
 <div class="modal">
-  <h1 style="padding: 20px">{{ tituloForm }}</h1>
+  <h1 style="padding: 20px">{{ titleForm }}</h1>
   <mat-card-content>
-    <form class="form-cidade" [formGroup]="cidadeForm" (ngSubmit)="onSubmit()">
+    <form class="form-cidade" [formGroup]="cityForm" (ngSubmit)="onSubmit()">
       <!-- Estado -->
       <mat-form-field appearance="outline">
         <mat-label>Estados</mat-label>
-        <mat-select formControlName="estado_id" (selectionChange)="estadoSelecionado($event)">
-          <mat-option *ngFor="let estado of estadosOptions" [value]="estado.id">
-            {{ estado.nome_estado }}
+        <mat-select formControlName="estado_id" (selectionChange)="stateSelected($event)">
+          <mat-option *ngFor="let state of statesOptions" [value]="state.id">
+            {{ state.nome_estado }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="cidadeForm.get('estado_id')?.hasError('required')">
+        <mat-error *ngIf="cityForm.get('estado_id')?.hasError('required')">
           {{
-            cidadeForm.get("estado_id")?.hasError("required")
+            cityForm.get("estado_id")?.hasError("required")
               ? "Estado é obrigatório"
               : errorMessage
           }}
@@ -30,9 +30,9 @@
             {{ mesorregiao.nome_mesorregiao }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="cidadeForm.get('mesorregiao_id')?.hasError('required')">
+        <mat-error *ngIf="cityForm.get('mesorregiao_id')?.hasError('required')">
           {{
-            cidadeForm.get("mesorregiao_id")?.hasError("required")
+            cityForm.get("mesorregiao_id")?.hasError("required")
               ? "Mesorregião é obrigatório"
               : errorMessage
           }}
@@ -43,9 +43,9 @@
       <mat-form-field appearance="outline">
         <mat-label>Nome Cidade</mat-label>
         <input matInput formControlName="nome_cidade" />
-        <mat-error *ngIf="cidadeForm.get('nome_cidade')?.hasError('required')">
+        <mat-error *ngIf="cityForm.get('nome_cidade')?.hasError('required')">
           {{
-            cidadeForm.get("nome_cidade")?.hasError("required")
+            cityForm.get("nome_cidade")?.hasError("required")
               ? "O Nome da Cidade é obrigatório"
               : errorMessage
           }}
@@ -56,7 +56,7 @@
         mat-raised-button
         color="primary"
         type="submit"
-        [disabled]="cidadeForm.invalid"
+        [disabled]="cityForm.invalid"
       >
         Enviar
       </button>

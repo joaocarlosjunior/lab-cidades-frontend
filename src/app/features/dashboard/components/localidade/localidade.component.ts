@@ -1,8 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalFormDocumentoComponent } from '../documento/components/modal-form-documento/modal-form-documento.component';
-import { TabelaLocalidadeComponent } from './components/tabela-localidade/tabela-localidade.component';
 import { ModalFormLocalidadeComponent } from './components/modal-form-localidade/modal-form-localidade.component';
+import { TabelaLocalidadeComponent } from './components/tabela-localidade/tabela-localidade.component';
 
 @Component({
   selector: 'app-localidade',
@@ -10,37 +10,38 @@ import { ModalFormLocalidadeComponent } from './components/modal-form-localidade
   styleUrl: './localidade.component.scss',
 })
 export class LocalidadeComponent {
-
-    @ViewChild(TabelaLocalidadeComponent) tabelaLocalidadeComponent!: TabelaLocalidadeComponent;
-
+  @ViewChild(TabelaLocalidadeComponent)
+  tabelaLocalidadeComponent!: TabelaLocalidadeComponent;
+  private destroyRef = inject(DestroyRef);
 
   constructor(private _dialog: MatDialog) {}
 
-  onClickCadastrarCidade() {
-    this.abrirArquivoModal(
+  onClickRegisterCity() {
+    this.openModalRegisterCity(
       0,
-      'Cadastrar Documento',
+      'Cadastrar Cidade',
       ModalFormLocalidadeComponent
     );
   }
 
-  onClickRecarregarTabela() {
-    this.tabelaLocalidadeComponent.recarregarTabela();
+  onClickReloadTable() {
+    this.tabelaLocalidadeComponent.reloadTable();
   }
 
-  abrirArquivoModal(id: number, titulo: string, component: any) {
+  private openModalRegisterCity(id: number, title: string, component: any) {
     var _popup = this._dialog.open(component, {
       width: 'auto',
       height: 'auto',
       enterAnimationDuration: '500ms',
       exitAnimationDuration: '500ms',
       data: {
-        tituloModal: titulo,
+        modalTitle: title,
         id: id,
       },
     });
-    _popup.afterClosed().subscribe((item) => {
-      this.onClickRecarregarTabela();
-    });
+    _popup
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.onClickReloadTable());
   }
 }

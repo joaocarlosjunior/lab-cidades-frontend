@@ -1,53 +1,53 @@
 <mat-card>
   <mat-card-header class="header">
     <h1>Informações Documento</h1>
-    <button mat-button color="warn" (click)="onClickFecharModal()">
+    <button mat-button color="warn" (click)="onClickCloseModal()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-card-header>
-  <mat-card-content class="content" *ngIf="!carregando; else spinner">
-    <span><b>Titulo:</b> {{ documento.titulo }}</span>
+  <mat-card-content class="content" *ngIf="!loading; else spinner">
+    <span><b>Titulo:</b> {{ document.titulo }}</span>
     <p><b>Descrição:</b></p>
-    <textarea readonly class="text-area">{{ documento.descricao }}</textarea>
+    <textarea readonly class="text-area">{{ document.descricao }}</textarea>
     <div>
       <span><b>Autores:</b></span>
-      <p class="autores">{{ documento.autores | autores }}</p>
+      <p class="autores">{{ document.autores | autores }}</p>
     </div>
 
     <div class="autores">
-      <p><b>Ano Publicação:</b> {{ documento.ano_publicacao }}</p>
+      <p><b>Ano Publicação:</b> {{ document.ano_publicacao }}</p>
       <p>
         <b>Tipo Documento:</b>
-        {{ documento.tipo_documento.nome_tipo_documento }}
+        {{ document.tipo_documento.nome_tipo_documento }}
       </p>
     </div>
-    <div class="cidade" *ngIf="documento.cidade">
+    <div class="cidade" *ngIf="document.cidade">
       <span
-        ><b>Cidade:</b> {{ documento.cidade.nome_cidade }}<b> | Estado:</b>
-        {{ documento.cidade.estado.nome_estado }} <b>| Mesorregião: </b
-        >{{ documento.cidade.mesorregiao.nome_mesorregiao }}</span
+        ><b>Cidade:</b> {{ document.cidade.nome_cidade }}<b> | Estado:</b>
+        {{ document.cidade.estado.nome_estado }} <b>| Mesorregião: </b
+        >{{ document.cidade.mesorregiao.nome_mesorregiao }}</span
       >
     </div>
-    <p *ngIf="documento.arquivo_url" class="url-arquivo">
+    <p *ngIf="document.arquivo_url" class="url-arquivo">
       <b>Url Arquivo: </b>
       <a
-        [href]="documento.arquivo_url"
+        [href]="document.arquivo_url"
         target="_blank"
         rel="noopener noreferrer"
       >
-        {{ documento.arquivo_url }}
+        {{ document.arquivo_url }}
       </a>
     </p>
 
-    <span *ngIf="documento.nome_arquivo"
-      ><b>Arquivo Adicionado: </b> {{ documento.nome_arquivo }}
+    <span *ngIf="document.nome_arquivo"
+      ><b>Arquivo Adicionado: </b> {{ document.nome_arquivo }}
     </span>
     <button
       mat-button
       mat-stroked-button
       color="primary"
-      *ngIf="documento.nome_arquivo"
-      (click)="onClickDownloadArquivo(documento.id)"
+      *ngIf="document.nome_arquivo"
+      (click)="onClickDownloadFile(document.id)"
     >
       Download Arquivo
     </button>

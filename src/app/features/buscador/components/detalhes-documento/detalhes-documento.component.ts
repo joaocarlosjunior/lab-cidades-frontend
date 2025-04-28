@@ -1,22 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Documento } from '../../../../core/models/Documento';
-import { DownloadArquivo } from '../../../../shared/class/DownloadArquivo';
-import { DocumentoService } from '../../../../shared/services/documento.service';
+import { Document } from '../../../../core/models/Document';
+import { DownloadFile } from '../../../../shared/class/DownloadFile';
+import { DocumentService } from '../../../../shared/services/document.service';
 
 @Component({
   selector: 'app-detalhes-documento',
   templateUrl: './detalhes-documento.component.html',
   styleUrl: './detalhes-documento.component.scss'
 })
-export class DetalhesDocumentoComponent {
-  documento: Documento = {} as Documento;
-  downloadArquivo!: DownloadArquivo;
+export class DetalhesDocumentoComponent implements OnInit{
+  document: Document = {} as Document;
+  downloadFile!: DownloadFile;
+  private destroyRef = inject(DestroyRef)
 
   constructor(
     private _route: ActivatedRoute,
-    private _documentoService: DocumentoService,
+    private _documentService: DocumentService,
     private _toastr: ToastrService
   ) { }
 
@@ -24,19 +26,20 @@ export class DetalhesDocumentoComponent {
     this._route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id && !isNaN(+id)) {
-        this.buscarDocumentoPeloId(+id);
+        this.searchDocumentById(+id);
       } else {
         this._toastr.error('ID inválido', 'Erro');
       }
     });
   }
 
-  buscarDocumentoPeloId(id: number): void {
+  private searchDocumentById(id: number): void {
     if (id) {
-      this._documentoService.getDocumentoByCode(id)
+      this._documentService.getDocumentById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (documento) => {
-          this.documento = documento;
+        next: (document) => {
+          this.document = document;
         },
         error: (err) => {
           this._toastr.error('','Erro ao retornar documento')
@@ -45,8 +48,9 @@ export class DetalhesDocumentoComponent {
     }
   }
 
-  onDownloadArquivo(documentoId: number){
-    this.downloadArquivo = new DownloadArquivo(this._documentoService, this._toastr);
-    this.downloadArquivo.downloadArquivo(documentoId);
+  onClickDownloadFile(idDocument: number){
+    this.downloadFile = new DownloadFile(this._documentService, this._toastr);
+    this.downloadFile.downloadFile(idDocument);
   }
+
 }

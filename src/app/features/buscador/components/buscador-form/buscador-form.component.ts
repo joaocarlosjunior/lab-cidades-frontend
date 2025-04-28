@@ -7,21 +7,17 @@ import { FormGroup } from '@angular/forms';
   styleUrl: './buscador-form.component.scss',
 })
 export class BuscadorFormComponent {
-  mostrarBuscaAvancada = false;
+  showAdvancedSearch = false;
   @Output() formEvent = new EventEmitter<FormGroup>();
-  @Output() isBuscaAvancada = new EventEmitter<boolean>();
+  @Output() isAdvancedSearch = new EventEmitter<boolean>();
 
-
-  constructor(
-  ) {}
-
-  setFormBuscaAvancada(form: FormGroup) {
+  setSearchAdvancedForm(form: FormGroup) {
     this.formEvent.emit(form);
   }
 
-  toggleBuscaAvancada() {
-    this.mostrarBuscaAvancada = !this.mostrarBuscaAvancada;
-    this.isBuscaAvancada.emit(this.mostrarBuscaAvancada);
+  onClickToggleAdvancedSearch() {
+    this.showAdvancedSearch = !this.showAdvancedSearch;
+    this.isAdvancedSearch.emit(this.showAdvancedSearch);
   }
 
 }

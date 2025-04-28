@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Filtro } from './interfaces/Filtro';
-import { Operador } from './interfaces/Operador';
+import { Filter } from './interfaces/Filter';
+import { Operator } from './interfaces/Operator';
 
 
 @Component({
@@ -11,12 +11,12 @@ import { Operador } from './interfaces/Operador';
 })
 export class FilterComponent {
   @Input({ required: true }) group!: FormGroup;
-  @Input({ required: true }) exibirOperador: boolean = false;
-  @Input({ required: true }) exibirBotaoRemover: boolean = false;
+  @Input({ required: true }) showOperator: boolean = false;
+  @Input({ required: true }) showRemoveButton: boolean = false;
   @Input({ required: true }) formValid: boolean = false;
-  @Output() removeFiltro = new EventEmitter<void>();
+  @Output() removeFilter = new EventEmitter<void>();
 
-  filtros: Filtro[] = [
+  filters: Filter[] = [
     { value: 'all', viewValue: 'Qualquer Campo' },
     { value: 'autor', viewValue: 'Autor' },
     { value: 'titulo', viewValue: 'Título' },
@@ -26,7 +26,7 @@ export class FilterComponent {
     { value: 'estado', viewValue: 'Estado' }
   ];
 
-  operadores: Operador[] = [
+  operators: Operator[] = [
     { value: 'AND', viewValue: 'E' },
     { value: 'OR', viewValue: 'Ou' }
   ];

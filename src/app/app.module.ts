@@ -9,19 +9,20 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import {
-  HTTP_INTERCEPTORS
+  HTTP_INTERCEPTORS,
+  HttpClientModule
 } from '@angular/common/http';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor';
-import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       closeButton: true,
@@ -37,11 +38,6 @@ import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptor,
       multi: true,
     },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },

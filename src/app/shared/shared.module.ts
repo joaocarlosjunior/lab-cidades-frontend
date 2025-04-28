@@ -8,15 +8,14 @@ import { BackToTopComponent } from './components/back-to-top/back-to-top.compone
 import { ButtonPrimaryComponent } from './components/button-primary/button-primary.component';
 import { CardComponent } from './components/card/card.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
-import { SearchOverlayComponent } from './components/search-overlay/search-overlay.component';
 import { AutoresPipe } from './pipes/autores.pipe';
-import { CidadeService } from './services/cidade.service';
+import { CityService } from './services/city.service';
 import { DashboardService } from './services/dashboard.service';
-import { DocumentoService } from './services/documento.service';
-import { EstadoService } from './services/estado.service';
+import { DocumentTypeService } from './services/document-type.service';
+import { DocumentService } from './services/document.service';
 import { LoginService } from './services/login.service';
 import { MesorregiaoService } from './services/mesorregiao.service';
-import { TipoDocumentoService } from './services/tipo-documento.service';
+import { StateService } from './services/state.service';
 
 
 
@@ -24,7 +23,6 @@ import { TipoDocumentoService } from './services/tipo-documento.service';
   declarations: [
     CardComponent,
     SearchBarComponent,
-    SearchOverlayComponent,
     ButtonPrimaryComponent,
     BackToTopComponent,
     AutoresPipe,
@@ -48,6 +46,6 @@ import { TipoDocumentoService } from './services/tipo-documento.service';
     BackToTopComponent,
     AutoresPipe
   ],
-  providers: [ DocumentoService, TipoDocumentoService, MesorregiaoService, CidadeService, EstadoService, DashboardService, LoginService]
+  providers: [ DocumentService, DocumentTypeService, MesorregiaoService, CityService, StateService, DashboardService, LoginService]
 })
 export class SharedModule { }

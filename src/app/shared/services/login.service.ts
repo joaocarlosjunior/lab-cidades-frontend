@@ -1,22 +1,39 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginResponse } from '../../core/interfaces/LoginResponse';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
   private readonly API = `${environment.apiUrl}/auth`;
 
-  constructor(private _httpClient: HttpClient) { }
+  constructor(private _httpClient: HttpClient) {}
 
-  login(login: string, password: string){
-    return this._httpClient.post<LoginResponse>(this.API + "/login", { login, password }).pipe(
-      tap((value) => {
-        sessionStorage.setItem("auth-token", value.token);
-      })
-    )
+  login(login: string, password: string): Observable<any>{
+    return this._httpClient.post<void>(this.API + '/login', { login, password },
+      {
+        withCredentials: true
+      }
+    );
+  }
+
+  checkAuthStatus(): Observable<any>{
+    return this._httpClient.get(`${this.API}/check`, {
+      withCredentials: true
+    });
+  }
+
+  refreshToken(): Observable<any> {
+    return this._httpClient.post(`${this.API}/refresh-token`, {}, {
+      withCredentials: true
+    });
+  }
+
+  logout(): Observable<any> {
+    return this._httpClient.post(`${this.API}/logout`, {}, {
+      withCredentials: true
+    });
   }
 }

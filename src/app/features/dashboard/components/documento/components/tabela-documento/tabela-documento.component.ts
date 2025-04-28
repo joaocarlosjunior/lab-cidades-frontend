@@ -2,18 +2,21 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
+  inject,
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, take, takeUntil, tap } from 'rxjs';
-import { DocumentoService } from '../../../../../../shared/services/documento.service';
-import { ModalFormDocumentoComponent } from '../modal-form-documento/modal-form-documento.component';
-import { DocumentoDataSource } from '../../datasource/DocumentoDataSource';
+import { take, tap } from 'rxjs';
+import { DocumentService } from '../../../../../../shared/services/document.service';
+import { DocumentDataSource } from '../../datasource/DocumentDataSource';
 import { ModalDetalharDocumentoComponent } from '../modal-detalhar-documento/modal-detalhar-documento.component';
+import { ModalFormDocumentoComponent } from '../modal-form-documento/modal-form-documento.component';
 
 @Component({
   selector: 'app-tabela-documento',
@@ -33,57 +36,50 @@ export class TabelaDocumentoComponent implements OnInit, AfterViewInit {
     'atualizadoEm',
     'acao',
   ];
-  documentoDataSource!: DocumentoDataSource;
+  documentDataSource!: DocumentDataSource;
+  searchTerm: string = '';
+  loading: boolean = true;
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  termoBusca: string = '';
-
-  carregando: boolean = true;
-
-  private destroy$ = new Subject<void>();
-
   constructor(
-    private _documentoService: DocumentoService,
+    private _documentService: DocumentService,
     private _dialog: MatDialog,
     private _toastr: ToastrService,
     private _cdRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
-    this.inicializarDataSource();
-    this.configurarSubscricoes();
+  ngOnInit(){
+    this.initDataSource();
+    this.configureSubscriptions();
   }
 
-  ngAfterViewInit(): void {
-    this.configurarPaginacao();
-    this.carregarDocumentos();
+  ngAfterViewInit(){
+    this.configurePagination();
+    this.searchDocuments();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private inicializarDataSource(): void {
-    this.documentoDataSource = new DocumentoDataSource(
-      this._documentoService,
-      this._toastr
+  private initDataSource(){
+    this.documentDataSource = new DocumentDataSource(
+      this._documentService,
+      this._toastr,
+      this.destroyRef
     );
   }
 
-  private configurarSubscricoes(): void {
-    this.documentoDataSource.loading$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((carregando) => {
-        this.carregando = carregando;
+  private configureSubscriptions(){
+    this.documentDataSource.loading$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((loading) => {
+        this.loading = loading;
         this._cdRef.detectChanges();
       });
 
-    this.documentoDataSource.counter$
+    this.documentDataSource.counter$
       .pipe(
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
         tap((total) => {
           if (this.paginator) {
             this.paginator.length = total;
@@ -93,93 +89,99 @@ export class TabelaDocumentoComponent implements OnInit, AfterViewInit {
       .subscribe();
   }
 
-  private configurarPaginacao(): void {
+  private configurePagination(){
     this.paginator.page
       .pipe(
-        tap(() => this.carregarDocumentos()),
-        takeUntil(this.destroy$)
+        tap(() => this.searchDocuments()),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
 
-  buscarDocumentosPorTitulo(event: Event): void {
-    this.termoBusca = (event.target as HTMLInputElement).value.trim();
+  searchDocumentsByTitle(event: Event){
+    this.searchTerm = (event.target as HTMLInputElement).value.trim();
     this.paginator.pageIndex = 0;
-    this.carregarDocumentos();
+    this.searchDocuments();
   }
 
-  recarregarTabela(): void {
-    this.termoBusca = '';
-    this.carregarDocumentos();
+  reloadTable(){
+    this.searchTerm = '';
+    this.searchDocuments();
   }
 
-  carregarDocumentos(): void {
+  private searchDocuments(){
     if (!this.paginator) return;
 
-    if (this.termoBusca) {
-      this.documentoDataSource.carregarDocumentosPorTitulo(
-        this.termoBusca,
+    if (this.searchTerm) {
+      this.documentDataSource.getDocumentsByTitle(
+        this.searchTerm,
         this.paginator.pageIndex,
         this.paginator.pageSize
       );
     } else {
-      this.documentoDataSource.carregarDocumentos(
+      this.documentDataSource.getPaginatedDocuments(
         this.paginator.pageIndex,
         this.paginator.pageSize
       );
     }
   }
 
-  onClickEditarDocumento(id: number): void {
-    this.abrirModalDocumento(id, 'Editar Documento');
+  onClickEditDocument(id: number){
+    this.openModalDocument(id, 'Editar Documento');
   }
 
-  onClickVisualizarDocumento(idDocumento: number): void {
+  onClickViewDetailDocument(idDocument: number){
     this._dialog.open(ModalDetalharDocumentoComponent, {
       width: '80vh',
       height: 'auto',
       enterAnimationDuration: '500ms',
       exitAnimationDuration: '500ms',
-      data: { id: idDocumento },
+      data: { id: idDocument },
     });
   }
 
-  onClickDeletarDocumento(id: number): void {
+  onClickDeleteDocument(id: number){
     if (!id) {
       this._toastr.error('Documento inválido');
-      return;
     }
 
-    this._documentoService.deletarDocumento(id).subscribe({
-      next: () => {
-        this._toastr.success('Documento removido com sucesso');
-        this.ajustarPaginacaoAposExclusao();
-      },
-      error: () => this._toastr.error('Erro ao remover documento'),
-    });
+    this._documentService
+      .deleteDocument(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this._toastr.success('Documento removido com sucesso');
+          this.adjustPaginationAfterDeletingDocument();
+        },
+        error: () => this._toastr.error('Erro ao remover documento'),
+      });
   }
 
-  private ajustarPaginacaoAposExclusao(): void {
-    this.documentoDataSource.counterNumeroDocumentoPorPagina$
+  private adjustPaginationAfterDeletingDocument(){
+    this.documentDataSource.counterNumeroDocumentoPorPagina$
       .pipe(take(1))
       .subscribe((total) => {
         if (total - 1 === 0) {
           this.paginator.pageIndex = Math.max(this.paginator.pageIndex - 1, 0);
         }
-        this.carregarDocumentos();
+        this.searchDocuments();
       });
   }
 
-  abrirModalDocumento(id: number, titulo: string): void {
+  private openModalDocument(id: number, title: string){
     this._dialog
       .open(ModalFormDocumentoComponent, {
         width: 'auto',
         height: '80vh',
         enterAnimationDuration: '500ms',
         exitAnimationDuration: '500ms',
-        data: { tituloModal: titulo, id },
+        data: {
+          modalTitle: title,
+          id: id
+        },
       })
       .afterClosed()
-      .subscribe(() => this.recarregarTabela());
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.reloadTable());
   }
 }

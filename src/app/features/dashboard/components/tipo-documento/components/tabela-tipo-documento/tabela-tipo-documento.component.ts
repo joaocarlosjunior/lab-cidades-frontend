@@ -1,19 +1,20 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, take, takeUntil, tap } from 'rxjs';
-import { TipoDocumentoService } from '../../../../../../shared/services/tipo-documento.service';
-import { TipoDocumentoDataSource } from '../../datasource/TipoDocumentoDataSource';
+import { take, tap } from 'rxjs';
+import { DocumentTypeService } from '../../../../../../shared/services/document-type.service';
+import { DocumentTypeDataSource } from '../../datasource/DocumentTypeDataSource';
 import { ModalFormTipoDocumentoComponent } from '../modal-form-tipo-documento/modal-form-tipo-documento.component';
 
 @Component({
   selector: 'app-tabela-tipo-documento',
   templateUrl: './tabela-tipo-documento.component.html',
-  styleUrl: './tabela-tipo-documento.component.scss'
+  styleUrl: './tabela-tipo-documento.component.scss',
 })
-export class TabelaTipoDocumentoComponent implements OnInit, AfterViewInit{
+export class TabelaTipoDocumentoComponent implements OnInit, AfterViewInit {
   displayedColumns = [
     'id',
     'tipoDocumento',
@@ -22,103 +23,103 @@ export class TabelaTipoDocumentoComponent implements OnInit, AfterViewInit{
     'acao',
   ];
 
-  tipoDocumentoDataSource!: TipoDocumentoDataSource;
+  documentTypeDataSource!: DocumentTypeDataSource;
+  loading!: boolean;
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  carregando!: boolean;
-
-  private destroy$ = new Subject<void>();
-
   constructor(
-    private _tipoDocumentoService: TipoDocumentoService,
+    private _documentTypeService: DocumentTypeService,
     private _toastr: ToastrService,
-    private _dialog: MatDialog,
+    private _dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.inicializarDataSource();
-    this.carregarDadosIniciais();
+    this.initializerDataSource();
+    this.loadInitialData();
   }
 
   ngAfterViewInit(): void {
-    this.configurarPaginacao();
+    this.configurePagination();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private inicializarDataSource(): void {
-    this.tipoDocumentoDataSource = new TipoDocumentoDataSource(
-      this._tipoDocumentoService,
-      this._toastr
+  private initializerDataSource(): void {
+    this.documentTypeDataSource = new DocumentTypeDataSource(
+      this._documentTypeService,
+      this._toastr,
+      this.destroyRef
     );
 
-    this.tipoDocumentoDataSource.loading$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(carregando => this.carregando = carregando);
+    this.documentTypeDataSource.loading$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((loading) => (this.loading = loading));
   }
 
-  private carregarDadosIniciais(): void {
-    this.tipoDocumentoDataSource.carregarTiposDocumento();
+  private loadInitialData(): void {
+    this.documentTypeDataSource.loadPaginatedDocumentTypes();
   }
 
-  private configurarPaginacao(): void {
-    this.tipoDocumentoDataSource.counter$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(total => this.paginator.length = total);
+  private configurePagination(): void {
+    this.documentTypeDataSource.counter$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((total) => (this.paginator.length = total));
 
     this.paginator.page
       .pipe(
-        tap(() => this.carregarTiposDocumento()),
-        takeUntil(this.destroy$)
+        tap(() => this.loadDocumentTypes()),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
 
-  carregarTiposDocumento(): void {
-    this.tipoDocumentoDataSource.carregarTiposDocumento(
+  loadDocumentTypes(): void {
+    this.documentTypeDataSource.loadPaginatedDocumentTypes(
       this.paginator.pageIndex,
       this.paginator.pageSize
     );
   }
 
-  onClickEditarTipoDocumento(id: number): void {
-    this.abrirModalDocumento(id, 'Editar Tipo Documento');
+  onClickEditDocumentTypeByIdDocumentType(idDocumentType: number): void {
+    this.openModalDocumentType(idDocumentType, 'Editar Tipo Documento');
   }
 
-  onClickDeletarTipoDocumento(id: number): void {
-    this._tipoDocumentoService.deletarTipoDocumento(id).subscribe({
+  onClickDeleteDocumentTypeByIdDocumentType(idDocumentType: number): void {
+    this._documentTypeService
+    .deleteDocumentType(idDocumentType)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
       next: () => {
         this._toastr.success('Tipo Documento removido com sucesso');
-        this.ajustarPaginacaoAposExclusao();
+        this.adjustPaginationAfterDeletingDocumentType();
       },
-      error: () => this._toastr.error('Erro ao remover tipo documento')
+      error: () => this._toastr.error('Erro ao remover tipo documento'),
     });
   }
 
-  private ajustarPaginacaoAposExclusao(): void {
-    this.tipoDocumentoDataSource.counterTipoDocumentoPage$
+  private adjustPaginationAfterDeletingDocumentType(): void {
+    this.documentTypeDataSource.counterTipoDocumentoPage$
       .pipe(take(1))
-      .subscribe(total => {
-        if ((total - 1) === 0) {
+      .subscribe((total) => {
+        if (total - 1 === 0) {
           this.paginator.pageIndex = Math.max(this.paginator.pageIndex - 1, 0);
         }
-        this.carregarTiposDocumento();
+        this.loadDocumentTypes();
       });
   }
 
-  abrirModalDocumento(id: number, titulo: string): void {
-    this._dialog.open(ModalFormTipoDocumentoComponent, {
-      width: 'auto',
-      height: 'auto',
-      enterAnimationDuration: '500ms',
-      exitAnimationDuration: '500ms',
-      data: { tituloModal: titulo, id }
-    }).afterClosed().subscribe(() => this.carregarTiposDocumento());
+  private openModalDocumentType(id: number, titulo: string): void {
+    this._dialog
+      .open(ModalFormTipoDocumentoComponent, {
+        width: 'auto',
+        height: 'auto',
+        enterAnimationDuration: '500ms',
+        exitAnimationDuration: '500ms',
+        data: { tituloModal: titulo, id },
+      })
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.loadDocumentTypes());
   }
-
 }

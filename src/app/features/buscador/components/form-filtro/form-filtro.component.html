@@ -1,14 +1,14 @@
 <form class="busca-avancada"  [formGroup]="searchForm" (ngSubmit)="onSubmit()">
   <div class="content-busca-avancada" >
     <div class="form-filtro-body">
-      <div formArrayName="filtros">
-        <div *ngFor="let filtro of filtros.controls; let i = index">
+      <div formArrayName="filters">
+        <div *ngFor="let filter of filters.controls; let i = index">
           <app-filter
-            [group]="filtro"
-            [exibirOperador]="i > 0"
-            [exibirBotaoRemover]="i > 0"
-            (removeFiltro)="removeFiltro(i)"
+            [group]="filter"
+            [showOperator]="i > 0"
+            [showRemoveButton]="i > 0"
             [formValid]="formValid"
+            (removeFilter)="removeFilter(i)"
           >
             ></app-filter
           >
@@ -20,8 +20,8 @@
           mat-stroked-button
           type="button"
           color="primary"
-          (click)="addFiltro()"
-          [disabled]="isAddFiltroDisabled"
+          (click)="addFilter()"
+          [disabled]="isAddFilterDisabled"
         >
           <mat-icon>add</mat-icon>
           Adicionar Filtro
@@ -30,9 +30,9 @@
     </div>
     <div class="tipo-documento">
       <span style="text-wrap-mode: nowrap;">Tipo de Documento</span>
-      <select formControlName="tipoDocumento">
-        <option *ngFor="let tipoDocumento of tiposDocumentoOptions" [value]="tipoDocumento.id">
-          {{ tipoDocumento.nome_tipo_documento }}
+      <select formControlName="documentType">
+        <option *ngFor="let documentType of documentTypesOptions" [value]="documentType.id">
+          {{ documentType.nome_tipo_documento }}
         </option>
       </select>
     </div>
