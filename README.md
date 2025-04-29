@@ -1,11 +1,17 @@
 # Lab Cidades Uesc front-end
+Nesse repositório contém todos os arquivos relacionado ao front-end do projeto LabCidades Uesc.
 
-## Requisitos
+## Instalação & Execução
+Foi utilizado:
+<br>[Node](https://nodejs.org/en) v.22.14.0
+<br>[Angular](https://angular.dev/) v17
+<br>[Angular Matreial](https://v17.material.angular.io/) v17
 
-Node v22.14.0
+### Key necessária do projeto
 
-## Executar projeto localmente
-
+1. reCAPTCHA Google 
+<br>Na aplicacação é utilizado o google reCAPTCHA v2. É necessário gerar a **key** no site do google: https://cloud.google.com/security/products/recaptcha
+<br>Depois de gerado insira no arquivo: [environment.development.ts](https://github.com/joaocarlosjunior/lab-cidades-frontend/blob/main/src/environments/environment.development.ts)
 
 Instalar as depenências do projeto:
 ```
