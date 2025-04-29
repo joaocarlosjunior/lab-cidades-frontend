@@ -39,6 +39,11 @@
             &:hover {
                 color: var(--black-color);
             }
+
+
+        }
+        .selected{
+          background: var(--primary-color-hover);
         }
 
         &:hover {
