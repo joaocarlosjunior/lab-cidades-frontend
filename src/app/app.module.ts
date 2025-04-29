@@ -16,6 +16,8 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor';
+import { RECAPTCHA_SETTINGS, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { environment } from '../environments/environment.development';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +43,12 @@ import { AuthInterceptor } from './core/interceptors/AuthInterceptor';
       multi: true,
     },
     { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: environment.recaptcha.siteKey,
+      }
+    }
   ],
   bootstrap: [AppComponent],
 })

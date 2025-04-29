@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedModule } from '../../shared/shared.module';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 
 @NgModule({
@@ -12,7 +13,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   imports: [
     SharedModule,
     LoginRoutingModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RecaptchaModule,
+    RecaptchaFormsModule
   ]
 })
 export class LoginModule { }
