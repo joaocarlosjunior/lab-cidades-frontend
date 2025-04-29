@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
           },
           error: (err) => {
             this.loading = false;
+            this.resetCaptcha();
             switch (err.error.status) {
               case 403:
                 this.toastService.error(err.error.detail);
@@ -63,5 +64,10 @@ export class LoginComponent implements OnInit {
           },
         });
     }
+  }
+
+  private resetCaptcha() {
+    this.loginForm.get('recaptcha')?.setValue(null);
+    this.loginForm.get('recaptcha')?.updateValueAndValidity();
   }
 }
