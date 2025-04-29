@@ -38,7 +38,7 @@ export class ModalFormLocalidadeComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.titleForm = this.data.titleModal;
+    this.titleForm = this.data.modalTitle;
     this.loadStates();
 
     //data.id 0 é codigo para um nova localidade

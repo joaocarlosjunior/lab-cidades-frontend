@@ -423,7 +423,7 @@ export class ModalFormDocumentoComponent implements OnInit {
       enterAnimationDuration: '500ms',
       exitAnimationDuration: '500ms',
       data: {
-        titleModal: titulo,
+        modalTitle: titulo,
         id: id,
       },
     });

@@ -122,7 +122,7 @@ export class TabelaLocalidadeComponent implements OnInit, AfterViewInit {
   }
 
   onClickEditLocalityByIdCity(id: number): void {
-    this.openModalLocality(id, 'Editar Localidade');
+    this.openModalLocality(id, 'Editar Cidade');
   }
 
   onClickDeleteLocalityByIdCity(id: number): void {
