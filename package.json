@@ -46,5 +46,27 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.4.2"
+  },
+  "overrides": {
+    "@babel/core": "^7.29.7",
+    "@sigstore/core": "^3.2.1",
+    "ajv": "^8.20.0",
+    "brace-expansion": "^1.1.16",
+    "esbuild": "^0.25.0",
+    "http-proxy-middleware": "^2.0.10",
+    "picomatch": "^4.0.5",
+    "piscina": "^4.9.3",
+    "postcss": "^8.5.10",
+    "serialize-javascript": "^7.0.7",
+    "sigstore": "^4.1.1",
+    "tar": "^7.5.20",
+    "tmp": "^0.2.7",
+    "uuid": "^14.0.1",
+    "webpack": "^5.108.4",
+    "ws": "^8.21.1",
+    "undici": "^6.27.0",
+    "qs": "^6.15.3",
+    "vite": "^6.4.3",
+    "webpack-dev-server": "^5.2.6"
   }
 }
