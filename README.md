@@ -1,12 +1,11 @@
-# Lab Cidades UESC - Front-end
-
-<img width="1912" height="1044" alt="Image" src="https://github.com/user-attachments/assets/4ae096a2-a2f4-436c-98e7-0a802fcf2b73" />
-
+# Lab Cidades UESC
 [![Angular](https://img.shields.io/badge/Angular-17.3-red.svg?logo=angular)](https://angular.dev/)
 [![Node](https://img.shields.io/badge/Node-v22.14.0-green.svg?logo=node.js)](https://nodejs.org/en)
 [![Material UI](https://img.shields.io/badge/Material--UI-17.3-blue.svg?logo=angular)](https://v17.material.angular.io/)
 
-Este repositório contém a aplicação front-end da plataforma web do projeto **Lab Cidades UESC** (vinculado ao Departamento de Economia da Universidade Estadual de Santa Cruz). A plataforma tem como objetivo centralizar, catalogar, indexar e facilitar o acesso a documentos de políticas urbanas e planejamento público municipal (tais como planos diretores, leis de zoneamento, relatórios técnicos, artigos e mapas).
+<img width="1912" height="1044" alt="Image" src="https://github.com/user-attachments/assets/4ae096a2-a2f4-436c-98e7-0a802fcf2b73" />
+
+Este repositório contém a aplicação front-end da plataforma web do projeto **Lab Cidades UESC**. A plataforma tem como objetivo centralizar, catalogar, indexar e facilitar o acesso a documentos de políticas urbanas e planejamento público municipal (tais como planos diretores, leis de zoneamento, relatórios técnicos, artigos e mapas).
 
 ---
 
@@ -21,10 +20,6 @@ O grande destaque da plataforma é a sua ferramenta de **Busca Avançada com Fil
 *   **Seleção de Campos:** Cada filtro pode ser direcionado a campos específicos (como título, descrição, autor, localidade) com correspondência flexível.
 *   **Filtro por Tipo de Documento:** Integração com listagens dinâmicas de tipos de documentos cadastrados (ex: Lei, Decreto, Artigo, Mapa, Relatório).
 *   **Paginação Inteligente:** Resultados paginados de forma automática e integrada ao estado da busca (simples ou avançada).
-
-A lógica de geração da consulta dinâmica pode ser encontrada em:
-*   [buscador.component.ts](file:///home/joao/Documentos/Projetos/lab-cidades-frontend/src/app/features/buscador/buscador.component.ts)
-*   [form-filtro.component.ts](file:///home/joao/Documentos/Projetos/lab-cidades-frontend/src/app/features/buscador/components/form-filtro/form-filtro.component.ts)
 
 ---
 
